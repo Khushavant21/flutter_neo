@@ -1,7 +1,7 @@
 // lib/widgets/card_page.dart
 import 'package:flutter/material.dart';
 import '../admin_card/admin_card_styles.dart';
-import '../admin_top_navbar.dart';
+// import '../admin_top_navbar.dart';
 
 class CardPage extends StatefulWidget {
   const CardPage({super.key});
@@ -176,7 +176,7 @@ class _CardPageState extends State<CardPage>
       body: Column(
         children: [
           // Top Navbar - NeoBank Admin header
-          const TopNavbar(),
+          // const TopNavbar(),
 
           // Scrollable content
           Expanded(

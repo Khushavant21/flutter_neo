@@ -1,6 +1,6 @@
 // lib/widgets/admin_setting_page.dart
 import 'package:flutter/material.dart';
-import '../admin_top_navbar.dart';
+// import '../admin_top_navbar.dart';
 import '../admin_setting/admin_setting_styles.dart';
 
 class AdminSettingPage extends StatefulWidget {
@@ -176,7 +176,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       backgroundColor: AdminSettingStyles.bgLight,
       body: Column(
         children: [
-          const TopNavbar(),
+          // const TopNavbar(),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(

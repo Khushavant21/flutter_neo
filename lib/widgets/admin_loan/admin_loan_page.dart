@@ -1,6 +1,6 @@
 // lib/widgets/admin_loan_page.dart
 import 'package:flutter/material.dart';
-import '../admin_top_navbar.dart';
+// import '../admin_top_navbar.dart';
 import '../admin_loan//admin_loan_styles.dart';
 
 class AdminLoanPage extends StatefulWidget {
@@ -21,6 +21,15 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
 
   final List<String> statusOptions = [
     "All",
+    "Approved",
+    "Rejected",
+    "Sanction",
+    "Disburse",
+    "Reschedule",
+    "NPA"
+  ];
+
+  final List<String> actionOptions = [
     "Approved",
     "Rejected",
     "Sanction",
@@ -117,7 +126,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
     return Scaffold(
       body: Column(
         children: [
-          const TopNavbar(),
+          // const TopNavbar(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -270,6 +279,8 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
           headingRowColor: WidgetStateProperty.all(const Color(0xFFF7F7F7)),
           dataRowColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
           columnSpacing: 16,
+          dataRowMinHeight: 40,
+          dataRowMaxHeight: 60,
           columns: _buildColumns(),
           rows: paginatedLoans.isEmpty
               ? [
@@ -398,59 +409,65 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
   }
 
   Widget _buildActions(String loanID) {
-    return SizedBox(
-      width: 300,
-      child: Wrap(
-        spacing: 6,
-        runSpacing: 6,
-        children: ["Approved", "Rejected", "Sanction", "Disburse", "Reschedule", "NPA"]
-            .map((action) => ElevatedButton(
-                  onPressed: () => handleAction(loanID, action),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LoanStyles.primaryColor,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                    elevation: 0,
-                    minimumSize: const Size(75, 32),
-                  ),
-                  child: Text(action, style: const TextStyle(fontSize: 11)),
-                ))
-            .toList(),
+    return Container(
+      width: 150,
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(color: LoanStyles.primaryColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(color: LoanStyles.primaryColor, width: 2),
+          ),
+        ),
+        hint: const Text('Select Action', style: TextStyle(fontSize: 12)),
+        isExpanded: true,
+        items: actionOptions.map((action) {
+          return DropdownMenuItem(
+            value: action,
+            child: Text(action, style: const TextStyle(fontSize: 12)),
+          );
+        }).toList(),
+        onChanged: (value) {
+          if (value != null) {
+            handleAction(loanID, value);
+          }
+        },
       ),
     );
   }
 
   Widget _buildAccountActions(String loanID) {
-    return SizedBox(
-      width: 200,
-      child: Wrap(
-        spacing: 6,
-        runSpacing: 6,
-        children: [
-          ElevatedButton(
-            onPressed: () => handleAction(loanID, "Reschedule"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: LoanStyles.primaryColor,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              elevation: 0,
-            ),
-            child: const Text("Reschedule", style: TextStyle(fontSize: 11)),
+    return Container(
+      width: 150,
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(color: LoanStyles.primaryColor),
           ),
-          ElevatedButton(
-            onPressed: () => handleAction(loanID, "NPA"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: LoanStyles.primaryColor,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              elevation: 0,
-            ),
-            child: const Text("Mark NPA", style: TextStyle(fontSize: 11)),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(6),
+            borderSide: BorderSide(color: LoanStyles.primaryColor, width: 2),
           ),
+        ),
+        hint: const Text('Select Action', style: TextStyle(fontSize: 12)),
+        isExpanded: true,
+        items: const [
+          DropdownMenuItem(value: "Reschedule", child: Text("Reschedule", style: TextStyle(fontSize: 12))),
+          DropdownMenuItem(value: "NPA", child: Text("Mark NPA", style: TextStyle(fontSize: 12))),
         ],
+        onChanged: (value) {
+          if (value != null) {
+            handleAction(loanID, value);
+          }
+        },
       ),
     );
   }

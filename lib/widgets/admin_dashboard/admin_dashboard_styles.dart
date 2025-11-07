@@ -305,9 +305,7 @@ class DashboardStyles {
     backgroundColor: Color(0xFF950606),
     foregroundColor: Colors.white,
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(radius8),
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius8)),
   );
 
   static ButtonStyle alertButtonStyle = ElevatedButton.styleFrom(
@@ -317,7 +315,10 @@ class DashboardStyles {
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius8)),
     elevation: 0,
-    textStyle: const TextStyle(fontSize: fontSize09, fontWeight: FontWeight.w500),
+    textStyle: const TextStyle(
+      fontSize: fontSize09,
+      fontWeight: FontWeight.w500,
+    ),
   );
 
   // Transaction List Item Decoration

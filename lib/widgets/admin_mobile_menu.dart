@@ -1,4 +1,4 @@
-// lib/widgets/mobile_menu.dart
+// lib/widgets/admin_mobile_menu.dart
 import 'package:flutter/material.dart';
 import '../models/admin_menu_item_model.dart';
 import '../styles/admin_tnb_styles.dart';
@@ -19,264 +19,300 @@ class MobileMenu extends StatefulWidget {
 
 class _MobileMenuState extends State<MobileMenu>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
+  late AnimationController _controller;
+  late Animation<double> _slideAnimation;
   String? _expandedItem;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 400),
     );
-    
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-    
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, -0.1),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-    
-    _animationController.forward();
+
+    _slideAnimation = Tween<double>(begin: -1, end: 0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+    );
+
+    _controller.forward();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _controller.dispose();
     super.dispose();
+  }
+
+  void _closeMenu() {
+    _controller.reverse().then((_) => widget.onClose());
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final maxHeight = screenHeight * 0.75; // 75% of screen height
+    final width = MediaQuery.of(context).size.width * 0.75;
+    final height = MediaQuery.of(context).size.height;
 
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: Container(
-          decoration: TnbStyles.mobileMenuDecoration,
-          constraints: BoxConstraints(
-            maxHeight: maxHeight,
-          ),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: widget.menuItems.map((item) {
-                if (item.hasDropdown) {
-                  return _buildDropdownItem(item);
-                } else {
-                  return _buildMenuItem(item);
-                }
-              }).toList(),
-            ),
+    return Stack(
+      children: [
+        // Dim overlay
+        GestureDetector(
+          onTap: _closeMenu,
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Container(
+                color: Colors.black.withOpacity(0.4 * _controller.value),
+              );
+            },
           ),
         ),
-      ),
-    );
-  }
 
-  Widget _buildMenuItem(MenuItemModel item) {
-    final currentRoute = ModalRoute.of(context)?.settings.name;
-    final isActive = currentRoute == item.path;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            if (item.path != null) {
-              Navigator.pushNamed(context, item.path!);
-              widget.onClose();
-            }
+        // Slide-in Menu
+        AnimatedBuilder(
+          animation: _slideAnimation,
+          builder: (context, child) {
+            return Transform.translate(
+              offset: Offset(_slideAnimation.value * width, 0),
+              child: child,
+            );
           },
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: isActive 
-                  ? TnbColors.primary.withOpacity(0.1)
-                  : Colors.transparent,
-              border: isActive
-                  ? Border.all(color: TnbColors.primary.withOpacity(0.3))
-                  : null,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  item.icon,
-                  size: 20,
-                  color: isActive ? TnbColors.primary : TnbColors.grey,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              width: width,
+              height: height,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFF9FAFB), Color(0xFFF3F4F6)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    item.name,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                      color: isActive ? TnbColors.primary : TnbColors.grey,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdownItem(MenuItemModel item) {
-    final isExpanded = _expandedItem == item.name;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Column(
-        children: [
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  _expandedItem = isExpanded ? null : item.name;
-                });
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: isExpanded
-                      ? TnbColors.primary.withOpacity(0.05)
-                      : Colors.transparent,
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      item.icon,
-                      size: 20,
-                      color: isExpanded ? TnbColors.primary : TnbColors.grey,
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Text(
-                        item.name,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: isExpanded ? TnbColors.primary : TnbColors.grey,
-                        ),
-                      ),
-                    ),
-                    AnimatedRotation(
-                      turns: isExpanded ? 0.5 : 0,
-                      duration: const Duration(milliseconds: 200),
-                      child: Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 20,
-                        color: isExpanded ? TnbColors.primary : TnbColors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          
-          // Dropdown Items with Animation
-          AnimatedCrossFade(
-            firstChild: const SizedBox.shrink(),
-            secondChild: Container(
-              margin: const EdgeInsets.only(left: 16, top: 6),
-              padding: const EdgeInsets.only(left: 12),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: TnbColors.primary.withOpacity(0.3),
-                    width: 2,
-                  ),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
                 ),
               ),
               child: Column(
-                children: item.dropdown!.map((subItem) {
-                  return _buildSubMenuItem(subItem);
-                }).toList(),
+                children: [
+                  // 🔹 Header - directly below top navbar
+                  Container(
+                    height: 100,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [TnbColors.primary, Color(0xFF911515)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(25),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(
+                      top: 8, // reduced drastically (was 30)
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.account_circle_rounded,
+                          color: Colors.white,
+                          size: 36,
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              "Admin Panel",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                height: 1.2,
+                              ),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              "neobank.admin@app",
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                                height: 1.2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // 🔹 Menu Items
+                  Expanded(
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
+                      children: widget.menuItems.map((item) {
+                        return item.hasDropdown
+                            ? _buildDropdownItem(item)
+                            : _buildMenuItem(item);
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
             ),
-            crossFadeState: isExpanded
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: const Duration(milliseconds: 200),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // --- Menu Item ---
+  Widget _buildMenuItem(MenuItemModel item) {
+    final isActive = ModalRoute.of(context)?.settings.name == item.path;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: isActive ? const Color(0xFFFFF5F5) : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.15),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        leading: Icon(
+          item.icon,
+          color: isActive ? TnbColors.primary : Colors.grey[700],
+          size: 22,
+        ),
+        title: Text(
+          item.name,
+          style: TextStyle(
+            fontSize: 15.5,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            color: isActive ? TnbColors.primary : Colors.grey[900],
+          ),
+        ),
+        onTap: () {
+          if (item.path != null) {
+            Navigator.pushNamed(context, item.path!);
+            _closeMenu();
+          }
+        },
+      ),
+    );
+  }
+
+  // --- Dropdown Item ---
+  Widget _buildDropdownItem(MenuItemModel item) {
+    final isExpanded = _expandedItem == item.name;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(
+              item.icon,
+              color: isExpanded ? TnbColors.primary : Colors.grey[700],
+              size: 22,
+            ),
+            title: Text(
+              item.name,
+              style: TextStyle(
+                fontSize: 15.5,
+                fontWeight: isExpanded ? FontWeight.w600 : FontWeight.w500,
+                color: isExpanded ? TnbColors.primary : Colors.grey[900],
+              ),
+            ),
+            trailing: AnimatedRotation(
+              turns: isExpanded ? 0.5 : 0,
+              duration: const Duration(milliseconds: 200),
+              child: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: isExpanded ? TnbColors.primary : Colors.grey[600],
+              ),
+            ),
+            onTap: () {
+              setState(() {
+                _expandedItem = isExpanded ? null : item.name;
+              });
+            },
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            child: isExpanded
+                ? Container(
+                    margin: const EdgeInsets.only(
+                        left: 20, right: 12, bottom: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children:
+                          item.dropdown!.map(_buildSubMenuItem).toList(),
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ),
         ],
       ),
     );
   }
 
+  // --- Sub Menu Item ---
   Widget _buildSubMenuItem(MenuItemModel subItem) {
-    final currentRoute = ModalRoute.of(context)?.settings.name;
-    final isActive = currentRoute == subItem.path;
+    final isActive = ModalRoute.of(context)?.settings.name == subItem.path;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            if (subItem.path != null) {
-              Navigator.pushNamed(context, subItem.path!);
-              widget.onClose();
-            }
-          },
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: isActive
-                  ? TnbColors.primary.withOpacity(0.1)
-                  : Colors.transparent,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  subItem.icon,
-                  size: 18,
-                  color: isActive ? TnbColors.primary : Colors.grey[600],
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    subItem.name,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                      color: isActive ? TnbColors.primary : Colors.grey[700],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+    return ListTile(
+      dense: true,
+      leading: Icon(
+        subItem.icon,
+        size: 18,
+        color: isActive ? TnbColors.primary : Colors.grey[700],
+      ),
+      title: Text(
+        subItem.name,
+        style: TextStyle(
+          fontSize: 14.5,
+          fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+          color: isActive ? TnbColors.primary : Colors.grey[900],
         ),
       ),
+      onTap: () {
+        if (subItem.path != null) {
+          Navigator.pushNamed(context, subItem.path!);
+          _closeMenu();
+        }
+      },
     );
   }
 }

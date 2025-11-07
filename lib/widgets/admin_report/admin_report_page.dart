@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../admin_report/admin_report_styles.dart';
-import '../admin_top_navbar.dart';
+// import '../admin_top_navbar.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -188,7 +188,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
     return Scaffold(
       body: Column(
         children: [
-          const TopNavbar(),
+          // const TopNavbar(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(

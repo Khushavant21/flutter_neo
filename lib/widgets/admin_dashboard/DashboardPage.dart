@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../admin_dashboard/admin_dashboard_styles.dart';
-import '../admin_top_navbar.dart';
+// import '../admin_top_navbar.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -18,7 +18,7 @@ class _DashboardPageState extends State<DashboardPage> {
       backgroundColor: DashboardColors.background,
       body: Column(
         children: [
-          const TopNavbar(),
+          // const TopNavbar(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
