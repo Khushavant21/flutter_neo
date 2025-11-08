@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         fontFamily: 'Poppins',
       ),
-      // ✅ Start with SplashScreen
       home: const SplashScreen(),
       routes: {
         '/login': (context) => const AdminLogin(),
@@ -82,6 +81,48 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// ===== Notification Model =====
+class NotificationItem {
+  final String title;
+  final String message;
+  final String time;
+  final IconData icon;
+  final Color iconColor;
+
+  NotificationItem({
+    required this.title,
+    required this.message,
+    required this.time,
+    required this.icon,
+    required this.iconColor,
+  });
+}
+
+// ===== Sample Notifications =====
+final List<NotificationItem> notifications = [
+  NotificationItem(
+    title: 'New User Registration',
+    message: 'A new user has completed registration and KYC verification.',
+    time: '5 min ago',
+    icon: Icons.person_add,
+    iconColor: Colors.green,
+  ),
+  NotificationItem(
+    title: 'Loan Application',
+    message: 'New loan application submitted by John Doe for \$50,000.',
+    time: '1 hour ago',
+    icon: Icons.account_balance_wallet,
+    iconColor: Colors.orange,
+  ),
+  NotificationItem(
+    title: 'System Alert',
+    message: 'Server maintenance scheduled for tonight at 2:00 AM.',
+    time: '3 hours ago',
+    icon: Icons.warning,
+    iconColor: Colors.red,
+  ),
+];
+
 //
 // ===== Responsive Layout Widget =====
 //
@@ -93,6 +134,215 @@ class ResponsiveAdminLayout extends StatelessWidget {
     required this.content,
     this.title = 'NeoBank Admin',
   });
+
+  // Search Dialog
+  void _showSearchDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.search, color: Colors.black54),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: TextField(
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        hintText: 'Search users, transactions, reports...',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.black38),
+                      ),
+                      onSubmitted: (value) {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Searching for: $value')),
+                        );
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.black54),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const Divider(),
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Recent Searches',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildSearchItem(context, 'User Management', Icons.person),
+              _buildSearchItem(context, 'Transaction History', Icons.receipt),
+              _buildSearchItem(context, 'Loan Applications', Icons.money),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchItem(BuildContext context, String text, IconData icon) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Navigating to: $text')),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Icon(icon, size: 18, color: Colors.black54),
+            const SizedBox(width: 12),
+            Text(text, style: const TextStyle(fontSize: 14)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Notification Panel
+  void _showNotificationPanel(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.grey.shade200),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Notifications',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Marked all as read')),
+                        );
+                      },
+                      child: const Text('Mark all as read'),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: notifications.length,
+                  itemBuilder: (context, index) {
+                    final notification = notifications[index];
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Opened: ${notification.title}')),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey.shade200),
+                          ),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: notification.iconColor.withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                notification.icon,
+                                color: notification.iconColor,
+                                size: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    notification.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    notification.message,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    notification.time,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.grey.shade500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -126,20 +376,14 @@ class ResponsiveAdminLayout extends StatelessWidget {
               actions: [
                 IconButton(
                   icon: const Icon(Icons.search, color: Colors.black87, size: 24),
-                  onPressed: () {
-                    // Handle search action
-                    print('Search clicked');
-                  },
+                  onPressed: () => _showSearchDialog(context),
                   padding: const EdgeInsets.all(12),
                 ),
                 Stack(
                   children: [
                     IconButton(
                       icon: const Icon(Icons.notifications_outlined, color: Colors.black87, size: 24),
-                      onPressed: () {
-                        // Handle notification action
-                        print('Notification clicked');
-                      },
+                      onPressed: () => _showNotificationPanel(context),
                       padding: const EdgeInsets.all(12),
                     ),
                     Positioned(
@@ -155,9 +399,9 @@ class ResponsiveAdminLayout extends StatelessWidget {
                           minWidth: 16,
                           minHeight: 16,
                         ),
-                        child: const Text(
-                          '3',
-                          style: TextStyle(
+                        child: Text(
+                          '${notifications.length}',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -204,20 +448,14 @@ class ResponsiveAdminLayout extends StatelessWidget {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.search, color: Colors.black87, size: 24),
-                              onPressed: () {
-                                // Handle search action
-                                print('Search clicked');
-                              },
+                              onPressed: () => _showSearchDialog(context),
                             ),
                             const SizedBox(width: 12),
                             Stack(
                               children: [
                                 IconButton(
                                   icon: const Icon(Icons.notifications_outlined, color: Colors.black87, size: 24),
-                                  onPressed: () {
-                                    // Handle notification action
-                                    print('Notification clicked');
-                                  },
+                                  onPressed: () => _showNotificationPanel(context),
                                 ),
                                 Positioned(
                                   right: 8,
@@ -232,9 +470,9 @@ class ResponsiveAdminLayout extends StatelessWidget {
                                       minWidth: 16,
                                       minHeight: 16,
                                     ),
-                                    child: const Text(
-                                      '3',
-                                      style: TextStyle(
+                                    child: Text(
+                                      '${notifications.length}',
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,
