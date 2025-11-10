@@ -10,6 +10,9 @@ import 'widgets/admin_loan/admin_loan_page.dart';
 import 'widgets/admin_setting/admin_setting_page.dart';
 import 'widgets/admin_report/admin_report_page.dart';
 import 'widgets/admin_dashboard/DashboardPage.dart';
+import 'widgets/adminTransaction/adminTransactionPage.dart';
+import 'widgets/adminMoneyTransfer/adminMoneyTransferPage.dart';
+import 'widgets/adminDepositManagement/adminDepositManagementPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,15 +51,15 @@ class MyApp extends StatelessWidget {
         ),
         '/admin/transactions': (context) => const ResponsiveAdminLayout(
           title: 'Transactions',
-          content: Center(child: Text('Transactions Screen')),
+          content: AdminTransactionPage(),
         ),
         '/admin/moneyrequest': (context) => const ResponsiveAdminLayout(
           title: 'Money Requests',
-          content: Center(child: Text('Money Transfer Requests')),
+          content: MoneyTransferRequests(),
         ),
         '/admin/depositmanagement': (context) => const ResponsiveAdminLayout(
           title: 'Deposit Management',
-          content: Center(child: Text('Deposit Management')),
+          content: AdminDepositManagement(),
         ),
         '/admin/reports': (context) => const ResponsiveAdminLayout(
           title: 'Reports',
