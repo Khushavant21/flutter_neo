@@ -159,7 +159,7 @@ class _AdminSidebarState extends State<AdminSidebar> {
                       Text(
                         'Administrator',
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: Colors.black87,
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),

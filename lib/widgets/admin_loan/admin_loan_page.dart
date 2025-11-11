@@ -229,7 +229,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
         const SizedBox(width: 10),
         Expanded(
           child: DropdownButtonFormField<String>(
-            initialValue: statusFilter,
+            value: statusFilter,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               border: OutlineInputBorder(
@@ -283,24 +283,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
           dataRowMaxHeight: 60,
           columns: _buildColumns(),
           rows: paginatedLoans.isEmpty
-              ? [
-                  DataRow(
-                    color: WidgetStateProperty.all(Colors.transparent),
-                    cells: [
-                      const DataCell(
-                        SizedBox(
-                          width: 600,
-                          child: Center(
-                            child: Text(
-                              'No loans found',
-                              style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ]
+              ? [_buildEmptyRow()]
               : paginatedLoans.map((loan) => _buildRow(loan)).toList(),
         ),
       ),
@@ -335,6 +318,26 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
         DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.w600))),
       ];
     }
+  }
+
+  DataRow _buildEmptyRow() {
+    final columnCount = activeTab == "applications" ? 9 : 11;
+    return DataRow(
+      color: WidgetStateProperty.all(Colors.transparent),
+      cells: List.generate(
+        columnCount,
+        (index) => index == 0
+            ? const DataCell(
+                Center(
+                  child: Text(
+                    'No loans found',
+                    style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                  ),
+                ),
+              )
+            : const DataCell(SizedBox.shrink()),
+      ),
+    );
   }
 
   DataRow _buildRow(Map<String, dynamic> loan) {
@@ -473,6 +476,8 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
   }
 
   Widget _buildPagination() {
+    if (totalPages == 0) return const SizedBox.shrink();
+    
     return Wrap(
       spacing: 8,
       alignment: WrapAlignment.end,

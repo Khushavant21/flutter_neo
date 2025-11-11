@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../admin_dashboard/admin_dashboard_styles.dart';
-// import '../admin_top_navbar.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -12,54 +11,60 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: DashboardColors.background,
       body: Column(
         children: [
-          // const TopNavbar(),
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Red Header Banner
-                  _buildRedHeader(),
-                  
-                  // Main Content with Padding
-                  Padding(
-                    padding: DashboardStyles.getContainerPadding(context),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Welcome Text
-                        _buildWelcomeText(),
-                        const SizedBox(height: DashboardStyles.spacingMd),
-                        
-                        // NeoBank Statistics Cards (Active Users, Pending KYCs, Daily Transactions)
-                        _buildNeoBankStatsGrid(),
-                        const SizedBox(height: DashboardStyles.spacingXl),
-                        
-                        // Quick Actions (KYC Approvals, Transaction Reviews, Loan Applications)
-                        _buildQuickActions(),
-                        const SizedBox(height: DashboardStyles.spacingXl),
-                        
-                        // Bottom Section (Recent Transactions + System Alerts)
-                        _buildNeoBankBottomSection(),
-                        const SizedBox(height: DashboardStyles.spacingXl),
-                        
-                        // Original Statistics Cards
-                        _buildStatisticsCards(),
-                        const SizedBox(height: DashboardStyles.spacingLg),
-                        
-                        // Recent Activity & Quick Actions
-                        _buildBottomSection(),
-                      ],
-                    ),
+            child: CustomScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(), // Smooth scrolling
+              slivers: [
+                // Red Header Banner
+                SliverToBoxAdapter(child: _buildRedHeader()),
+                
+                // Main Content with Padding
+                SliverPadding(
+                  padding: DashboardStyles.getContainerPadding(context),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate([
+                      // Welcome Text
+                      _buildWelcomeText(),
+                      const SizedBox(height: DashboardStyles.spacingMd),
+                      
+                      // NeoBank Statistics Cards
+                      _buildNeoBankStatsGrid(),
+                      const SizedBox(height: DashboardStyles.spacingXl),
+                      
+                      // Quick Actions
+                      _buildQuickActions(),
+                      const SizedBox(height: DashboardStyles.spacingXl),
+                      
+                      // Bottom Section (Recent Transactions + System Alerts)
+                      _buildNeoBankBottomSection(),
+                      const SizedBox(height: DashboardStyles.spacingXl),
+                      
+                      // Original Statistics Cards
+                      _buildStatisticsCards(),
+                      const SizedBox(height: DashboardStyles.spacingLg),
+                      
+                      // Recent Activity & Quick Actions
+                      _buildBottomSection(),
+                      const SizedBox(height: DashboardStyles.spacingXl),
+                    ]),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -93,7 +98,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // Welcome Text
   Widget _buildWelcomeText() {
     return Center(
       child: RichText(
@@ -148,17 +152,17 @@ class _DashboardPageState extends State<DashboardPage> {
           crossAxisCount = 2;
         }
 
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: DashboardStyles.spacingMd,
-            mainAxisSpacing: DashboardStyles.spacingMd,
-            childAspectRatio: DashboardStyles.isMobile(context) ? 2.5 : 1.8,
-          ),
-          itemCount: stats.length,
-          itemBuilder: (context, index) => _buildNeoBankStatCard(stats[index]),
+        // Convert GridView to Wrap for better performance
+        return Wrap(
+          spacing: DashboardStyles.spacingMd,
+          runSpacing: DashboardStyles.spacingMd,
+          children: stats.map((stat) {
+            double cardWidth = (constraints.maxWidth - (DashboardStyles.spacingMd * (crossAxisCount - 1))) / crossAxisCount;
+            return SizedBox(
+              width: cardWidth,
+              child: _buildNeoBankStatCard(stat),
+            );
+          }).toList(),
         );
       },
     );
@@ -247,17 +251,17 @@ class _DashboardPageState extends State<DashboardPage> {
               crossAxisCount = 2;
             }
 
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                crossAxisSpacing: DashboardStyles.spacingMd,
-                mainAxisSpacing: DashboardStyles.spacingMd,
-                childAspectRatio: DashboardStyles.isSmallMobile(context) ? 1.3 : 1.5,
-              ),
-              itemCount: actions.length,
-              itemBuilder: (context, index) => _buildQuickActionCard(actions[index]),
+            // Convert to Wrap for better scrolling
+            return Wrap(
+              spacing: DashboardStyles.spacingMd,
+              runSpacing: DashboardStyles.spacingMd,
+              children: actions.map((action) {
+                double cardWidth = (constraints.maxWidth - (DashboardStyles.spacingMd * (crossAxisCount - 1))) / crossAxisCount;
+                return SizedBox(
+                  width: cardWidth,
+                  child: _buildQuickActionCard(action),
+                );
+              }).toList(),
             );
           },
         ),
@@ -271,6 +275,7 @@ class _DashboardPageState extends State<DashboardPage> {
       decoration: DashboardStyles.actionCardDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -296,7 +301,7 @@ class _DashboardPageState extends State<DashboardPage> {
             action.description,
             style: DashboardStyles.sectionSubStyle,
           ),
-          const Spacer(),
+          const SizedBox(height: DashboardStyles.spacingMd),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -371,6 +376,7 @@ class _DashboardPageState extends State<DashboardPage> {
       decoration: DashboardStyles.actionCardDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
             'Recent Transactions',
@@ -382,108 +388,105 @@ class _DashboardPageState extends State<DashboardPage> {
             style: DashboardStyles.sectionSubStyle,
           ),
           const SizedBox(height: DashboardStyles.spacingMd),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: transactions.length,
-            itemBuilder: (context, index) {
-              final txn = transactions[index];
-              return Container(
-                decoration: index < transactions.length - 1
-                    ? DashboardStyles.transactionItemDecoration
-                    : null,
-                padding: const EdgeInsets.symmetric(
-                  vertical: DashboardStyles.spacing10,
-                  horizontal: DashboardStyles.spacing6,
-                ),
-                child: DashboardStyles.isSmallMobile(context)
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                txn.id,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: DashboardStyles.fontSize095,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              _buildStatusTag(txn.status),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            txn.name,
-                            style: const TextStyle(
-                              fontSize: DashboardStyles.fontSize095,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                txn.amount,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: DashboardStyles.fontSize095,
-                                ),
-                              ),
-                              Text(
-                                txn.time,
-                                style: const TextStyle(
-                                  color: DashboardColors.textLight,
-                                  fontSize: DashboardStyles.fontSize085,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    : Row(
-                        children: [
-                          SizedBox(
-                            width: 80,
-                            child: Text(
+          // Replace ListView with Column for better performance
+          ...transactions.asMap().entries.map((entry) {
+            final index = entry.key;
+            final txn = entry.value;
+            return Container(
+              decoration: index < transactions.length - 1
+                  ? DashboardStyles.transactionItemDecoration
+                  : null,
+              padding: const EdgeInsets.symmetric(
+                vertical: DashboardStyles.spacing10,
+                horizontal: DashboardStyles.spacing6,
+              ),
+              child: DashboardStyles.isSmallMobile(context)
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
                               txn.id,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: DashboardStyles.fontSize095,
                               ),
                             ),
+                            const SizedBox(width: 8),
+                            _buildStatusTag(txn.status),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          txn.name,
+                          style: const TextStyle(
+                            fontSize: DashboardStyles.fontSize095,
                           ),
-                          _buildStatusTag(txn.status),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              txn.name,
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              txn.amount,
                               style: const TextStyle(
+                                fontWeight: FontWeight.w600,
                                 fontSize: DashboardStyles.fontSize095,
                               ),
                             ),
-                          ),
-                          Text(
-                            txn.amount,
+                            Text(
+                              txn.time,
+                              style: const TextStyle(
+                                color: DashboardColors.textLight,
+                                fontSize: DashboardStyles.fontSize085,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        SizedBox(
+                          width: 80,
+                          child: Text(
+                            txn.id,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               fontSize: DashboardStyles.fontSize095,
                             ),
                           ),
-                          const SizedBox(width: 16),
-                          Text(
-                            txn.time,
+                        ),
+                        _buildStatusTag(txn.status),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            txn.name,
                             style: const TextStyle(
-                              color: DashboardColors.textLight,
-                              fontSize: DashboardStyles.fontSize085,
+                              fontSize: DashboardStyles.fontSize095,
                             ),
                           ),
-                        ],
-                      ),
-              );
-            },
-          ),
+                        ),
+                        Text(
+                          txn.amount,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: DashboardStyles.fontSize095,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          txn.time,
+                          style: const TextStyle(
+                            color: DashboardColors.textLight,
+                            fontSize: DashboardStyles.fontSize085,
+                          ),
+                        ),
+                      ],
+                    ),
+            );
+          }).toList(),
           const SizedBox(height: DashboardStyles.spacingMd),
           SizedBox(
             width: double.infinity,
@@ -541,6 +544,7 @@ class _DashboardPageState extends State<DashboardPage> {
       decoration: DashboardStyles.actionCardDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
             'System Alerts',
@@ -552,70 +556,67 @@ class _DashboardPageState extends State<DashboardPage> {
             style: DashboardStyles.sectionSubStyle,
           ),
           const SizedBox(height: DashboardStyles.spacingMd),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: alerts.length,
-            itemBuilder: (context, index) {
-              final alert = alerts[index];
-              return Padding(
-                padding: EdgeInsets.only(
-                  bottom: index < alerts.length - 1 ? DashboardStyles.spacing12 : 0,
-                ),
-                child: Container(
-                  decoration: DashboardStyles.alertItemDecoration,
-                  padding: const EdgeInsets.all(DashboardStyles.spacing14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 10,
-                            height: 10,
-                            margin: const EdgeInsets.only(top: 4, right: 10),
-                            decoration: BoxDecoration(
-                              color: alert.dotColor,
-                              shape: BoxShape.circle,
+          // Replace ListView with Column
+          ...alerts.asMap().entries.map((entry) {
+            final index = entry.key;
+            final alert = entry.value;
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: index < alerts.length - 1 ? DashboardStyles.spacing12 : 0,
+              ),
+              child: Container(
+                decoration: DashboardStyles.alertItemDecoration,
+                padding: const EdgeInsets.all(DashboardStyles.spacing14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.only(top: 4, right: 10),
+                          decoration: BoxDecoration(
+                            color: alert.dotColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            alert.message,
+                            style: const TextStyle(
+                              fontSize: DashboardStyles.fontSize095,
+                              color: DashboardColors.textPrimary,
                             ),
                           ),
-                          Expanded(
-                            child: Text(
-                              alert.message,
-                              style: const TextStyle(
-                                fontSize: DashboardStyles.fontSize095,
-                                color: DashboardColors.textPrimary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: DashboardStyles.spacing6),
-                      Text(
-                        alert.time,
-                        style: const TextStyle(
-                          fontSize: DashboardStyles.fontSize085,
-                          color: DashboardColors.textLight,
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: DashboardStyles.spacing6),
+                    Text(
+                      alert.time,
+                      style: const TextStyle(
+                        fontSize: DashboardStyles.fontSize085,
+                        color: DashboardColors.textLight,
                       ),
-                      const SizedBox(height: DashboardStyles.spacing10),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, alert.route);
-                          },
-                          style: DashboardStyles.alertButtonStyle,
-                          child: Text(alert.buttonText),
-                        ),
+                    ),
+                    const SizedBox(height: DashboardStyles.spacing10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, alert.route);
+                        },
+                        style: DashboardStyles.alertButtonStyle,
+                        child: Text(alert.buttonText),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          }).toList(),
         ],
       ),
     );
@@ -661,17 +662,21 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: DashboardStyles.getGridColumns(context),
-        crossAxisSpacing: DashboardStyles.spacingMd,
-        mainAxisSpacing: DashboardStyles.spacingMd,
-        childAspectRatio: DashboardStyles.isMobile(context) ? 2.5 : 2.2,
-      ),
-      itemCount: stats.length,
-      itemBuilder: (context, index) => _buildStatCard(stats[index]),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int crossAxisCount = DashboardStyles.getGridColumns(context);
+        return Wrap(
+          spacing: DashboardStyles.spacingMd,
+          runSpacing: DashboardStyles.spacingMd,
+          children: stats.map((stat) {
+            double cardWidth = (constraints.maxWidth - (DashboardStyles.spacingMd * (crossAxisCount - 1))) / crossAxisCount;
+            return SizedBox(
+              width: cardWidth,
+              child: _buildStatCard(stat),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 
@@ -734,17 +739,28 @@ class _DashboardPageState extends State<DashboardPage> {
   // ============================================
 
   Widget _buildBottomSection() {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: DashboardStyles.getChartGridColumns(context),
-      crossAxisSpacing: DashboardStyles.spacingMd,
-      mainAxisSpacing: DashboardStyles.spacingMd,
-      childAspectRatio: DashboardStyles.isMobile(context) ? 0.9 : 1.2,
-      children: [
-        _buildRecentActivityCard(),
-        _buildQuickActionsCard(),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int crossAxisCount = DashboardStyles.getChartGridColumns(context);
+        if (constraints.maxWidth < 768) {
+          return Column(
+            children: [
+              _buildRecentActivityCard(),
+              const SizedBox(height: DashboardStyles.spacingMd),
+              _buildQuickActionsCard(),
+            ],
+          );
+        } else {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _buildRecentActivityCard()),
+              const SizedBox(width: DashboardStyles.spacingMd),
+              Expanded(child: _buildQuickActionsCard()),
+            ],
+          );
+        }
+      },
     );
   }
 
@@ -785,6 +801,7 @@ class _DashboardPageState extends State<DashboardPage> {
       padding: const EdgeInsets.all(DashboardStyles.spacingMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -798,16 +815,13 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const SizedBox(height: DashboardStyles.spacingMd),
-          Expanded(
-            child: ListView.separated(
-              itemCount: activities.length,
-              separatorBuilder: (context, index) => const Divider(
-                height: DashboardStyles.spacingMd,
-                color: DashboardColors.borderLight,
-              ),
-              itemBuilder: (context, index) {
-                final activity = activities[index];
-                return ListTile(
+          // Replace ListView with Column
+          ...activities.asMap().entries.map((entry) {
+            final index = entry.key;
+            final activity = entry.value;
+            return Column(
+              children: [
+                ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Container(
                     padding: const EdgeInsets.all(10),
@@ -823,10 +837,15 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   subtitle: Text(activity.subtitle, style: DashboardStyles.captionStyle),
                   trailing: Text(activity.time, style: DashboardStyles.captionStyle),
-                );
-              },
-            ),
-          ),
+                ),
+                if (index < activities.length - 1)
+                  const Divider(
+                    height: DashboardStyles.spacingMd,
+                    color: DashboardColors.borderLight,
+                  ),
+              ],
+            );
+          }).toList(),
         ],
       ),
     );
@@ -865,21 +884,18 @@ class _DashboardPageState extends State<DashboardPage> {
       padding: const EdgeInsets.all(DashboardStyles.spacingMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text('Quick Actions', style: DashboardStyles.subheadingStyle),
           const SizedBox(height: DashboardStyles.spacingMd),
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: DashboardStyles.spacingMd,
-                mainAxisSpacing: DashboardStyles.spacingMd,
-                childAspectRatio: 1.3,
-              ),
-              itemCount: actions.length,
-              itemBuilder: (context, index) {
-                final action = actions[index];
-                return InkWell(
+          Wrap(
+            spacing: DashboardStyles.spacingMd,
+            runSpacing: DashboardStyles.spacingMd,
+            children: actions.map((action) {
+              return SizedBox(
+                width: (MediaQuery.of(context).size.width - 
+                        DashboardStyles.spacingMd * 5) / 2,
+                child: InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, action.route);
                   },
@@ -907,9 +923,9 @@ class _DashboardPageState extends State<DashboardPage> {
                       ],
                     ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            }).toList(),
           ),
         ],
       ),
