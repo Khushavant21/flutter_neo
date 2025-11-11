@@ -18,17 +18,26 @@ dependencies:
   fl_chart: ^1.1.1
   pdf: ^3.11.1
   printing: ^5.13.2
-  csv: ^6.0.0              # Add this line
-  path_provider: ^2.1.4     # Add this line
+  csv: ^6.0.0
+  path_provider: ^2.1.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/neobank01.png"  # Changed to neobank01.png
+  adaptive_icon_background: "#FFFFFF"  # Optional: set background color
+  adaptive_icon_foreground: "assets/neobank01.png"  # Optional: for Android adaptive icons
 
 flutter:
   uses-material-design: true
 
   assets:
     - assets/logo.png
+    - assets/neobank01.png
     - assets/neobank02.png
