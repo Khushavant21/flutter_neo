@@ -18,6 +18,8 @@ dependencies:
   fl_chart: ^1.1.1
   pdf: ^3.11.1
   printing: ^5.13.2
+  csv: ^6.0.0              # Add this line
+  path_provider: ^2.1.4     # Add this line
 
 dev_dependencies:
   flutter_test:
@@ -30,4 +32,3 @@ flutter:
   assets:
     - assets/logo.png
     - assets/neobank02.png
-    

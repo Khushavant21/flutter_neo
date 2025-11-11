@@ -13,6 +13,12 @@ import 'widgets/admin_dashboard/DashboardPage.dart';
 import 'widgets/adminTransaction/adminTransactionPage.dart';
 import 'widgets/adminMoneyTransfer/adminMoneyTransferPage.dart';
 import 'widgets/adminDepositManagement/adminDepositManagementPage.dart';
+// ===== Import Complaints & Support page =====
+import 'widgets/adminComplaint/complaints_layout_screen.dart';
+// ===== Import Investment Products page =====
+import 'widgets/adminInvestment/admin_investment_page.dart';
+// ===== Import Accounts page (NEW) =====
+import 'widgets/adminAccounts/admin_accounts_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +53,7 @@ class MyApp extends StatelessWidget {
         ),
         '/admin/accountsdashboard': (context) => const ResponsiveAdminLayout(
           title: 'Accounts',
-          content: Center(child: Text('Accounts Dashboard')),
+          content: AdminAccountsPage(), // UPDATED: Now points to your actual Accounts page
         ),
         '/admin/transactions': (context) => const ResponsiveAdminLayout(
           title: 'Transactions',
@@ -60,6 +66,14 @@ class MyApp extends StatelessWidget {
         '/admin/depositmanagement': (context) => const ResponsiveAdminLayout(
           title: 'Deposit Management',
           content: AdminDepositManagement(),
+        ),
+        '/admin/investment_products': (context) => const ResponsiveAdminLayout(
+          title: 'Investment Products',
+          content: AdminInvestmentPage(),
+        ),
+        '/admin/complaints&support': (context) => const ResponsiveAdminLayout(
+          title: 'Complaints & Support',
+          content: ComplaintsLayoutScreen(),
         ),
         '/admin/reports': (context) => const ResponsiveAdminLayout(
           title: 'Reports',
