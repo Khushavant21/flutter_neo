@@ -17,6 +17,10 @@ import 'widgets/adminComplaint/complaints_layout_screen.dart';
 import 'widgets/adminInvestment/admin_investment_page.dart';
 import 'widgets/adminAccounts/admin_accounts_page.dart';
 import 'widgets/adminKYC/kyc_dashboard.dart';
+import 'widgets/adminUser/user_management_page.dart';
+
+// Search controller
+final TextEditingController homeSearchController = TextEditingController();
 
 void main() {
   runApp(const MyApp());
@@ -43,11 +47,11 @@ class MyApp extends StatelessWidget {
         ),
         '/admin/users': (context) => const ResponsiveAdminLayout(
           title: 'Users',
-          content: Center(child: Text('Users Screen')),
+          content: UserManagementPage(),
         ),
         '/admin/kyc': (context) => const ResponsiveAdminLayout(
           title: 'KYC',
-          content: KYCDashboard(), // UPDATED: Now points to your actual KYC page
+          content: KYCDashboard(),
         ),
         '/admin/accountsdashboard': (context) => const ResponsiveAdminLayout(
           title: 'Accounts',
@@ -81,8 +85,8 @@ class MyApp extends StatelessWidget {
           title: 'Loans',
           content: AdminLoanPage(),
         ),
-        '/admin/cards': (context) =>
-            const ResponsiveAdminLayout(title: 'Cards', content: CardPage()),
+        '/admin/cards': (context) => const ResponsiveAdminLayout(
+            title: 'Cards', content: CardPage()),
         '/admin/settings': (context) => const ResponsiveAdminLayout(
           title: 'Settings',
           content: AdminSettingPage(),
@@ -124,14 +128,14 @@ final List<NotificationItem> notifications = [
   ),
   NotificationItem(
     title: 'Loan Application',
-    message: 'New loan application submitted by John Doe for \$50,000.',
+    message: 'New loan application submitted.',
     time: '1 hour ago',
     icon: Icons.account_balance_wallet,
     iconColor: Colors.orange,
   ),
   NotificationItem(
     title: 'System Alert',
-    message: 'Server maintenance scheduled for tonight at 2:00 AM.',
+    message: 'Server maintenance scheduled.',
     time: '3 hours ago',
     icon: Icons.warning,
     iconColor: Colors.red,
@@ -141,265 +145,81 @@ final List<NotificationItem> notifications = [
 //
 // ===== Responsive Layout Widget =====
 //
-class ResponsiveAdminLayout extends StatelessWidget {
+class ResponsiveAdminLayout extends StatefulWidget {
   final Widget content;
   final String title;
+
   const ResponsiveAdminLayout({
     super.key,
     required this.content,
     this.title = 'NeoBank Admin',
   });
 
-  // Search Dialog
-  void _showSearchDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.search, color: Colors.black54),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        hintText: 'Search users, transactions, reports...',
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(color: Colors.black38),
-                      ),
-                      onSubmitted: (value) {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Searching for: $value')),
-                        );
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.black54),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              const Divider(),
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Recent Searches',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              _buildSearchItem(context, 'User Management', Icons.person),
-              _buildSearchItem(context, 'Transaction History', Icons.receipt),
-              _buildSearchItem(context, 'Loan Applications', Icons.money),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  @override
+  State<ResponsiveAdminLayout> createState() => _ResponsiveAdminLayoutState();
+}
 
-  Widget _buildSearchItem(BuildContext context, String text, IconData icon) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Navigating to: $text')),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          children: [
-            Icon(icon, size: 18, color: Colors.black54),
-            const SizedBox(width: 12),
-            Text(text, style: const TextStyle(fontSize: 14)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Notification Panel
-  void _showNotificationPanel(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.4,
-        maxChildSize: 0.9,
-        builder: (context, scrollController) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade200),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Notifications',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Marked all as read')),
-                        );
-                      },
-                      child: const Text('Mark all as read'),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: notifications.length,
-                  itemBuilder: (context, index) {
-                    final notification = notifications[index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Opened: ${notification.title}')),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.grey.shade200),
-                          ),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: notification.iconColor.withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                notification.icon,
-                                color: notification.iconColor,
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    notification.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    notification.message,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    notification.time,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: Colors.grey.shade500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
+  bool showSearch = false;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         bool isMobile = constraints.maxWidth < 800;
+
+        // MOBILE UI — This is where search toggle happens
         if (isMobile) {
           return Scaffold(
             appBar: AppBar(
-              elevation: 2,
-              shadowColor: Colors.black.withOpacity(0.1),
-              title: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                  letterSpacing: 0.3,
-                ),
-              ),
               backgroundColor: Colors.white,
+              elevation: 2,
               systemOverlayStyle: SystemUiOverlayStyle.dark,
-              centerTitle: false,
-              leadingWidth: 56,
+
               leading: Builder(
                 builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.black87, size: 24),
+                  icon: const Icon(Icons.menu, color: Colors.black87),
                   onPressed: () => Scaffold.of(context).openDrawer(),
-                  padding: const EdgeInsets.all(16),
                 ),
               ),
+
+              title: showSearch
+                  ? _mobileSearchBar()
+                  : Text(
+                      widget.title,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.search, color: Colors.black87, size: 24),
-                  onPressed: () => _showSearchDialog(context),
-                  padding: const EdgeInsets.all(12),
-                ),
+                // SEARCH ICON or CLOSE BUTTON
+                if (!showSearch)
+                  IconButton(
+                    icon: const Icon(Icons.search, color: Colors.black87),
+                    onPressed: () {
+                      setState(() => showSearch = true);
+                    },
+                  )
+                else
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.black87),
+                    onPressed: () {
+                      setState(() {
+                        showSearch = false;
+                        homeSearchController.clear();
+                      });
+                    },
+                  ),
+
+                // NOTIFICATION ICON
                 Stack(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.notifications_outlined, color: Colors.black87, size: 24),
-                      onPressed: () => _showNotificationPanel(context),
-                      padding: const EdgeInsets.all(12),
+                      icon: const Icon(Icons.notifications_outlined,
+                          color: Colors.black87),
+                      onPressed: () {},
                     ),
                     Positioned(
                       right: 8,
@@ -407,36 +227,28 @@ class ResponsiveAdminLayout extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 158, 26, 16),
+                          color: Colors.red,
                           shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
                         ),
                         child: Text(
                           '${notifications.length}',
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
+                              color: Colors.white, fontSize: 10),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(width: 8),
               ],
             ),
+
             drawer: const Drawer(child: AdminSidebar()),
-            body: SafeArea(
-              top: false,
-              child: content,
-            ),
+            body: widget.content,
           );
-        } else {
+        }
+
+        // DESKTOP VIEW (unchanged)
+        else {
           return Scaffold(
             body: Row(
               children: [
@@ -444,7 +256,6 @@ class ResponsiveAdminLayout extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      // Top bar with search and notification for desktop
                       Container(
                         height: 60,
                         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -462,15 +273,15 @@ class ResponsiveAdminLayout extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.search, color: Colors.black87, size: 24),
-                              onPressed: () => _showSearchDialog(context),
+                              icon: const Icon(Icons.search),
+                              onPressed: () {},
                             ),
                             const SizedBox(width: 12),
                             Stack(
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.notifications_outlined, color: Colors.black87, size: 24),
-                                  onPressed: () => _showNotificationPanel(context),
+                                  icon: const Icon(Icons.notifications_outlined),
+                                  onPressed: () {},
                                 ),
                                 Positioned(
                                   right: 8,
@@ -481,18 +292,10 @@ class ResponsiveAdminLayout extends StatelessWidget {
                                       color: Colors.red,
                                       shape: BoxShape.circle,
                                     ),
-                                    constraints: const BoxConstraints(
-                                      minWidth: 16,
-                                      minHeight: 16,
-                                    ),
                                     child: Text(
                                       '${notifications.length}',
                                       style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
+                                          color: Colors.white, fontSize: 10),
                                     ),
                                   ),
                                 ),
@@ -501,9 +304,7 @@ class ResponsiveAdminLayout extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: SafeArea(child: content),
-                      ),
+                      Expanded(child: widget.content),
                     ],
                   ),
                 ),
@@ -512,6 +313,39 @@ class ResponsiveAdminLayout extends StatelessWidget {
           );
         }
       },
+    );
+  }
+
+  // MOBILE SEARCH BAR WIDGET
+  Widget _mobileSearchBar() {
+    return Container(
+      height: 42,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          const Icon(Icons.search, color: Colors.black54, size: 20),
+          const SizedBox(width: 6),
+          Expanded(
+            child: TextField(
+              controller: homeSearchController,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: "Search...",
+                border: InputBorder.none,
+              ),
+              onSubmitted: (value) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("Searching: $value")));
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
