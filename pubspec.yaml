@@ -11,15 +11,25 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # UI & Icons
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.6.0
+
+  # Routing
   go_router: ^16.3.0
+
+  # Utilities
   intl: ^0.20.2
-  fl_chart: ^1.1.1
-  pdf: ^3.11.1
-  printing: ^5.13.2
+  faker: ^2.1.0
   csv: ^6.0.0
   path_provider: ^2.1.4
+
+  # Charts
+  fl_chart: ^1.1.1
+
+  # PDF & Printing
+  pdf: ^3.11.1
+  printing: ^5.13.2
 
 dev_dependencies:
   flutter_test:
@@ -30,10 +40,9 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/neobank01.png"  # Changed to neobank01.png
-  adaptive_icon_background: "#FFFFFF"  # Optional: set background color
-  adaptive_icon_foreground: "assets/neobank01.png"  # Optional: for Android adaptive icons
-
+  image_path: "assets/neobank01.png"
+  min_sdk_android: 21
+  
 flutter:
   uses-material-design: true
 
