@@ -3,7 +3,7 @@ import '../../styles/kyc_styles.dart';
 // import 'kyc_routes.dart';
 
 class KYCDashboard extends StatefulWidget {
-  const KYCDashboard({Key? key}) : super(key: key);
+  const KYCDashboard({super.key});
 
   @override
   State<KYCDashboard> createState() => _KYCDashboardState();
@@ -16,15 +16,42 @@ class _KYCDashboardState extends State<KYCDashboard> {
   Map<String, dynamic>? reviewTxn;
 
   final List<Map<String, dynamic>> transactions = [
-    {'id': 'TXN001', 'type': 'High Value', 'amount': '\$30,000', 'status': 'pending'},
-    {'id': 'TXN002', 'type': 'Structuring', 'amount': '\$25,000', 'status': 'flagged'},
-    {'id': 'TXN003', 'type': 'Offshore', 'amount': '\$35,000', 'status': 'pending'},
+    {
+      'id': 'TXN001',
+      'type': 'High Value',
+      'amount': '\$30,000',
+      'status': 'pending',
+    },
+    {
+      'id': 'TXN002',
+      'type': 'Structuring',
+      'amount': '\$25,000',
+      'status': 'flagged',
+    },
+    {
+      'id': 'TXN003',
+      'type': 'Offshore',
+      'amount': '\$35,000',
+      'status': 'pending',
+    },
   ];
 
   final List<Map<String, dynamic>> alerts = [
-    {'id': 1, 'text': 'AML compliance check failed for 3 users', 'time': '2 hours ago'},
-    {'id': 2, 'text': 'High transaction volume detected', 'time': '4 hours ago'},
-    {'id': 3, 'text': 'Daily backup completed successfully', 'time': '6 hours ago'},
+    {
+      'id': 1,
+      'text': 'AML compliance check failed for 3 users',
+      'time': '2 hours ago',
+    },
+    {
+      'id': 2,
+      'text': 'High transaction volume detected',
+      'time': '4 hours ago',
+    },
+    {
+      'id': 3,
+      'text': 'Daily backup completed successfully',
+      'time': '6 hours ago',
+    },
   ];
 
   @override
@@ -71,16 +98,14 @@ class _KYCDashboardState extends State<KYCDashboard> {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-      decoration: const BoxDecoration(
-        color: KYCColors.primary,
-      ),
+      decoration: const BoxDecoration(color: KYCColors.primary),
       child: SafeArea(
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'KYC & Compliance Dashboard',
+              'KYC Dashboard',
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
@@ -90,10 +115,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
             const SizedBox(height: 6),
             const Text(
               'Monitor and manage compliance operations',
-              style: TextStyle(
-                fontSize: 15,
-                color: Color(0xFFF0F0F0),
-              ),
+              style: TextStyle(fontSize: 15, color: Color(0xFFF0F0F0)),
             ),
           ],
         ),
@@ -128,8 +150,12 @@ class _KYCDashboardState extends State<KYCDashboard> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        int crossAxisCount = constraints.maxWidth > 900 ? 3 : constraints.maxWidth > 600 ? 2 : 1;
-        
+        int crossAxisCount = constraints.maxWidth > 900
+            ? 3
+            : constraints.maxWidth > 600
+            ? 2
+            : 1;
+
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -214,7 +240,10 @@ class _KYCDashboardState extends State<KYCDashboard> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: KYCColors.primary,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
                   ),
@@ -269,7 +298,8 @@ class _KYCDashboardState extends State<KYCDashboard> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 OutlinedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/transactions'),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/transactions'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: KYCColors.primary,
                     side: const BorderSide(color: KYCColors.primary),
@@ -290,9 +320,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.grey.shade300),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -308,7 +336,10 @@ class _KYCDashboardState extends State<KYCDashboard> {
                 const SizedBox(height: 4),
                 Text(
                   txn['type'],
-                  style: const TextStyle(fontSize: 12, color: KYCColors.textSecondary),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: KYCColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -316,7 +347,10 @@ class _KYCDashboardState extends State<KYCDashboard> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: KYCColors.background,
                   borderRadius: BorderRadius.circular(6),
@@ -336,9 +370,16 @@ class _KYCDashboardState extends State<KYCDashboard> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: txn['status'] == 'pending' ? Colors.grey[800] : KYCColors.warning,
-                  foregroundColor: txn['status'] == 'pending' ? Colors.white : Colors.black,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  backgroundColor: txn['status'] == 'pending'
+                      ? Colors.grey[800]
+                      : KYCColors.warning,
+                  foregroundColor: txn['status'] == 'pending'
+                      ? Colors.white
+                      : Colors.black,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                 ),
                 child: Text(txn['status'] == 'pending' ? 'Monitor' : 'Review'),
               ),
@@ -386,9 +427,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.grey.shade300),
-        ),
+        border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -411,7 +450,10 @@ class _KYCDashboardState extends State<KYCDashboard> {
                 const SizedBox(height: 4),
                 Text(
                   alert['time'],
-                  style: const TextStyle(fontSize: 12, color: KYCColors.textSecondary),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: KYCColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -440,8 +482,12 @@ class _KYCDashboardState extends State<KYCDashboard> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        int crossAxisCount = constraints.maxWidth > 900 ? 4 : constraints.maxWidth > 600 ? 2 : 1;
-        
+        int crossAxisCount = constraints.maxWidth > 900
+            ? 4
+            : constraints.maxWidth > 600
+            ? 2
+            : 1;
+
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -461,11 +507,18 @@ class _KYCDashboardState extends State<KYCDashboard> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(item['icon'] as IconData, size: 32, color: KYCColors.primary),
+                    Icon(
+                      item['icon'] as IconData,
+                      size: 32,
+                      color: KYCColors.primary,
+                    ),
                     const SizedBox(height: 8),
                     const Text(
                       '0',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -483,3 +536,4 @@ class _KYCDashboardState extends State<KYCDashboard> {
     );
   }
 }
+

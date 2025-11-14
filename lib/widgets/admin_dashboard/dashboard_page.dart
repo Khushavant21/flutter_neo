@@ -32,7 +32,7 @@ class _DashboardPageState extends State<DashboardPage> {
               slivers: [
                 // Red Header Banner
                 SliverToBoxAdapter(child: _buildRedHeader()),
-                
+
                 // Main Content with Padding
                 SliverPadding(
                   padding: DashboardStyles.getContainerPadding(context),
@@ -41,23 +41,23 @@ class _DashboardPageState extends State<DashboardPage> {
                       // Welcome Text
                       _buildWelcomeText(),
                       const SizedBox(height: DashboardStyles.spacingMd),
-                      
+
                       // NeoBank Statistics Cards
                       _buildNeoBankStatsGrid(),
                       const SizedBox(height: DashboardStyles.spacingXl),
-                      
+
                       // Quick Actions
                       _buildQuickActions(),
                       const SizedBox(height: DashboardStyles.spacingXl),
-                      
+
                       // Bottom Section (Recent Transactions + System Alerts)
                       _buildNeoBankBottomSection(),
                       const SizedBox(height: DashboardStyles.spacingXl),
-                      
+
                       // Original Statistics Cards
                       _buildStatisticsCards(),
                       const SizedBox(height: DashboardStyles.spacingLg),
-                      
+
                       // Recent Activity & Quick Actions
                       _buildBottomSection(),
                       const SizedBox(height: DashboardStyles.spacingXl),
@@ -75,7 +75,7 @@ class _DashboardPageState extends State<DashboardPage> {
   // ============================================
   // Red Header Banner
   // ============================================
-  
+
   Widget _buildRedHeader() {
     return Container(
       width: double.infinity,
@@ -157,7 +157,10 @@ class _DashboardPageState extends State<DashboardPage> {
           spacing: DashboardStyles.spacingMd,
           runSpacing: DashboardStyles.spacingMd,
           children: stats.map((stat) {
-            double cardWidth = (constraints.maxWidth - (DashboardStyles.spacingMd * (crossAxisCount - 1))) / crossAxisCount;
+            double cardWidth =
+                (constraints.maxWidth -
+                    (DashboardStyles.spacingMd * (crossAxisCount - 1))) /
+                crossAxisCount;
             return SizedBox(
               width: cardWidth,
               child: _buildNeoBankStatCard(stat),
@@ -237,10 +240,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Quick Actions',
-          style: DashboardStyles.sectionTitleStyle,
-        ),
+        const Text('Quick Actions', style: DashboardStyles.sectionTitleStyle),
         const SizedBox(height: DashboardStyles.spacingMd),
         LayoutBuilder(
           builder: (context, constraints) {
@@ -256,7 +256,10 @@ class _DashboardPageState extends State<DashboardPage> {
               spacing: DashboardStyles.spacingMd,
               runSpacing: DashboardStyles.spacingMd,
               children: actions.map((action) {
-                double cardWidth = (constraints.maxWidth - (DashboardStyles.spacingMd * (crossAxisCount - 1))) / crossAxisCount;
+                double cardWidth =
+                    (constraints.maxWidth -
+                        (DashboardStyles.spacingMd * (crossAxisCount - 1))) /
+                    crossAxisCount;
                 return SizedBox(
                   width: cardWidth,
                   child: _buildQuickActionCard(action),
@@ -287,7 +290,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: DashboardStyles.badgeDecoration,
                 child: Text(
                   action.badge,
@@ -297,10 +303,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const SizedBox(height: DashboardStyles.spacingSm),
-          Text(
-            action.description,
-            style: DashboardStyles.sectionSubStyle,
-          ),
+          Text(action.description, style: DashboardStyles.sectionSubStyle),
           const SizedBox(height: DashboardStyles.spacingMd),
           SizedBox(
             width: double.infinity,
@@ -486,7 +489,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ],
                     ),
             );
-          }).toList(),
+          }),
           const SizedBox(height: DashboardStyles.spacingMd),
           SizedBox(
             width: double.infinity,
@@ -507,10 +510,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: DashboardStyles.getTagDecoration(status),
-      child: Text(
-        status,
-        style: DashboardStyles.getTagTextStyle(),
-      ),
+      child: Text(status, style: DashboardStyles.getTagTextStyle()),
     );
   }
 
@@ -546,10 +546,7 @@ class _DashboardPageState extends State<DashboardPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'System Alerts',
-            style: DashboardStyles.sectionTitleStyle,
-          ),
+          const Text('System Alerts', style: DashboardStyles.sectionTitleStyle),
           const SizedBox(height: 4),
           const Text(
             'Critical notifications and system status',
@@ -562,7 +559,9 @@ class _DashboardPageState extends State<DashboardPage> {
             final alert = entry.value;
             return Padding(
               padding: EdgeInsets.only(
-                bottom: index < alerts.length - 1 ? DashboardStyles.spacing12 : 0,
+                bottom: index < alerts.length - 1
+                    ? DashboardStyles.spacing12
+                    : 0,
               ),
               child: Container(
                 decoration: DashboardStyles.alertItemDecoration,
@@ -616,7 +615,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -669,11 +668,11 @@ class _DashboardPageState extends State<DashboardPage> {
           spacing: DashboardStyles.spacingMd,
           runSpacing: DashboardStyles.spacingMd,
           children: stats.map((stat) {
-            double cardWidth = (constraints.maxWidth - (DashboardStyles.spacingMd * (crossAxisCount - 1))) / crossAxisCount;
-            return SizedBox(
-              width: cardWidth,
-              child: _buildStatCard(stat),
-            );
+            double cardWidth =
+                (constraints.maxWidth -
+                    (DashboardStyles.spacingMd * (crossAxisCount - 1))) /
+                crossAxisCount;
+            return SizedBox(width: cardWidth, child: _buildStatCard(stat));
           }).toList(),
         );
       },
@@ -699,7 +698,9 @@ class _DashboardPageState extends State<DashboardPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: DashboardStyles.badgeDecorationDynamic(
-                  data.isPositive ? DashboardColors.success : DashboardColors.error,
+                  data.isPositive
+                      ? DashboardColors.success
+                      : DashboardColors.error,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -707,13 +708,17 @@ class _DashboardPageState extends State<DashboardPage> {
                     Icon(
                       data.isPositive ? Icons.trending_up : Icons.trending_down,
                       size: 12,
-                      color: data.isPositive ? DashboardColors.success : DashboardColors.error,
+                      color: data.isPositive
+                          ? DashboardColors.success
+                          : DashboardColors.error,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       data.change,
                       style: DashboardStyles.badgeTextStyleDynamic(
-                        data.isPositive ? DashboardColors.success : DashboardColors.error,
+                        data.isPositive
+                            ? DashboardColors.success
+                            : DashboardColors.error,
                       ),
                     ),
                   ],
@@ -825,8 +830,14 @@ class _DashboardPageState extends State<DashboardPage> {
                   contentPadding: EdgeInsets.zero,
                   leading: Container(
                     padding: const EdgeInsets.all(10),
-                    decoration: DashboardStyles.iconContainerDecoration(activity.color),
-                    child: FaIcon(activity.icon, color: activity.color, size: 16),
+                    decoration: DashboardStyles.iconContainerDecoration(
+                      activity.color,
+                    ),
+                    child: FaIcon(
+                      activity.icon,
+                      color: activity.color,
+                      size: 16,
+                    ),
                   ),
                   title: Text(
                     activity.title,
@@ -835,8 +846,14 @@ class _DashboardPageState extends State<DashboardPage> {
                       color: DashboardColors.textPrimary,
                     ),
                   ),
-                  subtitle: Text(activity.subtitle, style: DashboardStyles.captionStyle),
-                  trailing: Text(activity.time, style: DashboardStyles.captionStyle),
+                  subtitle: Text(
+                    activity.subtitle,
+                    style: DashboardStyles.captionStyle,
+                  ),
+                  trailing: Text(
+                    activity.time,
+                    style: DashboardStyles.captionStyle,
+                  ),
                 ),
                 if (index < activities.length - 1)
                   const Divider(
@@ -845,7 +862,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
               ],
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -893,8 +910,10 @@ class _DashboardPageState extends State<DashboardPage> {
             runSpacing: DashboardStyles.spacingMd,
             children: actions.map((action) {
               return SizedBox(
-                width: (MediaQuery.of(context).size.width - 
-                        DashboardStyles.spacingMd * 5) / 2,
+                width:
+                    (MediaQuery.of(context).size.width -
+                        DashboardStyles.spacingMd * 5) /
+                    2,
                 child: InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, action.route);
@@ -902,9 +921,14 @@ class _DashboardPageState extends State<DashboardPage> {
                   borderRadius: BorderRadius.circular(DashboardStyles.radiusMd),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: action.color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(DashboardStyles.radiusMd),
-                      border: Border.all(color: action.color.withOpacity(0.2), width: 1),
+                      color: action.color.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(
+                        DashboardStyles.radiusMd,
+                      ),
+                      border: Border.all(
+                        color: action.color.withValues(alpha: 0.2),
+                        width: 1,
+                      ),
                     ),
                     padding: const EdgeInsets.all(DashboardStyles.spacingMd),
                     child: Column(
@@ -1046,3 +1070,4 @@ class _QuickActionData {
     required this.route,
   });
 }
+

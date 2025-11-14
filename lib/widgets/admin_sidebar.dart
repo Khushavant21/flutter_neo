@@ -94,7 +94,7 @@ class _AdminSidebarState extends State<AdminSidebar> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(2, 0),
           ),
@@ -106,10 +106,7 @@ class _AdminSidebarState extends State<AdminSidebar> {
           DrawerHeader(
             decoration: const BoxDecoration(color: Colors.white),
             child: Center(
-              child: Image.asset(
-                'assets/neobank02.png',
-                height: 140,
-              ),
+              child: Image.asset('assets/neobank02.png', height: 140),
             ),
           ),
 
@@ -123,7 +120,7 @@ class _AdminSidebarState extends State<AdminSidebar> {
                     return _buildDropdownItem(item, isMobile);
                   }
                   return _buildMenuItem(item, isMobile);
-                }).toList(),
+                }),
                 const Divider(),
               ],
             ),
@@ -262,10 +259,8 @@ class _AdminSidebarState extends State<AdminSidebar> {
         ),
       ),
       selected: isActive,
-      selectedTileColor: const Color(0xFF900603).withOpacity(0.1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      selectedTileColor: const Color(0xFF900603).withValues(alpha: 0.1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       onTap: () {
         if (item.path != null) {
           Navigator.pop(context);
@@ -307,10 +302,8 @@ class _AdminSidebarState extends State<AdminSidebar> {
             ),
           ),
           selected: hasActiveChild,
-          selectedTileColor: const Color(0xFF900603).withOpacity(0.1),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          selectedTileColor: const Color(0xFF900603).withValues(alpha: 0.1),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           onTap: () {
             setState(() {
               _expandedItem = isExpanded ? null : item.name;
@@ -359,10 +352,8 @@ class _AdminSidebarState extends State<AdminSidebar> {
         ),
       ),
       selected: isActive,
-      selectedTileColor: const Color(0xFF900603).withOpacity(0.1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      selectedTileColor: const Color(0xFF900603).withValues(alpha: 0.1),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       onTap: () {
         if (subItem.path != null) {
           Navigator.pop(context);
@@ -394,12 +385,12 @@ class _AdminSidebarState extends State<AdminSidebar> {
             ),
             onPressed: () {
               Navigator.pop(context);
-              
+
               // Show beautiful logout message
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                barrierColor: Colors.black.withOpacity(0.7),
+                barrierColor: Colors.black.withValues(alpha: 0.7),
                 builder: (_) => Center(
                   child: Material(
                     color: Colors.transparent,
@@ -415,7 +406,9 @@ class _AdminSidebarState extends State<AdminSidebar> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF900603).withOpacity(0.4),
+                            color: const Color(
+                              0xFF900603,
+                            ).withValues(alpha: 0.4),
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
@@ -434,11 +427,13 @@ class _AdminSidebarState extends State<AdminSidebar> {
                                 child: Container(
                                   padding: const EdgeInsets.all(20),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.25),
+                                    color: Colors.white.withValues(alpha: 0.25),
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                         blurRadius: 15,
                                         spreadRadius: 3,
                                       ),
@@ -512,11 +507,13 @@ class _AdminSidebarState extends State<AdminSidebar> {
                                 width: width,
                                 height: 4,
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white.withValues(alpha: 0.8),
                                   borderRadius: BorderRadius.circular(2),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.white.withOpacity(0.4),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.4,
+                                      ),
                                       blurRadius: 8,
                                     ),
                                   ],

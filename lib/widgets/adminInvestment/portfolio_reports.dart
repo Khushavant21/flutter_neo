@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class PortfolioReports extends StatefulWidget {
-  const PortfolioReports({super.key});
+  final VoidCallback? onBack;
+
+  const PortfolioReports({super.key, this.onBack});
 
   @override
   State<PortfolioReports> createState() => _PortfolioReportsState();
@@ -78,31 +81,20 @@ class _PortfolioReportsState extends State<PortfolioReports> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: widget.onBack,
+        ),
+        title: const Text("Portfolio Reports"),
+        backgroundColor: const Color(0xFF900603),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ===== Back Button =====
-              IconButton(
-                icon: const Icon(Icons.arrow_back, color: Color(0xFF900603)),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-
-              // ===== Header =====
-              Text(
-                "Portfolio Reports",
-                style: TextStyle(
-                  color: const Color(0xFF900603),
-                  fontSize: screenWidth < 400 ? 20 : 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-
               // ===== Card Container =====
               Container(
                 width: double.infinity,
@@ -111,7 +103,7 @@ class _PortfolioReportsState extends State<PortfolioReports> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -143,25 +135,56 @@ class _PortfolioReportsState extends State<PortfolioReports> {
                           },
                         ),
                         const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: exportToCSV,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF900603),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: exportToCSV,
+                                icon: const FaIcon(
+                                  FontAwesomeIcons.fileCsv,
+                                  size: 16,
+                                ),
+                                label: const Text("Export CSV"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF900603),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
                               ),
                             ),
-                            child: const Text(
-                              "Export CSV",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  // Placeholder for PDF export
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("PDF export coming soon!"),
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                  );
+                                },
+                                icon: const FaIcon(
+                                  FontAwesomeIcons.filePdf,
+                                  size: 16,
+                                ),
+                                label: const Text("Export PDF"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFDC3545),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),

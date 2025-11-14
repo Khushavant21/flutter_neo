@@ -145,3 +145,4 @@ Future<Ticket?> updateTicket(
   ticket.lastUpdate = DateTime.now();
   return ticket;
 }
+

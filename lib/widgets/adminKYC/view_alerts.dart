@@ -12,14 +12,14 @@ class KYCColors {
 
 class KYCStyles {
   static BoxShadow cardShadow = BoxShadow(
-    color: Colors.black.withOpacity(0.05),
+    color: Colors.black.withValues(alpha: 0.05),
     blurRadius: 10,
     offset: const Offset(0, 2),
   );
 }
 
 class ViewAlerts extends StatefulWidget {
-  const ViewAlerts({Key? key}) : super(key: key);
+  const ViewAlerts({super.key});
 
   @override
   State<ViewAlerts> createState() => _ViewAlertsState();
@@ -242,7 +242,7 @@ class _ViewAlertsState extends State<ViewAlerts> {
 
   Widget _buildFilterDropdown() {
     return DropdownButtonFormField<String>(
-      value: filter,
+      initialValue: filter,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -261,7 +261,7 @@ class _ViewAlertsState extends State<ViewAlerts> {
 
   Widget _buildSortDropdown() {
     return DropdownButtonFormField<String>(
-      value: sort,
+      initialValue: sort,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -308,13 +308,13 @@ class _ViewAlertsState extends State<ViewAlerts> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          headingRowColor: MaterialStateProperty.all(KYCColors.primary),
+          headingRowColor: WidgetStateProperty.all(KYCColors.primary),
           columns: [
             DataColumn(
               label: Checkbox(
                 value: selectedAlerts.length == paginatedAlerts.length && paginatedAlerts.isNotEmpty,
                 onChanged: (_) => _toggleAll(),
-                fillColor: MaterialStateProperty.all(Colors.white),
+                fillColor: WidgetStateProperty.all(Colors.white),
                 checkColor: KYCColors.primary,
               ),
             ),

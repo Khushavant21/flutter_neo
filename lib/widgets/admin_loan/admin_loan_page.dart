@@ -229,7 +229,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
         const SizedBox(width: 10),
         Expanded(
           child: DropdownButtonFormField<String>(
-            value: statusFilter,
+            initialValue: statusFilter,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               border: OutlineInputBorder(
@@ -266,7 +266,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

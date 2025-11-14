@@ -44,7 +44,7 @@ class ProfileStyles {
   );
 
   static BoxDecoration profileChipDecoration = BoxDecoration(
-    color: Colors.white.withOpacity(0.1),
+    color: Colors.white.withValues(alpha: 0.1),
     borderRadius: BorderRadius.circular(8),
   );
 
@@ -68,7 +68,7 @@ class ProfileStyles {
     borderRadius: BorderRadius.circular(12),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),

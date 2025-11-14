@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../adminMoneyTransfer/adminMoneyTransferStyles.dart';
+import '../adminMoneyTransfer/admin_money_transfer_styles.dart';
 
 class MoneyTransferRequests extends StatefulWidget {
-  const MoneyTransferRequests({Key? key}) : super(key: key);
+  const MoneyTransferRequests({super.key});
 
   @override
   State<MoneyTransferRequests> createState() => _MoneyTransferRequestsState();
@@ -34,7 +34,7 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "amount": 25000,
         "currency": "INR",
         "method": "NEFT",
-        "status": "Pending"
+        "status": "Pending",
       },
       {
         "id": "REQ002",
@@ -46,8 +46,8 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "amount": 5000,
         "currency": "INR",
         "method": "UPI",
-        "status": "Approved"
-      }
+        "status": "Approved",
+      },
     ];
 
     outgoing = [
@@ -57,7 +57,7 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "beneficiary": "Neha Singh",
         "amount": 12000,
         "currency": "INR",
-        "type": "Scheduled"
+        "type": "Scheduled",
       },
       {
         "id": "OUT002",
@@ -65,8 +65,8 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "beneficiary": "Vikram Rao",
         "amount": 7500,
         "currency": "INR",
-        "type": "Queued"
-      }
+        "type": "Queued",
+      },
     ];
 
     incoming = [
@@ -76,7 +76,7 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "sender": "Global Corp Ltd.",
         "amount": 500000,
         "currency": "INR",
-        "review": "Pending"
+        "review": "Pending",
       },
       {
         "id": "IN002",
@@ -84,8 +84,8 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "sender": "Overseas Bank",
         "amount": 250000,
         "currency": "INR",
-        "review": "Approved"
-      }
+        "review": "Approved",
+      },
     ];
 
     beneficiaries = [
@@ -94,15 +94,15 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "name": "Ravi Sharma",
         "account": "5551112223",
         "bank": "HDFC Bank",
-        "status": "Pending"
+        "status": "Pending",
       },
       {
         "id": "BENE002",
         "name": "Meena Kumari",
         "account": "7778889991",
         "bank": "ICICI Bank",
-        "status": "Approved"
-      }
+        "status": "Approved",
+      },
     ];
 
     bills = [
@@ -112,7 +112,7 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "biller": "Electricity Board",
         "amount": 3500,
         "currency": "INR",
-        "status": "Pending"
+        "status": "Pending",
       },
       {
         "id": "BILL002",
@@ -120,8 +120,8 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         "biller": "Mobile Operator",
         "amount": 899,
         "currency": "INR",
-        "status": "Approved"
-      }
+        "status": "Approved",
+      },
     ];
   }
 
@@ -140,8 +140,9 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
             .map((r) => r["id"] == id ? {...r, "status": action} : r)
             .toList();
       } else if (type == "bill") {
-        bills =
-            bills.map((r) => r["id"] == id ? {...r, "status": action} : r).toList();
+        bills = bills
+            .map((r) => r["id"] == id ? {...r, "status": action} : r)
+            .toList();
       }
     });
   }
@@ -149,7 +150,8 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
   List<Map<String, dynamic>> get filteredRequests {
     final q = search.toLowerCase();
     return requests.where((req) {
-      final matchesSearch = req["senderName"].toLowerCase().contains(q) ||
+      final matchesSearch =
+          req["senderName"].toLowerCase().contains(q) ||
           req["receiverName"].toLowerCase().contains(q) ||
           req["id"].toLowerCase().contains(q);
       final matchesStatus =
@@ -192,10 +194,10 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
           border: Border.all(color: Colors.grey.shade300),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 2,
               offset: const Offset(0, 1),
-            )
+            ),
           ],
         ),
         child: Text(
@@ -209,7 +211,7 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 600;
-    
+
     return Scaffold(
       backgroundColor: AppTheme.bgColor,
       body: SafeArea(
@@ -296,7 +298,8 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
             children: [
               TextField(
                 decoration: AppTheme.inputDecoration(
-                    hint: "Search by ID, Sender..."),
+                  hint: "Search by ID, Sender...",
+                ),
                 onChanged: (v) => setState(() => search = v),
               ),
               const SizedBox(height: 10),
@@ -315,10 +318,22 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
                     onChanged: (val) => setState(() => statusFilter = val!),
                     items: const [
                       DropdownMenuItem(value: "All", child: Text("All Status")),
-                      DropdownMenuItem(value: "Pending", child: Text("Pending")),
-                      DropdownMenuItem(value: "Approved", child: Text("Approved")),
-                      DropdownMenuItem(value: "Rejected", child: Text("Rejected")),
-                      DropdownMenuItem(value: "On Hold", child: Text("On Hold")),
+                      DropdownMenuItem(
+                        value: "Pending",
+                        child: Text("Pending"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Approved",
+                        child: Text("Approved"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Rejected",
+                        child: Text("Rejected"),
+                      ),
+                      DropdownMenuItem(
+                        value: "On Hold",
+                        child: Text("On Hold"),
+                      ),
                     ],
                   ),
                 ),
@@ -331,11 +346,17 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
           if (isMobile)
             Column(
               children: filteredRequests.isNotEmpty
-                  ? filteredRequests.map((req) => _buildMobileCard(req, "request")).toList()
-                  : [const Center(child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Text("No requests found"),
-                    ))],
+                  ? filteredRequests
+                        .map((req) => _buildMobileCard(req, "request"))
+                        .toList()
+                  : [
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Text("No requests found"),
+                        ),
+                      ),
+                    ],
             )
           else
             AppTheme.tableCard(
@@ -366,7 +387,7 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
                                 handleAction(req["id"], "Pending", "request");
                               }),
                             ],
-                          )
+                          ),
                         ]);
                       }).toList()
                     : [AppTheme.noDataRow("No requests found")],
@@ -393,29 +414,33 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
               ),
             ),
             const SizedBox(height: 12),
-            ...outgoing.map((o) => _buildSimpleCard([
-              {"label": "ID", "value": o["id"]},
-              {"label": "Date", "value": o["date"]},
-              {"label": "Beneficiary", "value": o["beneficiary"]},
-              {"label": "Amount", "value": "${o["currency"]} ${o["amount"]}"},
-              {"label": "Type", "value": o["type"]},
-            ])),
+            ...outgoing.map(
+              (o) => _buildSimpleCard([
+                {"label": "ID", "value": o["id"]},
+                {"label": "Date", "value": o["date"]},
+                {"label": "Beneficiary", "value": o["beneficiary"]},
+                {"label": "Amount", "value": "${o["currency"]} ${o["amount"]}"},
+                {"label": "Type", "value": o["type"]},
+              ]),
+            ),
           ],
         ),
       );
     }
-    
+
     return AppTheme.tableCard(
       title: "Queued / Scheduled Outgoing Transfers",
       child: Column(
         children: outgoing
-            .map((o) => AppTheme.tableRow([
-                  o["id"],
-                  o["date"],
-                  o["beneficiary"],
-                  "${o["currency"]} ${o["amount"]}",
-                  o["type"],
-                ]))
+            .map(
+              (o) => AppTheme.tableRow([
+                o["id"],
+                o["date"],
+                o["beneficiary"],
+                "${o["currency"]} ${o["amount"]}",
+                o["type"],
+              ]),
+            )
             .toList(),
       ),
     );
@@ -442,30 +467,40 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         ),
       );
     }
-    
+
     return AppTheme.tableCard(
       title: "Large Incoming Transfers Requiring Review",
       child: Column(
         children: incoming
-            .map((i) => AppTheme.tableRow([
-                  i["id"],
-                  i["date"],
-                  i["sender"],
-                  "${i["currency"]} ${i["amount"]}",
-                  AppTheme.statusBadge(i["review"]),
-                  Row(
-                    children: [
-                      buildActionButton("Approve",
-                          () => handleAction(i["id"], "Approved", "incoming")),
-                      buildActionButton("Reject",
-                          () => handleAction(i["id"], "Rejected", "incoming")),
-                      buildActionButton("Hold",
-                          () => handleAction(i["id"], "On Hold", "incoming")),
-                      buildActionButton("Pending",
-                          () => handleAction(i["id"], "Pending", "incoming")),
-                    ],
-                  )
-                ]))
+            .map(
+              (i) => AppTheme.tableRow([
+                i["id"],
+                i["date"],
+                i["sender"],
+                "${i["currency"]} ${i["amount"]}",
+                AppTheme.statusBadge(i["review"]),
+                Row(
+                  children: [
+                    buildActionButton(
+                      "Approve",
+                      () => handleAction(i["id"], "Approved", "incoming"),
+                    ),
+                    buildActionButton(
+                      "Reject",
+                      () => handleAction(i["id"], "Rejected", "incoming"),
+                    ),
+                    buildActionButton(
+                      "Hold",
+                      () => handleAction(i["id"], "On Hold", "incoming"),
+                    ),
+                    buildActionButton(
+                      "Pending",
+                      () => handleAction(i["id"], "Pending", "incoming"),
+                    ),
+                  ],
+                ),
+              ]),
+            )
             .toList(),
       ),
     );
@@ -492,26 +527,32 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         ),
       );
     }
-    
+
     return AppTheme.tableCard(
       title: "Beneficiary Management",
       child: Column(
         children: beneficiaries
-            .map((b) => AppTheme.tableRow([
-                  b["id"],
-                  b["name"],
-                  b["account"],
-                  b["bank"],
-                  AppTheme.statusBadge(b["status"]),
-                  Row(
-                    children: [
-                      buildActionButton("Approve",
-                          () => handleAction(b["id"], "Approved", "beneficiary")),
-                      buildActionButton("Blacklist",
-                          () => handleAction(b["id"], "Rejected", "beneficiary")),
-                    ],
-                  )
-                ]))
+            .map(
+              (b) => AppTheme.tableRow([
+                b["id"],
+                b["name"],
+                b["account"],
+                b["bank"],
+                AppTheme.statusBadge(b["status"]),
+                Row(
+                  children: [
+                    buildActionButton(
+                      "Approve",
+                      () => handleAction(b["id"], "Approved", "beneficiary"),
+                    ),
+                    buildActionButton(
+                      "Blacklist",
+                      () => handleAction(b["id"], "Rejected", "beneficiary"),
+                    ),
+                  ],
+                ),
+              ]),
+            )
             .toList(),
       ),
     );
@@ -538,30 +579,40 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         ),
       );
     }
-    
+
     return AppTheme.tableCard(
       title: "Bill Payments & Reconciliation",
       child: Column(
         children: bills
-            .map((b) => AppTheme.tableRow([
-                  b["id"],
-                  b["date"],
-                  b["biller"],
-                  "${b["currency"]} ${b["amount"]}",
-                  AppTheme.statusBadge(b["status"]),
-                  Row(
-                    children: [
-                      buildActionButton("Approve",
-                          () => handleAction(b["id"], "Approved", "bill")),
-                      buildActionButton("Reject",
-                          () => handleAction(b["id"], "Rejected", "bill")),
-                      buildActionButton(
-                          "Hold", () => handleAction(b["id"], "On Hold", "bill")),
-                      buildActionButton("Pending",
-                          () => handleAction(b["id"], "Pending", "bill")),
-                    ],
-                  )
-                ]))
+            .map(
+              (b) => AppTheme.tableRow([
+                b["id"],
+                b["date"],
+                b["biller"],
+                "${b["currency"]} ${b["amount"]}",
+                AppTheme.statusBadge(b["status"]),
+                Row(
+                  children: [
+                    buildActionButton(
+                      "Approve",
+                      () => handleAction(b["id"], "Approved", "bill"),
+                    ),
+                    buildActionButton(
+                      "Reject",
+                      () => handleAction(b["id"], "Rejected", "bill"),
+                    ),
+                    buildActionButton(
+                      "Hold",
+                      () => handleAction(b["id"], "On Hold", "bill"),
+                    ),
+                    buildActionButton(
+                      "Pending",
+                      () => handleAction(b["id"], "Pending", "bill"),
+                    ),
+                  ],
+                ),
+              ]),
+            )
             .toList(),
       ),
     );
@@ -596,8 +647,14 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
             ),
             const SizedBox(height: 8),
             if (type == "request") ...[
-              _buildInfoRow("Sender", "${data["senderName"]} (${data["senderAcc"]})"),
-              _buildInfoRow("Receiver", "${data["receiverName"]} (${data["receiverAcc"]})"),
+              _buildInfoRow(
+                "Sender",
+                "${data["senderName"]} (${data["senderAcc"]})",
+              ),
+              _buildInfoRow(
+                "Receiver",
+                "${data["receiverName"]} (${data["receiverAcc"]})",
+              ),
               _buildInfoRow("Amount", "${data["currency"]} ${data["amount"]}"),
               _buildInfoRow("Method", data["method"]),
               _buildInfoRow("Date", data["date"]),
@@ -693,7 +750,9 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: items.map((item) => _buildInfoRow(item["label"]!, item["value"]!)).toList(),
+          children: items
+              .map((item) => _buildInfoRow(item["label"]!, item["value"]!))
+              .toList(),
         ),
       ),
     );

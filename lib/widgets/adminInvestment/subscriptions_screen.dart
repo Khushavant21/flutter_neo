@@ -89,7 +89,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -119,7 +119,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 5,
                 offset: const Offset(0, 2),
               ),
@@ -312,3 +312,4 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
     );
   }
 }
+

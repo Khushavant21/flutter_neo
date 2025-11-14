@@ -55,7 +55,7 @@ class _TicketActionsModalState extends State<TicketActionsModal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.6),
+      backgroundColor: Colors.black.withValues(alpha: 0.6),
       body: GestureDetector(
         onTap: widget.close,
         child: Center(
@@ -220,3 +220,4 @@ class _TicketActionsModalState extends State<TicketActionsModal> {
     );
   }
 }
+

@@ -3,7 +3,7 @@ import '../../styles/kyc_styles.dart';
 // import 'kyc_routes.dart';
 
 class ReviewTransactions extends StatefulWidget {
-  const ReviewTransactions({Key? key}) : super(key: key);
+  const ReviewTransactions({super.key});
 
   @override
   State<ReviewTransactions> createState() => _ReviewTransactionsState();
@@ -219,7 +219,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
 
   Widget _buildFilterDropdown() {
     return DropdownButtonFormField<String>(
-      value: filter,
+      initialValue: filter,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -238,7 +238,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
 
   Widget _buildSortDropdown() {
     return DropdownButtonFormField<String>(
-      value: sort,
+      initialValue: sort,
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -285,13 +285,13 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          headingRowColor: MaterialStateProperty.all(KYCColors.primary),
+          headingRowColor: WidgetStateProperty.all(KYCColors.primary),
           columns: [
             DataColumn(
               label: Checkbox(
                 value: selectedCases.length == paginatedCases.length && paginatedCases.isNotEmpty,
                 onChanged: (_) => _toggleAll(),
-                fillColor: MaterialStateProperty.all(Colors.white),
+                fillColor: WidgetStateProperty.all(Colors.white),
                 checkColor: KYCColors.primary,
               ),
             ),

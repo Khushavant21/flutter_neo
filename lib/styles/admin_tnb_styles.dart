@@ -48,7 +48,7 @@ class TnbStyles {
     color: TnbColors.white,
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.08),
+        color: Colors.black.withValues(alpha: 0.08),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),
@@ -153,7 +153,7 @@ class TnbStyles {
         return 2;
       },
     ),
-    shadowColor: WidgetStateProperty.all(TnbColors.primary.withOpacity(0.3)),
+    shadowColor: WidgetStateProperty.all(TnbColors.primary.withValues(alpha: 0.3)),
     textStyle: WidgetStateProperty.all(
       const TextStyle(
         fontSize: 14,
@@ -170,7 +170,7 @@ class TnbStyles {
     borderRadius: BorderRadius.circular(10),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.12),
+        color: Colors.black.withValues(alpha: 0.12),
         blurRadius: 20,
         offset: const Offset(0, 6),
       ),
@@ -189,7 +189,7 @@ class TnbStyles {
     ),
     boxShadow: [
       BoxShadow(
-        color: TnbColors.primary.withOpacity(0.15),
+        color: TnbColors.primary.withValues(alpha: 0.15),
         blurRadius: 24,
         offset: const Offset(0, 8),
       ),
@@ -209,7 +209,7 @@ class TnbStyles {
     borderRadius: BorderRadius.circular(24),
     boxShadow: [
       BoxShadow(
-        color: TnbColors.primary.withOpacity(0.2),
+        color: TnbColors.primary.withValues(alpha: 0.2),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),
@@ -223,7 +223,7 @@ class TnbStyles {
     border: Border.all(color: TnbColors.white, width: 2),
     boxShadow: [
       BoxShadow(
-        color: TnbColors.primary.withOpacity(0.4),
+        color: TnbColors.primary.withValues(alpha: 0.4),
         blurRadius: 4,
         offset: const Offset(0, 2),
       ),
@@ -252,7 +252,7 @@ class TnbStyles {
   static BoxDecoration mobileNavItemActiveDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(10),
     color: TnbColors.activeBg,
-    border: Border.all(color: TnbColors.primary.withOpacity(0.3), width: 1),
+    border: Border.all(color: TnbColors.primary.withValues(alpha: 0.3), width: 1),
   );
 
   // Dropdown Item Style - NEW

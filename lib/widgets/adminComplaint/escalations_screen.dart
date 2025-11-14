@@ -27,3 +27,4 @@ class EscalationsScreen extends StatelessWidget {
     );
   }
 }
+

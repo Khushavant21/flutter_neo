@@ -276,7 +276,7 @@ class _ComplaintsLayoutScreenState extends State<ComplaintsLayoutScreen> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                           borderSide: BorderSide(
-                            color: primaryColor.withOpacity(0.4),
+                            color: primaryColor.withValues(alpha: 0.4),
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
@@ -317,8 +317,8 @@ class _ComplaintsLayoutScreenState extends State<ComplaintsLayoutScreen> {
                               final ticket = pagedTickets[index];
                               return ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: primaryColor.withOpacity(
-                                    0.1,
+                                  backgroundColor: primaryColor.withValues(
+                                    alpha: 0.1,
                                   ),
                                   child: Icon(
                                     Icons.confirmation_num_outlined,
@@ -593,7 +593,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                     decoration: BoxDecoration(
                       color: isUser
                           ? Colors.grey[300]
-                          : const Color(0xFF950606).withOpacity(0.9),
+                          : const Color(0xFF950606).withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(

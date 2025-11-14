@@ -3,7 +3,7 @@ import '../../styles/kyc_styles.dart';
 // import 'kyc_routes.dart';
 
 class ReviewKYC extends StatefulWidget {
-  const ReviewKYC({Key? key}) : super(key: key);
+  const ReviewKYC({super.key});
 
   @override
   State<ReviewKYC> createState() => _ReviewKYCState();
@@ -15,7 +15,7 @@ class _ReviewKYCState extends State<ReviewKYC> {
   // ignore: unused_field
   Map<String, dynamic>? _selectedDoc;
   Map<String, dynamic> _alert = {};
-  Map<int, String> _recentAction = {};
+  final Map<int, String> _recentAction = {};
 
   List<Map<String, dynamic>> users = [
     {
@@ -138,7 +138,7 @@ class _ReviewKYCState extends State<ReviewKYC> {
         borderRadius: BorderRadius.circular(6),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 6,
           ),
         ],

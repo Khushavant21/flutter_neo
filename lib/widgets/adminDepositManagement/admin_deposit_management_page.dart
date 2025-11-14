@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../adminDepositManagement/adminDepositManagementStyles.dart';
+import '../adminDepositManagement/admin_deposit_management_styles.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
@@ -97,10 +97,38 @@ class _AdminDepositManagementState extends State<AdminDepositManagement> {
   ];
 
   List<Map<String, dynamic>> withdrawals = [
-    {'id': 5, 'user': 'Eve', 'type': 'FD', 'amount': 20000, 'penalty': 500, 'status': 'Pending'},
-    {'id': 6, 'user': 'Frank', 'type': 'RD', 'amount': 8000, 'penalty': 200, 'status': 'Pending'},
-    {'id': 7, 'user': 'Grace', 'type': 'FD', 'amount': 35000, 'penalty': 1000, 'status': 'Approved'},
-    {'id': 8, 'user': 'Henry', 'type': 'RD', 'amount': 12000, 'penalty': 300, 'status': 'Rejected'},
+    {
+      'id': 5,
+      'user': 'Eve',
+      'type': 'FD',
+      'amount': 20000,
+      'penalty': 500,
+      'status': 'Pending',
+    },
+    {
+      'id': 6,
+      'user': 'Frank',
+      'type': 'RD',
+      'amount': 8000,
+      'penalty': 200,
+      'status': 'Pending',
+    },
+    {
+      'id': 7,
+      'user': 'Grace',
+      'type': 'FD',
+      'amount': 35000,
+      'penalty': 1000,
+      'status': 'Approved',
+    },
+    {
+      'id': 8,
+      'user': 'Henry',
+      'type': 'RD',
+      'amount': 12000,
+      'penalty': 300,
+      'status': 'Rejected',
+    },
   ];
 
   void showMessage(String msg) {
@@ -187,7 +215,8 @@ class _AdminDepositManagementState extends State<AdminDepositManagement> {
       'customerName': row['user'],
       'depositType': row['type'],
       'amount': row['amount'],
-      'startDate': row['startDate'] ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      'startDate':
+          row['startDate'] ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
       'dueDate': row['dueDate'] ?? row['maturityDate'] ?? 'N/A',
       'interest': row['interest'] ?? 'N/A',
       'status': row['status'],
@@ -209,7 +238,8 @@ class _AdminDepositManagementState extends State<AdminDepositManagement> {
   }
 
   void downloadCSV(Map<String, dynamic> data) {
-    final csvContent = '''Field,Value
+    final csvContent =
+        '''Field,Value
 Deposit ID,${data['depositId']}
 Customer Name,${data['customerName']}
 Deposit Type,${data['depositType']}
@@ -224,7 +254,8 @@ Generated Date,${data['generatedDate']}''';
   }
 
   void downloadPDF(Map<String, dynamic> data) {
-    final pdfContent = '''
+    final pdfContent =
+        '''
 DEPOSIT INSTRUMENT
 ==================
 
@@ -246,7 +277,8 @@ Bank Management System
   }
 
   void downloadExcel(Map<String, dynamic> data) {
-    final excelContent = '''Deposit ID\t${data['depositId']}
+    final excelContent =
+        '''Deposit ID\t${data['depositId']}
 Customer Name\t${data['customerName']}
 Deposit Type\t${data['depositType']}
 Amount\t₹${data['amount']}
@@ -261,8 +293,11 @@ Generated Date\t${data['generatedDate']}''';
 
   List<Map<String, dynamic>> filterRows(List<Map<String, dynamic>> rows) {
     return rows.where((row) {
-      final matchesSearch = row['user'].toString().toLowerCase().contains(searchQuery.toLowerCase());
-      final matchesStatus = statusFilter == 'All Statuses' || row['status'] == statusFilter;
+      final matchesSearch = row['user'].toString().toLowerCase().contains(
+        searchQuery.toLowerCase(),
+      );
+      final matchesStatus =
+          statusFilter == 'All Statuses' || row['status'] == statusFilter;
       return matchesSearch && matchesStatus;
     }).toList();
   }
@@ -270,7 +305,7 @@ Generated Date\t${data['generatedDate']}''';
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 600;
-    
+
     return Scaffold(
       body: Stack(
         children: [
@@ -312,9 +347,19 @@ Generated Date\t${data['generatedDate']}''';
                                 children: [
                                   Row(
                                     children: [
-                                      Expanded(child: _buildTab('Applications', 'applications')),
+                                      Expanded(
+                                        child: _buildTab(
+                                          'Applications',
+                                          'applications',
+                                        ),
+                                      ),
                                       const SizedBox(width: 8),
-                                      Expanded(child: _buildTab('Maturities', 'maturities')),
+                                      Expanded(
+                                        child: _buildTab(
+                                          'Maturities',
+                                          'maturities',
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(height: 8),
@@ -335,9 +380,12 @@ Generated Date\t${data['generatedDate']}''';
                             const SizedBox(height: 24),
 
                             // Content
-                            if (activeTab == 'applications') _buildApplicationsTable(isMobile),
-                            if (activeTab == 'maturities') _buildMaturitiesTable(isMobile),
-                            if (activeTab == 'withdrawals') _buildWithdrawalsTable(isMobile),
+                            if (activeTab == 'applications')
+                              _buildApplicationsTable(isMobile),
+                            if (activeTab == 'maturities')
+                              _buildMaturitiesTable(isMobile),
+                            if (activeTab == 'withdrawals')
+                              _buildWithdrawalsTable(isMobile),
                           ],
                         ),
                       ),
@@ -386,7 +434,9 @@ Generated Date\t${data['generatedDate']}''';
           Container(
             padding: const EdgeInsets.only(bottom: 8),
             decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Color(0xFF900603), width: 3)),
+              border: Border(
+                bottom: BorderSide(color: Color(0xFF900603), width: 3),
+              ),
             ),
             child: Text(
               'Deposit Applications',
@@ -424,7 +474,7 @@ Generated Date\t${data['generatedDate']}''';
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
-                value: statusFilter,
+                initialValue: statusFilter,
                 decoration: DepositStyles.inputDecoration(''),
                 isExpanded: true,
                 items: ['All Statuses', 'Pending', 'Approved', 'Rejected']
@@ -440,29 +490,81 @@ Generated Date\t${data['generatedDate']}''';
           if (isMobile)
             Column(
               children: filteredData.isEmpty
-                  ? [const Center(child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Text('No results found'),
-                    ))]
-                  : filteredData.map((row) => _buildMobileCard(row, 'application')).toList(),
+                  ? [
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Text('No results found'),
+                        ),
+                      ),
+                    ]
+                  : filteredData
+                        .map((row) => _buildMobileCard(row, 'application'))
+                        .toList(),
             )
           else
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 decoration: DepositStyles.tableDecoration,
-                headingRowColor: WidgetStateProperty.all(const Color(0xFF900603)),
+                headingRowColor: WidgetStateProperty.all(
+                  const Color(0xFF900603),
+                ),
                 columns: const [
-                  DataColumn(label: Text('User', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Type', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Amount', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Start Date', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Due Date', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Status', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Interest', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Approve', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Reject', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Instrument', style: DepositStyles.tableHeaderStyle)),
+                  DataColumn(
+                    label: Text('User', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text('Type', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Amount',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Start Date',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Due Date',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Status',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Interest',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Approve',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Reject',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Instrument',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
                 ],
                 rows: filteredData.map((row) {
                   return DataRow(
@@ -516,12 +618,12 @@ Generated Date\t${data['generatedDate']}''';
                       ),
                       DataCell(
                         row['status'] == 'Approved'
-                          ? ElevatedButton(
-                              onPressed: () => handleGenerateInstrument(row),
-                              style: DepositStyles.generateButtonStyle,
-                              child: const Text('Generate'),
-                            )
-                          : const SizedBox(),
+                            ? ElevatedButton(
+                                onPressed: () => handleGenerateInstrument(row),
+                                style: DepositStyles.generateButtonStyle,
+                                child: const Text('Generate'),
+                              )
+                            : const SizedBox(),
                       ),
                     ],
                   );
@@ -545,7 +647,9 @@ Generated Date\t${data['generatedDate']}''';
           Container(
             padding: const EdgeInsets.only(bottom: 8),
             decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Color(0xFF900603), width: 3)),
+              border: Border(
+                bottom: BorderSide(color: Color(0xFF900603), width: 3),
+              ),
             ),
             child: Text(
               'Maturities',
@@ -583,7 +687,7 @@ Generated Date\t${data['generatedDate']}''';
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
-                value: statusFilter,
+                initialValue: statusFilter,
                 decoration: DepositStyles.inputDecoration(''),
                 isExpanded: true,
                 items: ['All Statuses', 'Pending', 'Renewed', 'Closed']
@@ -598,27 +702,63 @@ Generated Date\t${data['generatedDate']}''';
           if (isMobile)
             Column(
               children: filteredData.isEmpty
-                  ? [const Center(child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Text('No results found'),
-                    ))]
-                  : filteredData.map((row) => _buildMobileCard(row, 'maturity')).toList(),
+                  ? [
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Text('No results found'),
+                        ),
+                      ),
+                    ]
+                  : filteredData
+                        .map((row) => _buildMobileCard(row, 'maturity'))
+                        .toList(),
             )
           else
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 decoration: DepositStyles.tableDecoration,
-                headingRowColor: WidgetStateProperty.all(const Color(0xFF900603)),
+                headingRowColor: WidgetStateProperty.all(
+                  const Color(0xFF900603),
+                ),
                 columns: const [
-                  DataColumn(label: Text('User', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Type', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Amount', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Maturity Date', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Status', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Renew', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Close', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Generate', style: DepositStyles.tableHeaderStyle)),
+                  DataColumn(
+                    label: Text('User', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text('Type', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Amount',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Maturity Date',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Status',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text('Renew', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text('Close', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Generate',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
                 ],
                 rows: filteredData.map((row) {
                   return DataRow(
@@ -630,26 +770,29 @@ Generated Date\t${data['generatedDate']}''';
                       DataCell(_buildStatusBadge(row['status'])),
                       DataCell(
                         ElevatedButton(
-                          onPressed: () => handleMaturityAction(row['id'], 'Renewed'),
+                          onPressed: () =>
+                              handleMaturityAction(row['id'], 'Renewed'),
                           style: DepositStyles.renewButtonStyle,
                           child: const Text('Renew'),
                         ),
                       ),
                       DataCell(
                         ElevatedButton(
-                          onPressed: () => handleMaturityAction(row['id'], 'Closed'),
+                          onPressed: () =>
+                              handleMaturityAction(row['id'], 'Closed'),
                           style: DepositStyles.closeButtonStyle,
                           child: const Text('Close'),
                         ),
                       ),
                       DataCell(
-                        (row['status'] == 'Renewed' || row['status'] == 'Closed')
-                          ? ElevatedButton(
-                              onPressed: () => handleGenerateInstrument(row),
-                              style: DepositStyles.generateButtonStyle,
-                              child: const Text('Generate'),
-                            )
-                          : const SizedBox(),
+                        (row['status'] == 'Renewed' ||
+                                row['status'] == 'Closed')
+                            ? ElevatedButton(
+                                onPressed: () => handleGenerateInstrument(row),
+                                style: DepositStyles.generateButtonStyle,
+                                child: const Text('Generate'),
+                              )
+                            : const SizedBox(),
                       ),
                     ],
                   );
@@ -673,7 +816,9 @@ Generated Date\t${data['generatedDate']}''';
           Container(
             padding: const EdgeInsets.only(bottom: 8),
             decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Color(0xFF900603), width: 3)),
+              border: Border(
+                bottom: BorderSide(color: Color(0xFF900603), width: 3),
+              ),
             ),
             child: Text(
               'Early Withdrawal Requests',
@@ -711,7 +856,7 @@ Generated Date\t${data['generatedDate']}''';
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
-                value: statusFilter,
+                initialValue: statusFilter,
                 decoration: DepositStyles.inputDecoration(''),
                 isExpanded: true,
                 items: ['All Statuses', 'Pending', 'Approved', 'Rejected']
@@ -726,27 +871,69 @@ Generated Date\t${data['generatedDate']}''';
           if (isMobile)
             Column(
               children: filteredData.isEmpty
-                  ? [const Center(child: Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Text('No results found'),
-                    ))]
-                  : filteredData.map((row) => _buildMobileCard(row, 'withdrawal')).toList(),
+                  ? [
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Text('No results found'),
+                        ),
+                      ),
+                    ]
+                  : filteredData
+                        .map((row) => _buildMobileCard(row, 'withdrawal'))
+                        .toList(),
             )
           else
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 decoration: DepositStyles.tableDecoration,
-                headingRowColor: WidgetStateProperty.all(const Color(0xFF900603)),
+                headingRowColor: WidgetStateProperty.all(
+                  const Color(0xFF900603),
+                ),
                 columns: const [
-                  DataColumn(label: Text('User', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Type', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Amount', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Penalty', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Status', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Approve', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Reject', style: DepositStyles.tableHeaderStyle)),
-                  DataColumn(label: Text('Generate', style: DepositStyles.tableHeaderStyle)),
+                  DataColumn(
+                    label: Text('User', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text('Type', style: DepositStyles.tableHeaderStyle),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Amount',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Penalty',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Status',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Approve',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Reject',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Generate',
+                      style: DepositStyles.tableHeaderStyle,
+                    ),
+                  ),
                 ],
                 rows: filteredData.map((row) {
                   return DataRow(
@@ -758,26 +945,28 @@ Generated Date\t${data['generatedDate']}''';
                       DataCell(_buildStatusBadge(row['status'])),
                       DataCell(
                         ElevatedButton(
-                          onPressed: () => handleWithdrawalAction(row['id'], 'Approved'),
+                          onPressed: () =>
+                              handleWithdrawalAction(row['id'], 'Approved'),
                           style: DepositStyles.approveButtonStyle,
                           child: const Text('Approve'),
                         ),
                       ),
                       DataCell(
                         ElevatedButton(
-                          onPressed: () => handleWithdrawalAction(row['id'], 'Rejected'),
+                          onPressed: () =>
+                              handleWithdrawalAction(row['id'], 'Rejected'),
                           style: DepositStyles.rejectButtonStyle,
                           child: const Text('Reject'),
                         ),
                       ),
                       DataCell(
                         row['status'] == 'Approved'
-                          ? ElevatedButton(
-                              onPressed: () => handleGenerateInstrument(row),
-                              style: DepositStyles.generateButtonStyle,
-                              child: const Text('Generate'),
-                            )
-                          : const SizedBox(),
+                            ? ElevatedButton(
+                                onPressed: () => handleGenerateInstrument(row),
+                                style: DepositStyles.generateButtonStyle,
+                                child: const Text('Generate'),
+                              )
+                            : const SizedBox(),
                       ),
                     ],
                   );
@@ -831,62 +1020,98 @@ Generated Date\t${data['generatedDate']}''';
               runSpacing: 8,
               children: [
                 if (type == 'application') ...[
-                  _buildSmallButton('Approve', const Color.fromARGB(255, 151, 2, 2), () {
-                    final interest = calculateInterest(
-                      row['amount'],
-                      row['startDate'],
-                      row['dueDate'],
-                    );
-                    setState(() {
-                      modalData = {
-                        'row': row,
-                        'action': 'Approved',
-                        'interest': interest,
-                      };
-                    });
-                  }),
-                  _buildSmallButton('Reject', const Color.fromARGB(255, 141, 11, 2), () {
-                    final interest = calculateInterest(
-                      row['amount'],
-                      row['startDate'],
-                      row['dueDate'],
-                    );
-                    setState(() {
-                      modalData = {
-                        'row': row,
-                        'action': 'Rejected',
-                        'interest': interest,
-                      };
-                    });
-                  }),
+                  _buildSmallButton(
+                    'Approve',
+                    const Color.fromARGB(255, 151, 2, 2),
+                    () {
+                      final interest = calculateInterest(
+                        row['amount'],
+                        row['startDate'],
+                        row['dueDate'],
+                      );
+                      setState(() {
+                        modalData = {
+                          'row': row,
+                          'action': 'Approved',
+                          'interest': interest,
+                        };
+                      });
+                    },
+                  ),
+                  _buildSmallButton(
+                    'Reject',
+                    const Color.fromARGB(255, 141, 11, 2),
+                    () {
+                      final interest = calculateInterest(
+                        row['amount'],
+                        row['startDate'],
+                        row['dueDate'],
+                      );
+                      setState(() {
+                        modalData = {
+                          'row': row,
+                          'action': 'Rejected',
+                          'interest': interest,
+                        };
+                      });
+                    },
+                  ),
                   if (row['status'] == 'Approved')
-                    _buildSmallButton('Generate', const Color.fromARGB(255, 32, 133, 1), () {
-                      handleGenerateInstrument(row);
-                    }),
+                    _buildSmallButton(
+                      'Generate',
+                      const Color.fromARGB(255, 32, 133, 1),
+                      () {
+                        handleGenerateInstrument(row);
+                      },
+                    ),
                 ],
                 if (type == 'maturity') ...[
-                  _buildSmallButton('Renew', const Color.fromARGB(255, 153, 2, 2), () {
-                    handleMaturityAction(row['id'], 'Renewed');
-                  }),
-                  _buildSmallButton('Close', const Color.fromARGB(255, 154, 2, 2), () {
-                    handleMaturityAction(row['id'], 'Closed');
-                  }),
+                  _buildSmallButton(
+                    'Renew',
+                    const Color.fromARGB(255, 153, 2, 2),
+                    () {
+                      handleMaturityAction(row['id'], 'Renewed');
+                    },
+                  ),
+                  _buildSmallButton(
+                    'Close',
+                    const Color.fromARGB(255, 154, 2, 2),
+                    () {
+                      handleMaturityAction(row['id'], 'Closed');
+                    },
+                  ),
                   if (row['status'] == 'Renewed' || row['status'] == 'Closed')
-                    _buildSmallButton('Generate', const Color.fromARGB(255, 33, 144, 2), () {
-                      handleGenerateInstrument(row);
-                    }),
+                    _buildSmallButton(
+                      'Generate',
+                      const Color.fromARGB(255, 33, 144, 2),
+                      () {
+                        handleGenerateInstrument(row);
+                      },
+                    ),
                 ],
                 if (type == 'withdrawal') ...[
-                  _buildSmallButton('Approve', const Color.fromARGB(255, 152, 1, 1), () {
-                    handleWithdrawalAction(row['id'], 'Approved');
-                  }),
-                  _buildSmallButton('Reject', const Color.fromARGB(255, 151, 2, 2), () {
-                    handleWithdrawalAction(row['id'], 'Rejected');
-                  }),
+                  _buildSmallButton(
+                    'Approve',
+                    const Color.fromARGB(255, 152, 1, 1),
+                    () {
+                      handleWithdrawalAction(row['id'], 'Approved');
+                    },
+                  ),
+                  _buildSmallButton(
+                    'Reject',
+                    const Color.fromARGB(255, 151, 2, 2),
+                    () {
+                      handleWithdrawalAction(row['id'], 'Rejected');
+                    },
+                  ),
                   if (row['status'] == 'Approved')
-                    _buildSmallButton('Generate', const Color.fromARGB(255, 1, 125, 20), () {
-                      handleGenerateInstrument(row);
-                    }),
+                    _buildSmallButton(
+                      'Generate',
+                      const Color.fromARGB(255, 1, 125, 20),
+                      () {
+                        handleGenerateInstrument(row);
+                      },
+                    ),
                 ],
               ],
             ),
@@ -968,7 +1193,7 @@ Generated Date\t${data['generatedDate']}''';
 
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withValues(alpha: 0.5),
         child: Center(
           child: Container(
             width: isMobile ? MediaQuery.of(context).size.width * 0.9 : 400,
@@ -1008,10 +1233,31 @@ Generated Date\t${data['generatedDate']}''';
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Text('User: ${row['user']}', style: DepositStyles.modalTextStyle.copyWith(fontSize: 13)),
-                      Text('Type: ${row['type']}', style: DepositStyles.modalTextStyle.copyWith(fontSize: 13)),
-                      Text('Amount: ₹${row['amount']}', style: DepositStyles.modalTextStyle.copyWith(fontSize: 13)),
-                      if (action == 'Approved') Text('Interest: ₹$interest', style: DepositStyles.modalTextStyle.copyWith(fontSize: 13)),
+                      Text(
+                        'User: ${row['user']}',
+                        style: DepositStyles.modalTextStyle.copyWith(
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        'Type: ${row['type']}',
+                        style: DepositStyles.modalTextStyle.copyWith(
+                          fontSize: 13,
+                        ),
+                      ),
+                      Text(
+                        'Amount: ₹${row['amount']}',
+                        style: DepositStyles.modalTextStyle.copyWith(
+                          fontSize: 13,
+                        ),
+                      ),
+                      if (action == 'Approved')
+                        Text(
+                          'Interest: ₹$interest',
+                          style: DepositStyles.modalTextStyle.copyWith(
+                            fontSize: 13,
+                          ),
+                        ),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -1019,13 +1265,21 @@ Generated Date\t${data['generatedDate']}''';
                           ElevatedButton(
                             onPressed: () => setState(() => modalData = null),
                             style: DepositStyles.modalCancelButtonStyle,
-                            child: const Text('Cancel', style: TextStyle(fontSize: 13)),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(fontSize: 13),
+                            ),
                           ),
                           const SizedBox(width: 10),
                           ElevatedButton(
                             onPressed: handleModalSave,
-                            style: action == 'Approved' ? DepositStyles.approveButtonStyle : DepositStyles.rejectButtonStyle,
-                            child: Text(action, style: const TextStyle(fontSize: 13)),
+                            style: action == 'Approved'
+                                ? DepositStyles.approveButtonStyle
+                                : DepositStyles.rejectButtonStyle,
+                            child: Text(
+                              action,
+                              style: const TextStyle(fontSize: 13),
+                            ),
                           ),
                         ],
                       ),
@@ -1045,7 +1299,7 @@ Generated Date\t${data['generatedDate']}''';
 
     return Positioned.fill(
       child: Container(
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withValues(alpha: 0.5),
         child: Center(
           child: Container(
             width: isMobile ? MediaQuery.of(context).size.width * 0.9 : 400,
@@ -1092,25 +1346,46 @@ Generated Date\t${data['generatedDate']}''';
                           GestureDetector(
                             onTap: () => downloadInstrument(row, 'csv'),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
                               decoration: DepositStyles.formatButtonDecoration,
-                              child: Text('CSV', style: DepositStyles.formatButtonTextStyle.copyWith(fontSize: 13)),
+                              child: Text(
+                                'CSV',
+                                style: DepositStyles.formatButtonTextStyle
+                                    .copyWith(fontSize: 13),
+                              ),
                             ),
                           ),
                           GestureDetector(
                             onTap: () => downloadInstrument(row, 'pdf'),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
                               decoration: DepositStyles.formatButtonDecoration,
-                              child: Text('PDF', style: DepositStyles.formatButtonTextStyle.copyWith(fontSize: 13)),
+                              child: Text(
+                                'PDF',
+                                style: DepositStyles.formatButtonTextStyle
+                                    .copyWith(fontSize: 13),
+                              ),
                             ),
                           ),
                           GestureDetector(
                             onTap: () => downloadInstrument(row, 'excel'),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
                               decoration: DepositStyles.formatButtonDecoration,
-                              child: Text('Excel', style: DepositStyles.formatButtonTextStyle.copyWith(fontSize: 13)),
+                              child: Text(
+                                'Excel',
+                                style: DepositStyles.formatButtonTextStyle
+                                    .copyWith(fontSize: 13),
+                              ),
                             ),
                           ),
                         ],
@@ -1120,9 +1395,13 @@ Generated Date\t${data['generatedDate']}''';
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
-                            onPressed: () => setState(() => formatModalData = null),
+                            onPressed: () =>
+                                setState(() => formatModalData = null),
                             style: DepositStyles.modalCancelButtonStyle,
-                            child: const Text('Cancel', style: TextStyle(fontSize: 13)),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(fontSize: 13),
+                            ),
                           ),
                         ],
                       ),

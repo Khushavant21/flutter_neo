@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class InvestmentPanel extends StatefulWidget {
-  const InvestmentPanel({super.key});
+  final Function(int)? onNavigateToTab;
+  
+  const InvestmentPanel({super.key, this.onNavigateToTab});
 
   @override
   State<InvestmentPanel> createState() => _InvestmentPanelState();
@@ -11,39 +13,39 @@ class InvestmentPanel extends StatefulWidget {
 class _InvestmentPanelState extends State<InvestmentPanel> {
   final List<Map<String, dynamic>> pages = [
     {
-      "key": "catalog",
-      "title": "Product Catalog",
-      "icon": FontAwesomeIcons.boxOpen,
-      "route": "/admin/investment/catalog",
-      "description": "Manage investment products and offerings",
-    },
-    {
-      "key": "subscriptions",
-      "title": "Subscriptions/Redemptions",
-      "icon": FontAwesomeIcons.exchangeAlt,
-      "route": "/admin/investment/subscriptions",
-      "description": "Handle subscription and redemption requests",
+      "key": "apikeys",
+      "title": "API Keys & Integrations",
+      "icon": FontAwesomeIcons.key,
+      "tabIndex": 1, // Index in parent tabs
+      "description": "Configure API access and integrations",
     },
     {
       "key": "reports",
       "title": "Portfolio Reports",
       "icon": FontAwesomeIcons.chartBar,
-      "route": "/admin/investment/reports",
+      "tabIndex": 2, // Index in parent tabs
       "description": "View and export portfolio analytics",
+    },
+    {
+      "key": "catalog",
+      "title": "Product Catalog",
+      "icon": FontAwesomeIcons.boxOpen,
+      "tabIndex": 3, // Index in parent tabs
+      "description": "Manage investment products and offerings",
     },
     {
       "key": "services",
       "title": "Services & Merchant",
-      "icon": FontAwesomeIcons.cog,
-      "route": "/admin/investment/services",
+      "icon": FontAwesomeIcons.gear,
+      "tabIndex": 4, // Index in parent tabs
       "description": "Manage merchant integrations",
     },
     {
-      "key": "apikeys",
-      "title": "API Keys & Integrations",
-      "icon": FontAwesomeIcons.key,
-      "route": "/admin/investment/apikeys",
-      "description": "Configure API access and integrations",
+      "key": "subscriptions",
+      "title": "Subscriptions/Redemptions",
+      "icon": FontAwesomeIcons.rightLeft,
+      "tabIndex": 5, // Index in parent tabs
+      "description": "Handle subscription and redemption requests",
     },
   ];
 
@@ -132,7 +134,10 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, page["route"]);
+          // Navigate to the specific tab in parent
+          if (widget.onNavigateToTab != null) {
+            widget.onNavigateToTab!(page["tabIndex"]);
+          }
         },
         borderRadius: BorderRadius.circular(12),
         child: Container(
@@ -145,7 +150,7 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),

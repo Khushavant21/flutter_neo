@@ -62,7 +62,7 @@ class _MobileMenuState extends State<MobileMenu>
             animation: _controller,
             builder: (context, child) {
               return Container(
-                color: Colors.black.withOpacity(0.4 * _controller.value),
+                color: Colors.black.withValues(alpha: 0.4 * _controller.value),
               );
             },
           ),
@@ -187,7 +187,7 @@ class _MobileMenuState extends State<MobileMenu>
         color: isActive ? const Color(0xFFFFF5F5) : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
+            color: Colors.grey.withValues(alpha: 0.15),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -229,7 +229,7 @@ class _MobileMenuState extends State<MobileMenu>
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -316,3 +316,4 @@ class _MobileMenuState extends State<MobileMenu>
     );
   }
 }
+

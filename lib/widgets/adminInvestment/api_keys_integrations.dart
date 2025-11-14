@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'dart:math';
 
 class APIKeysIntegrationsScreen extends StatefulWidget {
-  const APIKeysIntegrationsScreen({super.key});
+  final VoidCallback? onBack;
+  
+  const APIKeysIntegrationsScreen({super.key, this.onBack});
 
   @override
   State<APIKeysIntegrationsScreen> createState() =>
@@ -104,6 +106,10 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: widget.onBack,
+        ),
         title: const Text("API Keys & Integrations"),
         backgroundColor: const Color(0xFF900603),
       ),
@@ -235,7 +241,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                     : SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: DataTable(
-                          headingRowColor: MaterialStateColor.resolveWith(
+                          headingRowColor: WidgetStateColor.resolveWith(
                             (states) => const Color(0xFF900603),
                           ),
                           headingTextStyle: const TextStyle(

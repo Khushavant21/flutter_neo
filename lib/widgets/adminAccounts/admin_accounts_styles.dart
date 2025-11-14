@@ -37,7 +37,7 @@ class AccountsStyles {
     border: Border.all(color: primaryColor, width: 4),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.08),
+        color: Colors.black.withValues(alpha: 0.08),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),
@@ -50,7 +50,7 @@ class AccountsStyles {
     borderRadius: BorderRadius.circular(16),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.black.withValues(alpha: 0.3),
         blurRadius: 60,
         offset: const Offset(0, 20),
       ),
@@ -105,7 +105,7 @@ class AccountsStyles {
   static TextStyle getHeaderSubtitleStyle(bool isSmallMobile) {
     return TextStyle(
       fontSize: isSmallMobile ? 13 : 15,
-      color: Colors.white.withOpacity(0.9),
+      color: Colors.white.withValues(alpha: 0.9),
       fontWeight: FontWeight.w400,
       height: 1.4,
     );

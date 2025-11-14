@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 // ===== Import your widget pages =====
 import 'splash_screen.dart';
 import 'admin_login.dart';
@@ -9,12 +10,13 @@ import 'widgets/admin_profile/admin_profile_page.dart';
 import 'widgets/admin_loan/admin_loan_page.dart';
 import 'widgets/admin_setting/admin_setting_page.dart';
 import 'widgets/admin_report/admin_report_page.dart';
-import 'widgets/admin_dashboard/DashboardPage.dart';
-import 'widgets/adminTransaction/adminTransactionPage.dart';
-import 'widgets/adminMoneyTransfer/adminMoneyTransferPage.dart';
-import 'widgets/adminDepositManagement/adminDepositManagementPage.dart';
+import 'widgets/admin_dashboard/dashboard_page.dart';
+import 'widgets/adminTransaction/admin_transaction_page.dart';
+import 'widgets/adminMoneyTransfer/admin_money_transfer_page.dart';
+import 'widgets/adminDepositManagement/admin_deposit_management_page.dart';
 import 'widgets/adminComplaint/complaints_layout_screen.dart';
 import 'widgets/adminInvestment/admin_investment_page.dart';
+import 'widgets/adminInvestment/portfolio_reports.dart';
 import 'widgets/adminAccounts/admin_accounts_page.dart';
 import 'widgets/adminKYC/kyc_dashboard.dart';
 import 'widgets/adminUser/user_management_page.dart';
@@ -27,17 +29,14 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'NeoBank Admin',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-        fontFamily: 'Poppins',
-      ),
+      theme: ThemeData(primarySwatch: Colors.red, fontFamily: 'Poppins'),
       home: const SplashScreen(),
       routes: {
         '/login': (context) => const AdminLogin(),
@@ -49,10 +48,8 @@ class MyApp extends StatelessWidget {
           title: 'Users',
           content: UserManagementPage(),
         ),
-        '/admin/kyc': (context) => const ResponsiveAdminLayout(
-          title: 'KYC',
-          content: KYCDashboard(),
-        ),
+        '/admin/kyc': (context) =>
+            const ResponsiveAdminLayout(title: 'KYC', content: KYCDashboard()),
         '/admin/accountsdashboard': (context) => const ResponsiveAdminLayout(
           title: 'Accounts',
           content: AdminAccountsPage(),
@@ -85,8 +82,8 @@ class MyApp extends StatelessWidget {
           title: 'Loans',
           content: AdminLoanPage(),
         ),
-        '/admin/cards': (context) => const ResponsiveAdminLayout(
-            title: 'Cards', content: CardPage()),
+        '/admin/cards': (context) =>
+            const ResponsiveAdminLayout(title: 'Cards', content: CardPage()),
         '/admin/settings': (context) => const ResponsiveAdminLayout(
           title: 'Settings',
           content: AdminSettingPage(),
@@ -138,9 +135,34 @@ final List<NotificationItem> notifications = [
     message: 'Server maintenance scheduled.',
     time: '3 hours ago',
     icon: Icons.warning,
-    iconColor: Colors.red,
+    iconColor: Color.fromARGB(255, 148, 18, 8),
   ),
 ];
+
+// ===== Notification List Widget =====
+Widget notificationsList() {
+  return ListView.builder(
+    itemCount: notifications.length,
+    itemBuilder: (context, index) {
+      final item = notifications[index];
+      return ListTile(
+        leading: CircleAvatar(
+          backgroundColor: item.iconColor.withValues(alpha: 0.2),
+          child: Icon(item.icon, color: item.iconColor),
+        ),
+        title: Text(
+          item.title,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Text(item.message),
+        trailing: Text(
+          item.time,
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
+        ),
+      );
+    },
+  );
+}
 
 //
 // ===== Responsive Layout Widget =====
@@ -162,27 +184,49 @@ class ResponsiveAdminLayout extends StatefulWidget {
 class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
   bool showSearch = false;
 
+  // ===== SHOW NOTIFICATION BOTTOM SHEET (Mobile) =====
+  void _showNotifications() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => SizedBox(
+        height: 400,
+        child: Column(
+          children: [
+            const SizedBox(height: 12),
+            const Text(
+              "Notifications",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const Divider(),
+            Expanded(child: notificationsList()),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         bool isMobile = constraints.maxWidth < 800;
 
-        // MOBILE UI — This is where search toggle happens
+        // MOBILE LAYOUT
         if (isMobile) {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 2,
               systemOverlayStyle: SystemUiOverlayStyle.dark,
-
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: const Icon(Icons.menu, color: Colors.black87),
                   onPressed: () => Scaffold.of(context).openDrawer(),
                 ),
               ),
-
               title: showSearch
                   ? _mobileSearchBar()
                   : Text(
@@ -192,9 +236,7 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-
               actions: [
-                // SEARCH ICON or CLOSE BUTTON
                 if (!showSearch)
                   IconButton(
                     icon: const Icon(Icons.search, color: Colors.black87),
@@ -213,13 +255,15 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                     },
                   ),
 
-                // NOTIFICATION ICON
+                // ===== NOTIFICATION ICON =====
                 Stack(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.notifications_outlined,
-                          color: Colors.black87),
-                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.black87,
+                      ),
+                      onPressed: _showNotifications, // <--- ADDED
                     ),
                     Positioned(
                       right: 8,
@@ -227,13 +271,15 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: const BoxDecoration(
-                          color: Colors.red,
+                          color: Color.fromARGB(255, 141, 17, 8),
                           shape: BoxShape.circle,
                         ),
                         child: Text(
                           '${notifications.length}',
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 10),
+                            color: Colors.white,
+                            fontSize: 10,
+                          ),
                         ),
                       ),
                     ),
@@ -241,13 +287,11 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                 ),
               ],
             ),
-
             drawer: const Drawer(child: AdminSidebar()),
             body: widget.content,
           );
         }
-
-        // DESKTOP VIEW (unchanged)
+        // DESKTOP VIEW (UNCHANGED)
         else {
           return Scaffold(
             body: Row(
@@ -263,7 +307,7 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withValues(alpha: 0.05),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),
@@ -277,10 +321,14 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                               onPressed: () {},
                             ),
                             const SizedBox(width: 12),
+
+                            // Desktop notifications NOT modified
                             Stack(
                               children: [
                                 IconButton(
-                                  icon: const Icon(Icons.notifications_outlined),
+                                  icon: const Icon(
+                                    Icons.notifications_outlined,
+                                  ),
                                   onPressed: () {},
                                 ),
                                 Positioned(
@@ -289,13 +337,15 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
                                     decoration: const BoxDecoration(
-                                      color: Colors.red,
+                                      color: Color.fromARGB(255, 117, 15, 8),
                                       shape: BoxShape.circle,
                                     ),
                                     child: Text(
                                       '${notifications.length}',
                                       style: const TextStyle(
-                                          color: Colors.white, fontSize: 10),
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -316,7 +366,7 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
     );
   }
 
-  // MOBILE SEARCH BAR WIDGET
+  // MOBILE SEARCH BAR
   Widget _mobileSearchBar() {
     return Container(
       height: 42,
@@ -339,8 +389,9 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                 border: InputBorder.none,
               ),
               onSubmitted: (value) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("Searching: $value")));
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text("Searching: $value")));
               },
             ),
           ),

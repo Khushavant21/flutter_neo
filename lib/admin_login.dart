@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AdminLogin extends StatefulWidget {
-  const AdminLogin({Key? key}) : super(key: key);
+  const AdminLogin({super.key});
 
   @override
   State<AdminLogin> createState() => _AdminLoginState();
@@ -169,7 +169,7 @@ class _AdminLoginState extends State<AdminLogin> {
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                               blurRadius: 30,
                               offset: const Offset(0, 10),
                             ),
@@ -418,13 +418,13 @@ class _AdminLoginState extends State<AdminLogin> {
                                   backgroundColor: const Color(0xFF900603),
                                   foregroundColor: Colors.white,
                                   elevation: 8,
-                                  shadowColor: const Color(0xFF900603).withOpacity(0.5),
+                                  shadowColor: const Color(0xFF900603).withValues(alpha: 0.5),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                 ).copyWith(
                                   overlayColor: WidgetStateProperty.all(
-                                    Colors.white.withOpacity(0.1),
+                                    Colors.white.withValues(alpha: 0.1),
                                   ),
                                 ),
                                 child: const Text(
@@ -447,10 +447,10 @@ class _AdminLoginState extends State<AdminLogin> {
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Colors.white.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             width: 1,
                           ),
                         ),

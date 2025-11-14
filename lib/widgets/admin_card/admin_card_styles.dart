@@ -42,14 +42,14 @@ class CardStyles {
   
   // Card Shadows
   static BoxShadow cardShadow = BoxShadow(
-    color: Colors.black.withOpacity(0.08),
+    color: Colors.black.withValues(alpha: 0.08),
     blurRadius: 16,
     offset: const Offset(0, 4),
     spreadRadius: 0,
   );
 
   static BoxShadow hoverShadow = BoxShadow(
-    color: Colors.black.withOpacity(0.12),
+    color: Colors.black.withValues(alpha: 0.12),
     blurRadius: 24,
     offset: const Offset(0, 8),
     spreadRadius: 0,

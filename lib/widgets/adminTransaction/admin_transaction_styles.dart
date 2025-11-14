@@ -39,9 +39,9 @@ class TransactionStyles {
 
   // Stat Card Decoration
   static BoxDecoration statCardDecoration = BoxDecoration(
-    color: Colors.white.withOpacity(0.1),
+    color: Colors.white.withValues(alpha: 0.1),
     borderRadius: BorderRadius.circular(8),
-    border: Border.all(color: Colors.white.withOpacity(0.2)),
+    border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
   );
 
   static const TextStyle statValueStyle = TextStyle(
@@ -61,7 +61,7 @@ class TransactionStyles {
     borderRadius: BorderRadius.circular(8),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 3,
         offset: const Offset(0, 1),
       ),
@@ -74,7 +74,7 @@ class TransactionStyles {
     borderRadius: BorderRadius.circular(6),
     boxShadow: [
       BoxShadow(
-        color: primaryColor.withOpacity(0.2),
+        color: primaryColor.withValues(alpha: 0.2),
         blurRadius: 4,
         offset: const Offset(0, 2),
       ),
@@ -104,7 +104,7 @@ class TransactionStyles {
     borderRadius: BorderRadius.circular(8),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 3,
         offset: const Offset(0, 1),
       ),
@@ -155,7 +155,7 @@ class TransactionStyles {
     borderRadius: BorderRadius.circular(8),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 3,
         offset: const Offset(0, 1),
       ),
@@ -363,7 +363,7 @@ class TransactionStyles {
     borderRadius: BorderRadius.circular(8),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 3,
         offset: const Offset(0, 1),
       ),
@@ -382,7 +382,7 @@ class TransactionStyles {
     borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.black.withValues(alpha: 0.2),
         blurRadius: 25,
         offset: const Offset(0, -5),
       ),

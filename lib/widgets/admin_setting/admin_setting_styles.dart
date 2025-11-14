@@ -34,7 +34,7 @@ class AdminSettingStyles {
 
   static TextStyle adminSubtitle = TextStyle(
     fontSize: 14,
-    color: white.withOpacity(0.85),
+    color: white.withValues(alpha: 0.85),
     fontWeight: FontWeight.w400,
     letterSpacing: 0.1,
     height: 1.3,
@@ -130,7 +130,7 @@ class AdminSettingStyles {
     borderRadius: BorderRadius.circular(12),
     boxShadow: [
       BoxShadow(
-        color: primaryRed.withOpacity(0.12),
+        color: primaryRed.withValues(alpha: 0.12),
         blurRadius: 20,
         offset: const Offset(0, 4),
       ),
@@ -142,8 +142,8 @@ class AdminSettingStyles {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        white.withOpacity(0.08),
-        white.withOpacity(0.03),
+        white.withValues(alpha: 0.08),
+        white.withValues(alpha: 0.03),
       ],
     ),
     borderRadius: BorderRadius.circular(12),
@@ -157,7 +157,7 @@ class AdminSettingStyles {
     ),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         blurRadius: 10,
         offset: const Offset(0, 2),
       ),
@@ -169,7 +169,7 @@ class AdminSettingStyles {
     borderRadius: BorderRadius.circular(12),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         blurRadius: 10,
         offset: const Offset(0, 2),
       ),
@@ -189,7 +189,7 @@ class AdminSettingStyles {
   );
 
   static BoxDecoration recItemDecoration(bool isActive) => BoxDecoration(
-        color: isActive ? primaryRed.withOpacity(0.05) : bgLight,
+        color: isActive ? primaryRed.withValues(alpha: 0.05) : bgLight,
         borderRadius: BorderRadius.circular(8),
         border: const Border(
           left: BorderSide(color: primaryRed, width: 3),
@@ -207,7 +207,7 @@ class AdminSettingStyles {
     ),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),
@@ -228,7 +228,7 @@ class AdminSettingStyles {
     border: Border.all(color: borderColor, width: 2),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),
@@ -258,7 +258,7 @@ class AdminSettingStyles {
       );
 
   static BoxDecoration toggleIconDecoration(Color color) => BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
       );
 

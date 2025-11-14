@@ -6,7 +6,7 @@ import 'view_alerts.dart';
 import 'transactions.dart';
 
 class KYCComplianceRoutes extends StatelessWidget {
-  const KYCComplianceRoutes({Key? key}) : super(key: key);
+  const KYCComplianceRoutes({super.key});
 
   @override
   Widget build(BuildContext context) {

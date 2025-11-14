@@ -179,7 +179,7 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
                 SwitchListTile(
                   value: enabled,
                   onChanged: (val) => setState(() => enabled = val),
-                  activeColor: const Color(0xFF900603),
+                  activeThumbColor: const Color(0xFF900603),
                   title: const Text("Enable Product"),
                 ),
                 const SizedBox(height: 15),
@@ -228,7 +228,7 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
     required void Function(String?) onChanged,
   }) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       onChanged: onChanged,
       items: items
           .map((e) => DropdownMenuItem(value: e, child: Text(e)))
@@ -503,3 +503,4 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
     );
   }
 }
+

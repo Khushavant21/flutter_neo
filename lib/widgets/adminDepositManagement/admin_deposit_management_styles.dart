@@ -52,7 +52,7 @@ class DepositStyles {
         BoxShadow(
           color: isActive 
               ? const Color(0x4D900603) 
-              : Colors.black.withOpacity(0.08),
+              : Colors.black.withValues(alpha: 0.08),
           offset: isActive ? const Offset(0, 4) : const Offset(0, 2),
           blurRadius: isActive ? 12 : 8,
         ),
@@ -68,7 +68,7 @@ class DepositStyles {
     borderRadius: BorderRadius.circular(20),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         offset: const Offset(0, 8),
         blurRadius: 24,
       ),
@@ -80,7 +80,7 @@ class DepositStyles {
     borderRadius: BorderRadius.circular(20),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.15),
+        color: Colors.black.withValues(alpha: 0.15),
         offset: const Offset(0, 12),
         blurRadius: 32,
       ),
@@ -130,7 +130,7 @@ class DepositStyles {
     borderRadius: BorderRadius.circular(12),
     boxShadow: [
       BoxShadow(
-        color: const Color(0xFF900603).withOpacity(0.1),
+        color: const Color(0xFF900603).withValues(alpha: 0.1),
         offset: const Offset(0, 4),
         blurRadius: 12,
       ),
@@ -145,7 +145,7 @@ class DepositStyles {
     borderRadius: BorderRadius.circular(12),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         offset: const Offset(0, 2),
         blurRadius: 8,
       ),
@@ -167,7 +167,7 @@ class DepositStyles {
     ),
     boxShadow: [
       BoxShadow(
-        color: const Color(0xFF900603).withOpacity(0.08),
+        color: const Color(0xFF900603).withValues(alpha: 0.08),
         offset: const Offset(0, 2),
         blurRadius: 8,
       ),
@@ -229,7 +229,7 @@ class DepositStyles {
       borderRadius: BorderRadius.circular(20),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.1),
+          color: Colors.black.withValues(alpha: 0.1),
           offset: const Offset(0, 2),
           blurRadius: 6,
         ),
@@ -265,7 +265,7 @@ class DepositStyles {
       borderRadius: BorderRadius.circular(8),
     ),
     elevation: 2,
-    shadowColor: Colors.black.withOpacity(0.1),
+    shadowColor: Colors.black.withValues(alpha: 0.1),
     textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 14,
@@ -281,7 +281,7 @@ class DepositStyles {
       side: const BorderSide(color: Color(0xFF900603), width: 2),
     ),
     elevation: 2,
-    shadowColor: Colors.black.withOpacity(0.1),
+    shadowColor: Colors.black.withValues(alpha: 0.1),
     textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 14,
@@ -296,7 +296,7 @@ class DepositStyles {
       borderRadius: BorderRadius.circular(8),
     ),
     elevation: 2,
-    shadowColor: Colors.black.withOpacity(0.1),
+    shadowColor: Colors.black.withValues(alpha: 0.1),
     textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 14,
@@ -311,7 +311,7 @@ class DepositStyles {
       borderRadius: BorderRadius.circular(8),
     ),
     elevation: 2,
-    shadowColor: Colors.black.withOpacity(0.1),
+    shadowColor: Colors.black.withValues(alpha: 0.1),
     textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 14,
@@ -326,7 +326,7 @@ class DepositStyles {
       borderRadius: BorderRadius.circular(8),
     ),
     elevation: 2,
-    shadowColor: Colors.black.withOpacity(0.1),
+    shadowColor: Colors.black.withValues(alpha: 0.1),
     textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 14,
@@ -337,7 +337,7 @@ class DepositStyles {
   // MODAL
   // ========================================
   static final modalBackdropDecoration = BoxDecoration(
-    color: Colors.black.withOpacity(0.6),
+    color: Colors.black.withValues(alpha: 0.6),
   );
 
   static final modalDecoration = BoxDecoration(
@@ -345,7 +345,7 @@ class DepositStyles {
     borderRadius: BorderRadius.circular(20),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.black.withValues(alpha: 0.3),
         offset: const Offset(0, 20),
         blurRadius: 60,
       ),
@@ -410,7 +410,7 @@ class DepositStyles {
       borderRadius: BorderRadius.circular(10),
     ),
     elevation: 2,
-    shadowColor: Colors.black.withOpacity(0.1),
+    shadowColor: Colors.black.withValues(alpha: 0.1),
     textStyle: const TextStyle(
       fontWeight: FontWeight.w600,
       fontSize: 15,
@@ -430,7 +430,7 @@ class DepositStyles {
     borderRadius: BorderRadius.circular(12),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withValues(alpha: 0.1),
         offset: const Offset(0, 2),
         blurRadius: 8,
       ),
@@ -447,7 +447,7 @@ class DepositStyles {
     borderRadius: BorderRadius.circular(12),
     boxShadow: [
       BoxShadow(
-        color: const Color(0xFF900603).withOpacity(0.2),
+        color: const Color(0xFF900603).withValues(alpha: 0.2),
         offset: const Offset(0, 6),
         blurRadius: 16,
       ),

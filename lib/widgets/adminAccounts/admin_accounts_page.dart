@@ -326,7 +326,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
         border: Border.all(color: color, width: 3),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -338,7 +338,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: color, size: isSmallMobile ? 24 : 28),
@@ -396,7 +396,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
         border: Border.all(color: AccountsStyles.primaryColor, width: 3),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -612,7 +612,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
         ),
         const SizedBox(height: 6),
         DropdownButtonFormField<String>(
-          value: value,
+          initialValue: value,
           decoration: const InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -715,7 +715,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
         border: Border.all(color: AccountsStyles.primaryColor, width: 3),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -753,7 +753,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -772,7 +772,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
             scrollDirection: Axis.horizontal,
             child: DataTable(
               columnSpacing: isMobile ? 20 : 40,
-              headingRowColor: MaterialStateProperty.all(
+              headingRowColor: WidgetStateProperty.all(
                 const Color(0xFFF8F9FA),
               ),
               columns: const [
@@ -851,7 +851,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
                 final index = entry.key;
                 final account = entry.value;
                 return DataRow(
-                  color: MaterialStateProperty.all(
+                  color: WidgetStateProperty.all(
                     index % 2 == 0 ? Colors.white : const Color(0xFFF8F9FA),
                   ),
                   onSelectChanged: (_) {
@@ -1060,7 +1060,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 60,
                 offset: const Offset(0, 20),
               ),
@@ -1299,7 +1299,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 60,
                 offset: const Offset(0, 20),
               ),
@@ -1718,7 +1718,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
           ),
           const SizedBox(height: 6),
           DropdownButtonFormField<String>(
-            value: value,
+            initialValue: value,
             decoration: const InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -1758,3 +1758,4 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
     );
   }
 }
+

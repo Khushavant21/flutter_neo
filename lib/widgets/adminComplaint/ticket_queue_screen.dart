@@ -185,3 +185,4 @@ class _TicketQueueScreenState extends State<TicketQueueScreen> {
     );
   }
 }
+

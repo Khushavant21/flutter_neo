@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../adminTransaction/adminTransactionStyles.dart';
+import '../adminTransaction/admin_transaction_styles.dart';
 
 class AdminTransactionPage extends StatefulWidget {
   const AdminTransactionPage({super.key});
@@ -13,7 +13,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
   String filterType = "All";
   String activeTab = "all";
   Map<String, dynamic>? selectedTxn;
-  
+
   final List<Map<String, dynamic>> transactions = [
     {
       "id": "TXN1001",
@@ -24,7 +24,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
       "amount": 20000,
       "status": "Success",
       "channel": "Internet Banking",
-      "reference": "REF1001"
+      "reference": "REF1001",
     },
     {
       "id": "TXN1002",
@@ -35,7 +35,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
       "amount": 5000,
       "status": "Pending",
       "channel": "Mobile App",
-      "reference": "REF1002"
+      "reference": "REF1002",
     },
     {
       "id": "TXN1003",
@@ -47,7 +47,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
       "status": "Failed",
       "reason": "Insufficient Balance",
       "channel": "ATM",
-      "reference": "REF1003"
+      "reference": "REF1003",
     },
     {
       "id": "TXN1004",
@@ -58,7 +58,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
       "amount": 15000,
       "status": "Success",
       "channel": "Branch",
-      "reference": "REF1004"
+      "reference": "REF1004",
     },
     {
       "id": "TXN1005",
@@ -69,8 +69,8 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
       "amount": 30000,
       "status": "Success",
       "channel": "Internet Banking",
-      "reference": "REF1005"
-    }
+      "reference": "REF1005",
+    },
   ];
 
   @override
@@ -80,17 +80,16 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
   }
 
   String formatCurrency(double value) {
-    return "₹${value.toStringAsFixed(0).replaceAllMapped(
-      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-      (Match m) => '${m[1]},',
-    )}";
+    return "₹${value.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}";
   }
 
   List<Map<String, dynamic>> get filteredTransactions {
     return transactions.where((txn) {
       if (activeTab == "pending" && txn["status"] != "Pending") return false;
       if (activeTab == "failed" && txn["status"] != "Failed") return false;
-      if (activeTab == "reconciliation" && txn["status"] != "Success") return false;
+      if (activeTab == "reconciliation" && txn["status"] != "Success") {
+        return false;
+      }
 
       final searchLower = _searchController.text.toLowerCase();
       return (filterType == "All" || txn["type"] == filterType) &&
@@ -106,7 +105,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1024;
     final horizontalPadding = isMobile ? 0.0 : (isTablet ? 24.0 : 32.0);
-    
+
     return Scaffold(
       backgroundColor: TransactionStyles.backgroundColor,
       body: Column(
@@ -135,27 +134,32 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                       ),
                       const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: TransactionStyles.statCardDecoration,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.pie_chart, color: Colors.white, size: 16),
+                            const Icon(
+                              Icons.pie_chart,
+                              color: Colors.white,
+                              size: 16,
+                            ),
                             const SizedBox(width: 8),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '${transactions.length}',
-                                  style: TransactionStyles.statValueStyle.copyWith(
-                                    fontSize: 18,
-                                  ),
+                                  style: TransactionStyles.statValueStyle
+                                      .copyWith(fontSize: 18),
                                 ),
                                 Text(
                                   'Total Transactions',
-                                  style: TransactionStyles.statLabelStyle.copyWith(
-                                    fontSize: 11,
-                                  ),
+                                  style: TransactionStyles.statLabelStyle
+                                      .copyWith(fontSize: 11),
                                 ),
                               ],
                             ),
@@ -182,11 +186,18 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
                         decoration: TransactionStyles.statCardDecoration,
                         child: Row(
                           children: [
-                            const Icon(Icons.pie_chart, color: Colors.white, size: 20),
+                            const Icon(
+                              Icons.pie_chart,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                             const SizedBox(width: 12),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,15 +287,22 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                                 child: DropdownButton<String>(
                                   value: filterType,
                                   isExpanded: true,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
                                   items: ['All', 'Credit', 'Debit', 'Transfer']
-                                      .map((type) => DropdownMenuItem(
-                                            value: type,
-                                            child: Text(
-                                              type == 'All' ? 'All Transactions' : type,
-                                              style: TransactionStyles.dropdownItemStyle,
-                                            ),
-                                          ))
+                                      .map(
+                                        (type) => DropdownMenuItem(
+                                          value: type,
+                                          child: Text(
+                                            type == 'All'
+                                                ? 'All Transactions'
+                                                : type,
+                                            style: TransactionStyles
+                                                .dropdownItemStyle,
+                                          ),
+                                        ),
+                                      )
                                       .toList(),
                                   onChanged: (value) {
                                     setState(() {
@@ -315,17 +333,22 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                               Expanded(
                                 child: Text(
                                   _getTableTitle(),
-                                  style: TransactionStyles.tableHeaderTitleStyle.copyWith(
-                                    fontSize: isMobile ? 14 : 20,
-                                  ),
+                                  style: TransactionStyles.tableHeaderTitleStyle
+                                      .copyWith(fontSize: isMobile ? 14 : 20),
                                 ),
                               ),
                               if (!isMobile)
                                 Row(
                                   children: [
-                                    _buildExportButton('Export CSV', Icons.download),
+                                    _buildExportButton(
+                                      'Export CSV',
+                                      Icons.download,
+                                    ),
                                     const SizedBox(width: 12),
-                                    _buildExportButton('Export PDF', Icons.picture_as_pdf),
+                                    _buildExportButton(
+                                      'Export PDF',
+                                      Icons.picture_as_pdf,
+                                    ),
                                   ],
                                 ),
                             ],
@@ -350,7 +373,8 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   padding: const EdgeInsets.all(12),
                                   itemCount: filteredTransactions.length,
-                                  separatorBuilder: (context, index) => const SizedBox(height: 10),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(height: 10),
                                   itemBuilder: (context, index) {
                                     final txn = filteredTransactions[index];
                                     return _buildMobileCard(txn);
@@ -362,62 +386,169 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                             scrollDirection: Axis.horizontal,
                             child: Container(
                               constraints: BoxConstraints(
-                                minWidth: MediaQuery.of(context).size.width - (horizontalPadding * 2),
+                                minWidth:
+                                    MediaQuery.of(context).size.width -
+                                    (horizontalPadding * 2),
                               ),
                               child: DataTable(
                                 headingRowColor: WidgetStateProperty.all(
                                   TransactionStyles.tableHeaderColor,
                                 ),
                                 columns: [
-                                  DataColumn(label: Text('Txn ID', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Date & Time', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Account No', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Customer Name', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Type', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Amount', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Status', style: TransactionStyles.tableHeaderStyle)),
+                                  DataColumn(
+                                    label: Text(
+                                      'Txn ID',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Date & Time',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Account No',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Customer Name',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Type',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Amount',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Status',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
                                   if (activeTab == "failed")
-                                    DataColumn(label: Text('Failure Reason', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Channel', style: TransactionStyles.tableHeaderStyle)),
-                                  DataColumn(label: Text('Actions', style: TransactionStyles.tableHeaderStyle)),
+                                    DataColumn(
+                                      label: Text(
+                                        'Failure Reason',
+                                        style:
+                                            TransactionStyles.tableHeaderStyle,
+                                      ),
+                                    ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Channel',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Actions',
+                                      style: TransactionStyles.tableHeaderStyle,
+                                    ),
+                                  ),
                                 ],
                                 rows: filteredTransactions.map((txn) {
                                   return DataRow(
                                     cells: [
-                                      DataCell(Text(txn["id"], style: TransactionStyles.txnIdStyle)),
-                                      DataCell(Text(txn["date"], style: TransactionStyles.tableCellStyle)),
-                                      DataCell(Text(txn["account"], style: TransactionStyles.accountNoStyle)),
-                                      DataCell(Text(txn["customer"], style: TransactionStyles.tableCellStyle)),
+                                      DataCell(
+                                        Text(
+                                          txn["id"],
+                                          style: TransactionStyles.txnIdStyle,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          txn["date"],
+                                          style:
+                                              TransactionStyles.tableCellStyle,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          txn["account"],
+                                          style:
+                                              TransactionStyles.accountNoStyle,
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Text(
+                                          txn["customer"],
+                                          style:
+                                              TransactionStyles.tableCellStyle,
+                                        ),
+                                      ),
                                       DataCell(
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                          decoration: TransactionStyles.getTypeBadgeDecoration(txn["type"]),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          decoration:
+                                              TransactionStyles.getTypeBadgeDecoration(
+                                                txn["type"],
+                                              ),
                                           child: Text(
                                             txn["type"],
-                                            style: TransactionStyles.getTypeBadgeStyle(txn["type"]),
+                                            style:
+                                                TransactionStyles.getTypeBadgeStyle(
+                                                  txn["type"],
+                                                ),
                                           ),
                                         ),
                                       ),
-                                      DataCell(Text(
-                                        formatCurrency(txn["amount"].toDouble()),
-                                        style: TransactionStyles.amountStyle,
-                                      )),
+                                      DataCell(
+                                        Text(
+                                          formatCurrency(
+                                            txn["amount"].toDouble(),
+                                          ),
+                                          style: TransactionStyles.amountStyle,
+                                        ),
+                                      ),
                                       DataCell(
                                         Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                          decoration: TransactionStyles.getStatusBadgeDecoration(txn["status"]),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          decoration:
+                                              TransactionStyles.getStatusBadgeDecoration(
+                                                txn["status"],
+                                              ),
                                           child: Text(
                                             txn["status"],
-                                            style: TransactionStyles.getStatusBadgeStyle(txn["status"]),
+                                            style:
+                                                TransactionStyles.getStatusBadgeStyle(
+                                                  txn["status"],
+                                                ),
                                           ),
                                         ),
                                       ),
                                       if (activeTab == "failed")
-                                        DataCell(Text(
-                                          txn["reason"] ?? "—",
-                                          style: TransactionStyles.tableCellStyle,
-                                        )),
-                                      DataCell(Text(txn["channel"], style: TransactionStyles.tableCellStyle)),
+                                        DataCell(
+                                          Text(
+                                            txn["reason"] ?? "—",
+                                            style: TransactionStyles
+                                                .tableCellStyle,
+                                          ),
+                                        ),
+                                      DataCell(
+                                        Text(
+                                          txn["channel"],
+                                          style:
+                                              TransactionStyles.tableCellStyle,
+                                        ),
+                                      ),
                                       DataCell(
                                         ElevatedButton.icon(
                                           onPressed: () {
@@ -425,9 +556,13 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                                               selectedTxn = txn;
                                             });
                                           },
-                                          icon: const Icon(Icons.visibility, size: 16),
+                                          icon: const Icon(
+                                            Icons.visibility,
+                                            size: 16,
+                                          ),
                                           label: const Text('View Details'),
-                                          style: TransactionStyles.viewButtonStyle,
+                                          style:
+                                              TransactionStyles.viewButtonStyle,
                                         ),
                                       ),
                                     ],
@@ -451,7 +586,9 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                         children: [
                           Text(
                             'Export Reports',
-                            style: TransactionStyles.exportTitleStyle.copyWith(fontSize: 14),
+                            style: TransactionStyles.exportTitleStyle.copyWith(
+                              fontSize: 14,
+                            ),
                           ),
                           const SizedBox(height: 12),
                           Column(
@@ -482,9 +619,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
     return Card(
       elevation: 2,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: InkWell(
         onTap: () {
           setState(() {
@@ -505,11 +640,18 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                     style: TransactionStyles.txnIdStyle.copyWith(fontSize: 13),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: TransactionStyles.getStatusBadgeDecoration(txn["status"]),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: TransactionStyles.getStatusBadgeDecoration(
+                      txn["status"],
+                    ),
                     child: Text(
                       txn["status"],
-                      style: TransactionStyles.getStatusBadgeStyle(txn["status"]).copyWith(fontSize: 11),
+                      style: TransactionStyles.getStatusBadgeStyle(
+                        txn["status"],
+                      ).copyWith(fontSize: 11),
                     ),
                   ),
                 ],
@@ -537,12 +679,16 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                     children: [
                       Text(
                         'Amount',
-                        style: TransactionStyles.tableCellStyle.copyWith(fontSize: 11),
+                        style: TransactionStyles.tableCellStyle.copyWith(
+                          fontSize: 11,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         formatCurrency(txn["amount"].toDouble()),
-                        style: TransactionStyles.amountStyle.copyWith(fontSize: 15),
+                        style: TransactionStyles.amountStyle.copyWith(
+                          fontSize: 15,
+                        ),
                       ),
                     ],
                   ),
@@ -550,17 +696,26 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: TransactionStyles.getTypeBadgeDecoration(txn["type"]),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: TransactionStyles.getTypeBadgeDecoration(
+                          txn["type"],
+                        ),
                         child: Text(
                           txn["type"],
-                          style: TransactionStyles.getTypeBadgeStyle(txn["type"]).copyWith(fontSize: 11),
+                          style: TransactionStyles.getTypeBadgeStyle(
+                            txn["type"],
+                          ).copyWith(fontSize: 11),
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         txn["date"],
-                        style: TransactionStyles.tableCellStyle.copyWith(fontSize: 10),
+                        style: TransactionStyles.tableCellStyle.copyWith(
+                          fontSize: 10,
+                        ),
                       ),
                     ],
                   ),
@@ -573,12 +728,18 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                   decoration: TransactionStyles.reasonDecoration,
                   child: Row(
                     children: [
-                      const Icon(Icons.error_outline, size: 14, color: Color(0xFF991B1B)),
+                      const Icon(
+                        Icons.error_outline,
+                        size: 14,
+                        color: Color(0xFF991B1B),
+                      ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           txn["reason"],
-                          style: TransactionStyles.reasonTextStyle.copyWith(fontSize: 11),
+                          style: TransactionStyles.reasonTextStyle.copyWith(
+                            fontSize: 11,
+                          ),
                         ),
                       ),
                     ],
@@ -655,7 +816,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
   Widget _buildModal() {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
-    
+
     return Container(
       height: MediaQuery.of(context).size.height * 0.9,
       decoration: TransactionStyles.modalDecoration,
@@ -702,23 +863,44 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                     mainAxisSpacing: 12,
                     children: [
                       _buildDetailItem('Transaction ID', selectedTxn!["id"]),
-                      _buildDetailItem('Reference No', selectedTxn!["reference"]),
+                      _buildDetailItem(
+                        'Reference No',
+                        selectedTxn!["reference"],
+                      ),
                       _buildDetailItem('Date & Time', selectedTxn!["date"]),
-                      _buildDetailItem('Account Number', selectedTxn!["account"]),
-                      _buildDetailItem('Customer Name', selectedTxn!["customer"]),
-                      _buildDetailItem('Transaction Type', selectedTxn!["type"], isType: true),
+                      _buildDetailItem(
+                        'Account Number',
+                        selectedTxn!["account"],
+                      ),
+                      _buildDetailItem(
+                        'Customer Name',
+                        selectedTxn!["customer"],
+                      ),
+                      _buildDetailItem(
+                        'Transaction Type',
+                        selectedTxn!["type"],
+                        isType: true,
+                      ),
                       _buildDetailItem(
                         'Amount',
                         formatCurrency(selectedTxn!["amount"].toDouble()),
                         isAmount: true,
                       ),
-                      _buildDetailItem('Status', selectedTxn!["status"], isStatus: true),
+                      _buildDetailItem(
+                        'Status',
+                        selectedTxn!["status"],
+                        isStatus: true,
+                      ),
                       _buildDetailItem('Channel', selectedTxn!["channel"]),
                     ],
                   ),
                   if (selectedTxn!["reason"] != null) ...[
                     const SizedBox(height: 12),
-                    _buildDetailItemFullWidth('Failure Reason', selectedTxn!["reason"], isReason: true),
+                    _buildDetailItemFullWidth(
+                      'Failure Reason',
+                      selectedTxn!["reason"],
+                      isReason: true,
+                    ),
                   ],
                   const SizedBox(height: 24),
 
@@ -731,11 +913,15 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                       _buildActionButton('Refund', Colors.purple[700]!),
                       _buildActionButton('Resolved', Colors.green[700]!),
                       _buildActionButton('Add Note', Colors.orange[700]!),
-                      _buildActionButton('Close', Colors.grey[700]!, onPressed: () {
-                        setState(() {
-                          selectedTxn = null;
-                        });
-                      }),
+                      _buildActionButton(
+                        'Close',
+                        Colors.grey[700]!,
+                        onPressed: () {
+                          setState(() {
+                            selectedTxn = null;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ],
@@ -747,13 +933,21 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
     );
   }
 
-  Widget _buildDetailItem(String label, String value,
-      {bool isType = false, bool isStatus = false, bool isAmount = false}) {
+  Widget _buildDetailItem(
+    String label,
+    String value, {
+    bool isType = false,
+    bool isStatus = false,
+    bool isAmount = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(label, style: TransactionStyles.detailLabelStyle.copyWith(fontSize: 11)),
+        Text(
+          label,
+          style: TransactionStyles.detailLabelStyle.copyWith(fontSize: 11),
+        ),
         const SizedBox(height: 4),
         if (isType)
           Container(
@@ -761,7 +955,9 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
             decoration: TransactionStyles.getTypeBadgeDecoration(value),
             child: Text(
               value,
-              style: TransactionStyles.getTypeBadgeStyle(value).copyWith(fontSize: 11),
+              style: TransactionStyles.getTypeBadgeStyle(
+                value,
+              ).copyWith(fontSize: 11),
             ),
           )
         else if (isStatus)
@@ -770,22 +966,37 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
             decoration: TransactionStyles.getStatusBadgeDecoration(value),
             child: Text(
               value,
-              style: TransactionStyles.getStatusBadgeStyle(value).copyWith(fontSize: 11),
+              style: TransactionStyles.getStatusBadgeStyle(
+                value,
+              ).copyWith(fontSize: 11),
             ),
           )
         else if (isAmount)
-          Text(value, style: TransactionStyles.detailAmountStyle.copyWith(fontSize: 14))
+          Text(
+            value,
+            style: TransactionStyles.detailAmountStyle.copyWith(fontSize: 14),
+          )
         else
-          Text(value, style: TransactionStyles.detailValueStyle.copyWith(fontSize: 12)),
+          Text(
+            value,
+            style: TransactionStyles.detailValueStyle.copyWith(fontSize: 12),
+          ),
       ],
     );
   }
 
-  Widget _buildDetailItemFullWidth(String label, String value, {bool isReason = false}) {
+  Widget _buildDetailItemFullWidth(
+    String label,
+    String value, {
+    bool isReason = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TransactionStyles.detailLabelStyle.copyWith(fontSize: 11)),
+        Text(
+          label,
+          style: TransactionStyles.detailLabelStyle.copyWith(fontSize: 11),
+        ),
         const SizedBox(height: 4),
         Container(
           width: double.infinity,
@@ -793,7 +1004,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
           decoration: isReason ? TransactionStyles.reasonDecoration : null,
           child: Text(
             value,
-            style: isReason 
+            style: isReason
                 ? TransactionStyles.reasonTextStyle.copyWith(fontSize: 11)
                 : TransactionStyles.detailValueStyle.copyWith(fontSize: 12),
           ),
@@ -802,16 +1013,18 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
     );
   }
 
-  Widget _buildActionButton(String label, Color color, {VoidCallback? onPressed}) {
+  Widget _buildActionButton(
+    String label,
+    Color color, {
+    VoidCallback? onPressed,
+  }) {
     return ElevatedButton(
       onPressed: onPressed ?? () {},
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       ),
       child: Text(
         label,

@@ -185,7 +185,7 @@ class DashboardStyles {
     borderRadius: BorderRadius.circular(radiusLg),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.04),
+        color: Colors.black.withValues(alpha: 0.04),
         blurRadius: 10,
         offset: const Offset(0, 2),
       ),
@@ -240,7 +240,7 @@ class DashboardStyles {
 
   static BoxDecoration badgeDecorationDynamic(Color color) {
     return BoxDecoration(
-      color: color.withOpacity(0.1),
+      color: color.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(radiusSm),
     );
   }
@@ -256,7 +256,7 @@ class DashboardStyles {
   // Icon Styles
   static BoxDecoration iconContainerDecoration(Color color) {
     return BoxDecoration(
-      color: color.withOpacity(0.1),
+      color: color.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(radiusMd),
     );
   }
@@ -459,3 +459,4 @@ class DashboardStyles {
     return 2;
   }
 }
+

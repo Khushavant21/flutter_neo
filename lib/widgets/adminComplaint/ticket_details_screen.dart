@@ -106,7 +106,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                     decoration: BoxDecoration(
                       color: isUser
                           ? Colors.grey[300]
-                          : const Color(0xFF950606).withOpacity(0.9),
+                          : const Color(0xFF950606).withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -162,7 +162,7 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
       // Actions modal
       floatingActionButton: showActions
           ? FloatingActionButton(
-              backgroundColor: Colors.black.withOpacity(0.7),
+              backgroundColor: Colors.black.withValues(alpha: 0.7),
               onPressed: () => setState(() => showActions = false),
               child: const Icon(Icons.close),
             )
@@ -170,3 +170,4 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
     );
   }
 }
+

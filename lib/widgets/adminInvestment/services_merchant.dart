@@ -109,7 +109,7 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
       scrollDirection: Axis.horizontal,
       child: DataTable(
         columnSpacing: isSmallScreen ? 20 : 40,
-        headingRowColor: MaterialStateColor.resolveWith(
+        headingRowColor: WidgetStateColor.resolveWith(
           (_) => const Color(0xFF900603),
         ),
         headingTextStyle: const TextStyle(
@@ -246,7 +246,7 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
                     labelText: "Service Type",
                     border: OutlineInputBorder(),
                   ),
-                  value: selectedServiceType,
+                  initialValue: selectedServiceType,
                   items: serviceTypes
                       .map(
                         (type) =>
@@ -339,3 +339,4 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
     );
   }
 }
+

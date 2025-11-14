@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'admin_login.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    
+
     _logoController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Stage 1: Loading bar (2s)
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
-    
+
     setState(() {
       stage = 2;
       showLoading = false;
@@ -47,10 +47,10 @@ class _SplashScreenState extends State<SplashScreen>
     // Stage 2: Welcome message (2s)
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
-    
+
     // Start logo fly animation
     _logoController.forward();
-    
+
     // Stage 3: Navigate to login
     await Future.delayed(const Duration(milliseconds: 1500));
     if (mounted) {
@@ -59,10 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
           pageBuilder: (context, animation, secondaryAnimation) =>
               const AdminLogin(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
+            return FadeTransition(opacity: animation, child: child);
           },
           transitionDuration: const Duration(milliseconds: 800),
         ),
@@ -90,10 +87,12 @@ class _SplashScreenState extends State<SplashScreen>
               builder: (context, child) {
                 if (_logoAnimation.value > 0) {
                   return Transform.translate(
-                    offset: Offset(
-                      -MediaQuery.of(context).size.width * 0.5 + 24,
-                      -MediaQuery.of(context).size.height * 0.5 + 34,
-                    ) * _logoAnimation.value,
+                    offset:
+                        Offset(
+                          -MediaQuery.of(context).size.width * 0.5 + 24,
+                          -MediaQuery.of(context).size.height * 0.5 + 34,
+                        ) *
+                        _logoAnimation.value,
                     child: Transform.scale(
                       scale: 1 - (0.69 * _logoAnimation.value),
                       child: child,
@@ -109,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
+                      color: Colors.black.withValues(alpha: 0.15),
                       blurRadius: 16,
                       offset: const Offset(0, 6),
                     ),
@@ -117,16 +116,13 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    'assets/logo.png',
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.asset('assets/logo.png', fit: BoxFit.cover),
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 40),
-            
+
             // Loading bar
             if (showLoading)
               TweenAnimationBuilder<double>(
@@ -137,11 +133,11 @@ class _SplashScreenState extends State<SplashScreen>
                     width: 320,
                     height: 12,
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(6),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.15),
+                          color: Colors.black.withValues(alpha: 0.15),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
@@ -162,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen>
                   );
                 },
               ),
-            
+
             // Welcome text
             if (showWelcome) ...[
               const SizedBox(height: 20),
@@ -213,3 +209,4 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
+
