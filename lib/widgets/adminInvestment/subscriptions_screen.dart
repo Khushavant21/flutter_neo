@@ -72,7 +72,9 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
+
       appBar: AppBar(
+        automaticallyImplyLeading: false, // 🔥 REMOVE BACK BUTTON
         title: const Text(
           "Subscriptions / Redemptions",
           style: TextStyle(color: Colors.white, fontSize: 18),
@@ -81,6 +83,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
         centerTitle: true,
         elevation: 4,
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Container(
@@ -89,7 +92,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: Colors.black.withOpacity(0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -101,11 +104,10 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
     );
   }
 
-  /// 📱 Mobile Layout: Card-based List
+  /// 📱 Mobile Layout
   Widget _buildMobileView() {
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
       itemCount: subscriptions.length,
       itemBuilder: (context, index) {
         final sub = subscriptions[index];
@@ -119,7 +121,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 5,
                 offset: const Offset(0, 2),
               ),
@@ -130,7 +132,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // User name
                 Text(
                   sub["user"],
                   style: const TextStyle(
@@ -141,7 +142,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                 ),
                 const SizedBox(height: 8),
 
-                // Type & Amount Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -157,7 +157,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Status Label
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -180,7 +179,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Action Buttons
                 if (sub["status"] == "Pending")
                   Row(
                     children: [
@@ -188,15 +186,11 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                         child: ElevatedButton(
                           onPressed: () => handleApprove(sub["id"]),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            backgroundColor: const Color(0xFF900603),
                           ),
                           child: const Text(
                             "Approve",
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
@@ -205,15 +199,11 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                         child: ElevatedButton(
                           onPressed: () => handleReject(sub["id"]),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            backgroundColor: const Color(0xFF900603),
                           ),
                           child: const Text(
                             "Reject",
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
@@ -227,7 +217,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
     );
   }
 
-  /// 💻 Desktop / Tablet Layout: DataTable
+  /// 💻 Desktop Layout
   Widget _buildDesktopView() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -279,27 +269,23 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                           ElevatedButton(
                             onPressed: () => handleApprove(sub["id"]),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              textStyle: const TextStyle(fontSize: 13),
+                              backgroundColor: const Color(0xFF900603),
                             ),
-                            child: const Text("Approve"),
+                            child: const Text(
+                              "Approve",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           const SizedBox(width: 8),
                           ElevatedButton(
                             onPressed: () => handleReject(sub["id"]),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              textStyle: const TextStyle(fontSize: 13),
+                              backgroundColor: const Color(0xFF900603),
                             ),
-                            child: const Text("Reject"),
+                            child: const Text(
+                              "Reject",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
                       )
@@ -312,4 +298,3 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
     );
   }
 }
-

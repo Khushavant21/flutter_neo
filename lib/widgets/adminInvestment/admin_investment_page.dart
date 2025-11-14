@@ -27,7 +27,6 @@ class _AdminInvestmentPageState extends State<AdminInvestmentPage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Just show the content directly without tabs
         return _buildContent();
       },
     );
@@ -39,7 +38,7 @@ class _AdminInvestmentPageState extends State<AdminInvestmentPage> {
       case 0:
         // Investment Panel with navigation callback
         return InvestmentPanel(
-          onNavigateToTab: _navigateToTab,
+          onNavigateToTab: _navigateToTab, // ✅ Pass the callback
         );
       case 1:
         return const APIKeysIntegrationsScreen();

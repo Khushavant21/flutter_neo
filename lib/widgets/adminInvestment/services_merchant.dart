@@ -35,308 +35,227 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
     },
   ];
 
-  bool showModal = false;
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController merchantIdController = TextEditingController();
-  final TextEditingController serviceController = TextEditingController();
-  String? selectedServiceType;
-
-  final List<String> serviceTypes = ["UPI", "NetBanking", "Cards", "Wallet"];
-
   void toggleStatus(int id) {
     setState(() {
-      for (var m in merchants) {
+      merchants = merchants.map((m) {
         if (m["id"] == id) {
-          m["status"] = m["status"] == "Enabled" ? "Disabled" : "Enabled";
+          return {
+            ...m,
+            "status": m["status"] == "Enabled" ? "Disabled" : "Enabled",
+          };
         }
-      }
+        return m;
+      }).toList();
     });
   }
 
-  void addMerchant() {
-    if (nameController.text.isEmpty ||
-        merchantIdController.text.isEmpty ||
-        serviceController.text.isEmpty ||
-        selectedServiceType == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
-      return;
+  Color getStatusColor(String status) {
+    switch (status) {
+      case "Enabled":
+        return Colors.green;
+      case "Disabled":
+        return Colors.red;
+      default:
+        return Colors.amber;
     }
-
-    setState(() {
-      final nextId = merchants.length + 1;
-      merchants.add({
-        "id": nextId,
-        "name": nameController.text,
-        "merchantId": merchantIdController.text,
-        "service": serviceController.text,
-        "serviceType": selectedServiceType,
-        "status": "Enabled",
-      });
-      nameController.clear();
-      merchantIdController.clear();
-      serviceController.clear();
-      selectedServiceType = null;
-      showModal = false;
-    });
-  }
-
-  Widget statusBadge(String status) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: status == "Enabled"
-            ? const Color(0xFF28A745)
-            : const Color(0xFFDC3545),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        status,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  Widget buildTable(BuildContext context) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 600;
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columnSpacing: isSmallScreen ? 20 : 40,
-        headingRowColor: WidgetStateColor.resolveWith(
-          (_) => const Color(0xFF900603),
-        ),
-        headingTextStyle: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        ),
-        columns: const [
-          DataColumn(label: Text("Name")),
-          DataColumn(label: Text("ID")),
-          DataColumn(label: Text("Service")),
-          DataColumn(label: Text("Type")),
-          DataColumn(label: Text("Status")),
-          DataColumn(label: Text("Action")),
-        ],
-        rows: merchants
-            .map(
-              (m) => DataRow(
-                cells: [
-                  DataCell(
-                    Text(m["name"], style: const TextStyle(fontSize: 13)),
-                  ),
-                  DataCell(
-                    Text(m["merchantId"], style: const TextStyle(fontSize: 13)),
-                  ),
-                  DataCell(
-                    Text(m["service"], style: const TextStyle(fontSize: 13)),
-                  ),
-                  DataCell(
-                    Text(
-                      m["serviceType"],
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ),
-                  DataCell(statusBadge(m["status"])),
-                  DataCell(
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: m["status"] == "Enabled"
-                            ? const Color(0xFFDC3545)
-                            : const Color(0xFF28A745),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 6,
-                        ),
-                        minimumSize: const Size(70, 35),
-                      ),
-                      onPressed: () => toggleStatus(m["id"]),
-                      child: Text(
-                        m["status"] == "Enabled" ? "Disable" : "Enable",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )
-            .toList(),
-      ),
-    );
-  }
-
-  Widget buildModal(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = screenWidth < 600;
-
-    return Container(
-      color: Colors.black54,
-      child: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: isSmallScreen ? screenWidth * 0.9 : 500,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(color: Colors.black26, blurRadius: 10),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Header
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Add Merchant / Service",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF900603),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => setState(() => showModal = false),
-                      icon: const Icon(Icons.close, color: Color(0xFF900603)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-
-                // Merchant Details
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: "Merchant Name",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: merchantIdController,
-                  decoration: const InputDecoration(
-                    labelText: "Merchant ID",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: serviceController,
-                  decoration: const InputDecoration(
-                    labelText: "Service Name",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<String>(
-                  decoration: const InputDecoration(
-                    labelText: "Service Type",
-                    border: OutlineInputBorder(),
-                  ),
-                  initialValue: selectedServiceType,
-                  items: serviceTypes
-                      .map(
-                        (type) =>
-                            DropdownMenuItem(value: type, child: Text(type)),
-                      )
-                      .toList(),
-                  onChanged: (val) => setState(() {
-                    selectedServiceType = val;
-                  }),
-                ),
-                const SizedBox(height: 20),
-
-                // Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () => setState(() => showModal = false),
-                      child: const Text("Cancel"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: addMerchant,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF900603),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
-                        ),
-                      ),
-                      child: const Text("Add Merchant"),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const Text("Services & Merchant Integrations"),
+        automaticallyImplyLeading: false, // 🚀 Back button removed
+        title: const Text(
+          "Services & Merchant Integrations",
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
         backgroundColor: const Color(0xFF900603),
         centerTitle: true,
+        elevation: 4,
       ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6)],
-          ),
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton.icon(
-                  icon: const Icon(Icons.add, size: 18, color: Colors.white),
-                  label: const Text("Add Merchant / Service"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF900603),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                  ),
-                  onPressed: () => setState(() => showModal = true),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: SingleChildScrollView(child: buildTable(context)),
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
+          child: isMobile ? _buildMobileView() : _buildDesktopView(),
         ),
       ),
-      floatingActionButton: showModal ? buildModal(context) : null,
+    );
+  }
+
+  // 📱 Mobile Card Layout
+  Widget _buildMobileView() {
+    return ListView.builder(
+      itemCount: merchants.length,
+      padding: const EdgeInsets.all(10),
+      itemBuilder: (context, index) {
+        final m = merchants[index];
+        final statusColor = getStatusColor(m["status"]);
+
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade300),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 5,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                m["name"],
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "ID: ${m["merchantId"]}",
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  Text(
+                    "Type: ${m["serviceType"]}",
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+
+              Text(
+                "Service: ${m["service"]}",
+                style: const TextStyle(fontSize: 14),
+              ),
+              const SizedBox(height: 10),
+
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: statusColor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  m["status"],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF900603),
+                      ),
+                      onPressed: () => toggleStatus(m["id"]),
+                      child: Text(
+                        m["status"] == "Enabled" ? "Disable" : "Enable",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // 💻 Desktop / Tablet DataTable Layout
+  Widget _buildDesktopView() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        headingRowColor: WidgetStateProperty.all(const Color(0xFF900603)),
+        headingTextStyle: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        columnSpacing: 30,
+        columns: const [
+          DataColumn(label: Text("Merchant Name")),
+          DataColumn(label: Text("Merchant ID")),
+          DataColumn(label: Text("Service")),
+          DataColumn(label: Text("Type")),
+          DataColumn(label: Text("Status")),
+          DataColumn(label: Text("Actions")),
+        ],
+        rows: merchants.map((m) {
+          final statusColor = getStatusColor(m["status"]);
+
+          return DataRow(
+            cells: [
+              DataCell(Text(m["name"])),
+              DataCell(Text(m["merchantId"])),
+              DataCell(Text(m["service"])),
+              DataCell(Text(m["serviceType"])),
+              DataCell(
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    m["status"],
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              DataCell(
+                ElevatedButton(
+                  onPressed: () => toggleStatus(m["id"]),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF900603),
+                  ),
+                  child: Text(
+                    m["status"] == "Enabled" ? "Disable" : "Enable",
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }).toList(),
+      ),
     );
   }
 }
-

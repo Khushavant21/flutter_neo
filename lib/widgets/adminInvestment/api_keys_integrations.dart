@@ -1,11 +1,10 @@
+// Example: api_keys_integrations.dart with back button
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 
 class APIKeysIntegrationsScreen extends StatefulWidget {
-  final VoidCallback? onBack;
-  
-  const APIKeysIntegrationsScreen({super.key, this.onBack});
+  const APIKeysIntegrationsScreen({super.key});
 
   @override
   State<APIKeysIntegrationsScreen> createState() =>
@@ -33,6 +32,12 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
   bool showModal = false;
   String newKeyName = "";
 
+  Color getStatusColor(String status) {
+    if (status == "Active") return Colors.green;
+    if (status == "Disabled") return Colors.red;
+    return Colors.grey;
+  }
+
   void toggleStatus(int id) {
     setState(() {
       for (var key in keys) {
@@ -40,29 +45,6 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
           key["status"] = key["status"] == "Active" ? "Disabled" : "Active";
         }
       }
-    });
-  }
-
-  void handleGenerateKey() {
-    if (newKeyName.trim().isEmpty) return;
-
-    setState(() {
-      final random = Random();
-      final randomValue = List.generate(
-        10,
-        (_) => String.fromCharCode(random.nextInt(26) + 97),
-      ).join();
-
-      keys.add({
-        "id": keys.length + 1,
-        "name": newKeyName,
-        "status": "Active",
-        "created": DateTime.now().toIso8601String().substring(0, 10),
-        "value": randomValue,
-      });
-
-      newKeyName = "";
-      showModal = false;
     });
   }
 
@@ -85,18 +67,41 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
             child: const Text("Cancel"),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF900603)),
             onPressed: () {
               setState(() {
-                keys.removeWhere((k) => k["id"] == id);
+                keys.removeWhere((e) => e["id"] == id);
               });
               Navigator.pop(ctx);
             },
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text("Revoke"),
+            child: const Text("Revoke", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
+  }
+
+  void handleGenerateKey() {
+    if (newKeyName.trim().isEmpty) return;
+
+    setState(() {
+      final random = Random();
+      final newKey = List.generate(
+        12,
+        (_) => String.fromCharCode(random.nextInt(26) + 97),
+      ).join();
+
+      keys.add({
+        "id": keys.length + 1,
+        "name": newKeyName,
+        "status": "Active",
+        "created": DateTime.now().toString().substring(0, 10),
+        "value": newKey,
+      });
+
+      newKeyName = "";
+      showModal = false;
+    });
   }
 
   @override
@@ -104,308 +109,303 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
     final isMobile = MediaQuery.of(context).size.width < 600;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+      backgroundColor: const Color(0xFFF5F5F5),
+
       appBar: AppBar(
+        automaticallyImplyLeading: true, // ✅ SHOW BACK BUTTON
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: widget.onBack,
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context), // Go back
         ),
-        title: const Text("API Keys & Integrations"),
+        title: const Text(
+          "API Keys & Integrations",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: const Color(0xFF900603),
+        centerTitle: true,
+        elevation: 3,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF900603),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: const Color(0xFF900603),
+        onPressed: () => setState(() => showModal = true),
+        label: const Text(
+          "Generate API Key",
+          style: TextStyle(color: Colors.white),
+        ),
+        icon: const Icon(Icons.add, color: Colors.white),
+      ),
+
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+                ],
+              ),
+              child: isMobile ? _buildMobileView() : _buildDesktopView(),
+            ),
+          ),
+
+          if (showModal) _buildNewKeyModal(),
+        ],
+      ),
+    );
+  }
+
+  // ... rest of the code remains the same ...
+  Widget _buildMobileView() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(10),
+      itemCount: keys.length,
+      itemBuilder: (context, index) {
+        final k = keys[index];
+        final statusColor = getStatusColor(k["status"]);
+
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.grey.shade300),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  k["name"],
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () => setState(() => showModal = true),
-                child: const Text("Generate New API Key"),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+                const SizedBox(height: 6),
+                Text("Created: ${k["created"]}"),
+                const SizedBox(height: 8),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    k["status"],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => handleCopyKey(k["value"]),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF900603),
+                        ),
+                        child: const Text(
+                          "Copy",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => toggleStatus(k["id"]),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF900603),
+                        ),
+                        child: Text(
+                          k["status"] == "Active" ? "Disable" : "Enable",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => handleRevokeKey(k["id"]),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF900603),
+                        ),
+                        child: const Text(
+                          "Revoke",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                child: isMobile
-                    ? ListView.builder(
-                        padding: const EdgeInsets.all(10),
-                        itemCount: keys.length,
-                        itemBuilder: (context, index) {
-                          final k = keys[index];
-                          return Card(
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 6,
-                              horizontal: 4,
-                            ),
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    k["name"],
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text("Status: ${k["status"]}"),
-                                  Text("Created: ${k["created"]}"),
-                                  const SizedBox(height: 10),
-                                  Wrap(
-                                    spacing: 8,
-                                    runSpacing: 8,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () =>
-                                            handleCopyKey(k["value"]),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF28A745,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 14,
-                                            vertical: 8,
-                                          ),
-                                        ),
-                                        child: const Text("Copy"),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () => toggleStatus(k["id"]),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              k["status"] == "Active"
-                                              ? const Color(0xFFDC3545)
-                                              : const Color(0xFF28A745),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 14,
-                                            vertical: 8,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          k["status"] == "Active"
-                                              ? "Disable"
-                                              : "Enable",
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () =>
-                                            handleRevokeKey(k["id"]),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(
-                                            0xFF6C757D,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 14,
-                                            vertical: 8,
-                                          ),
-                                        ),
-                                        child: const Text("Revoke"),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          headingRowColor: WidgetStateColor.resolveWith(
-                            (states) => const Color(0xFF900603),
-                          ),
-                          headingTextStyle: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                          columns: const [
-                            DataColumn(label: Text("Key Name")),
-                            DataColumn(label: Text("Status")),
-                            DataColumn(label: Text("Created Date")),
-                            DataColumn(label: Text("Actions")),
-                          ],
-                          rows: keys
-                              .map(
-                                (k) => DataRow(
-                                  cells: [
-                                    DataCell(Text(k["name"])),
-                                    DataCell(Text(k["status"])),
-                                    DataCell(Text(k["created"])),
-                                    DataCell(
-                                      Row(
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () =>
-                                                handleCopyKey(k["value"]),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color(
-                                                0xFF28A745,
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 6,
-                                                  ),
-                                            ),
-                                            child: const Text("Copy"),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          ElevatedButton(
-                                            onPressed: () =>
-                                                toggleStatus(k["id"]),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  k["status"] == "Active"
-                                                  ? const Color(0xFFDC3545)
-                                                  : const Color(0xFF28A745),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 6,
-                                                  ),
-                                            ),
-                                            child: Text(
-                                              k["status"] == "Active"
-                                                  ? "Disable"
-                                                  : "Enable",
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          ElevatedButton(
-                                            onPressed: () =>
-                                                handleRevokeKey(k["id"]),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color(
-                                                0xFF6C757D,
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 6,
-                                                  ),
-                                            ),
-                                            child: const Text("Revoke"),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-              ),
+              ],
             ),
-          ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDesktopView() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: DataTable(
+        headingTextStyle: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
         ),
-      ),
-      floatingActionButton: showModal
-          ? Container(
-              color: Colors.black54,
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
+        headingRowColor: WidgetStateProperty.all(const Color(0xFF900603)),
+        columns: const [
+          DataColumn(label: Text("Key Name")),
+          DataColumn(label: Text("Status")),
+          DataColumn(label: Text("Created")),
+          DataColumn(label: Text("Actions")),
+        ],
+        rows: keys.map((k) {
+          return DataRow(
+            cells: [
+              DataCell(Text(k["name"])),
+              DataCell(
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: getStatusColor(k["status"]),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    k["status"],
+                    style: const TextStyle(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Generate New API Key",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () =>
-                                  setState(() => showModal = false),
-                              icon: const Icon(Icons.close),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          decoration: InputDecoration(
-                            labelText: "Key Name",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Color(0xFF900603),
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          onChanged: (v) => setState(() => newKeyName = v),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () =>
-                                  setState(() => showModal = false),
-                              child: const Text("Cancel"),
-                            ),
-                            const SizedBox(width: 8),
-                            ElevatedButton(
-                              onPressed: handleGenerateKey,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF900603),
-                              ),
-                              child: const Text("Generate"),
-                            ),
-                          ],
-                        ),
-                      ],
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            )
-          : null,
+              DataCell(Text(k["created"])),
+              DataCell(
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => handleCopyKey(k["value"]),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF900603),
+                      ),
+                      child: const Text(
+                        "Copy",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    ElevatedButton(
+                      onPressed: () => toggleStatus(k["id"]),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF900603),
+                      ),
+                      child: Text(
+                        k["status"] == "Active" ? "Disable" : "Enable",
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    ElevatedButton(
+                      onPressed: () => handleRevokeKey(k["id"]),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF900603),
+                      ),
+                      child: const Text(
+                        "Revoke",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildNewKeyModal() {
+    return Container(
+      color: Colors.black45,
+      child: Center(
+        child: Container(
+          width: 380,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Generate New API Key",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 14),
+
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Key Name",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onChanged: (v) => setState(() => newKeyName = v),
+              ),
+
+              const SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => setState(() => showModal = false),
+                    child: const Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    onPressed: handleGenerateKey,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF900603),
+                    ),
+                    child: const Text(
+                      "Generate",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
