@@ -22,7 +22,13 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
         {'type': 'PAN', 'url': 'https://via.placeholder.com/150'},
       ],
       'auditLogs': [
-        {'id': 1, 'action': 'Created', 'user': 'Admin1', 'date': '2025-09-18 10:00', 'remark': 'KYC started'},
+        {
+          'id': 1,
+          'action': 'Created',
+          'user': 'Admin1',
+          'date': '2025-09-18 10:00',
+          'remark': 'KYC started',
+        },
       ],
       'notes': ['Initial check pending'],
     },
@@ -33,10 +39,16 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
       'date': '2025-09-17',
       'note': 'Verified',
       'docs': [
-        {'type': 'Passport', 'url': 'https://via.placeholder.com/150'}
+        {'type': 'Passport', 'url': 'https://via.placeholder.com/150'},
       ],
       'auditLogs': [
-        {'id': 1, 'action': 'Approved', 'user': 'Admin2', 'date': '2025-09-17 12:00', 'remark': 'Verified'},
+        {
+          'id': 1,
+          'action': 'Approved',
+          'user': 'Admin2',
+          'date': '2025-09-17 12:00',
+          'remark': 'Verified',
+        },
       ],
       'notes': ['Documents verified'],
     },
@@ -48,7 +60,13 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
       'note': 'Invalid Docs',
       'docs': [],
       'auditLogs': [
-        {'id': 1, 'action': 'Rejected', 'user': 'Admin1', 'date': '2025-09-16 14:00', 'remark': 'Invalid documents'},
+        {
+          'id': 1,
+          'action': 'Rejected',
+          'user': 'Admin1',
+          'date': '2025-09-16 14:00',
+          'remark': 'Invalid documents',
+        },
       ],
       'notes': ['Documents not valid'],
     },
@@ -68,7 +86,8 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
 
   List<Map<String, dynamic>> get filteredCases {
     var filtered = cases.where((c) {
-      final matchesSearch = c['name'].toString().toLowerCase().contains(search.toLowerCase()) ||
+      final matchesSearch =
+          c['name'].toString().toLowerCase().contains(search.toLowerCase()) ||
           c['caseId'].toString().toLowerCase().contains(search.toLowerCase());
       final matchesFilter = filter == 'All' || c['status'] == filter;
       return matchesSearch && matchesFilter;
@@ -224,9 +243,13 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       ),
-      items: ['All', 'Pending', 'Approved', 'Rejected', 'Escalated']
-          .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-          .toList(),
+      items: [
+        'All',
+        'Pending',
+        'Approved',
+        'Rejected',
+        'Escalated',
+      ].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
       onChanged: (value) {
         setState(() {
           filter = value!;
@@ -289,52 +312,111 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
           columns: [
             DataColumn(
               label: Checkbox(
-                value: selectedCases.length == paginatedCases.length && paginatedCases.isNotEmpty,
+                value:
+                    selectedCases.length == paginatedCases.length &&
+                    paginatedCases.isNotEmpty,
                 onChanged: (_) => _toggleAll(),
                 fillColor: WidgetStateProperty.all(Colors.white),
                 checkColor: KYCColors.primary,
               ),
             ),
-            const DataColumn(label: Text('Case ID', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-            const DataColumn(label: Text('Name', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-            const DataColumn(label: Text('Status', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-            const DataColumn(label: Text('Date', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-            const DataColumn(label: Text('Note', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-            const DataColumn(label: Text('Action', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
-          ],
-          rows: paginatedCases.map((c) {
-            return DataRow(cells: [
-              DataCell(Checkbox(
-                value: selectedCases.contains(c['caseId']),
-                onChanged: (_) => _toggleCase(c['caseId']),
-              )),
-              DataCell(Text(c['caseId'])),
-              DataCell(Text(c['name'])),
-              DataCell(Text(
-                c['status'],
+            const DataColumn(
+              label: Text(
+                'Case ID',
                 style: TextStyle(
-                  color: _getStatusColor(c['status']),
+                  color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
-              )),
-              DataCell(Text(c['date'])),
-              DataCell(Text(c['note'])),
-              DataCell(
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      viewingCase = c;
-                      activeTab = 'Documents';
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: KYCColors.primary,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  ),
-                  child: const Text('View'),
+              ),
+            ),
+            const DataColumn(
+              label: Text(
+                'Name',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ]);
+            ),
+            const DataColumn(
+              label: Text(
+                'Status',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const DataColumn(
+              label: Text(
+                'Date',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const DataColumn(
+              label: Text(
+                'Note',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const DataColumn(
+              label: Text(
+                'Action',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+          rows: paginatedCases.map((c) {
+            return DataRow(
+              cells: [
+                DataCell(
+                  Checkbox(
+                    value: selectedCases.contains(c['caseId']),
+                    onChanged: (_) => _toggleCase(c['caseId']),
+                  ),
+                ),
+                DataCell(Text(c['caseId'])),
+                DataCell(Text(c['name'])),
+                DataCell(
+                  Text(
+                    c['status'],
+                    style: TextStyle(
+                      color: _getStatusColor(c['status']),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                DataCell(Text(c['date'])),
+                DataCell(Text(c['note'])),
+                DataCell(
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        viewingCase = c;
+                        activeTab = 'Documents';
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: KYCColors.primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                    ),
+                    child: const Text('View'),
+                  ),
+                ),
+              ],
+            );
           }).toList(),
         ),
       ),
@@ -388,7 +470,9 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
       if (selectedCases.length == paginatedCases.length) {
         selectedCases.clear();
       } else {
-        selectedCases = paginatedCases.map((c) => c['caseId'] as String).toList();
+        selectedCases = paginatedCases
+            .map((c) => c['caseId'] as String)
+            .toList();
       }
     });
   }
@@ -521,7 +605,9 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                color: activeTab == tab ? KYCColors.primary : const Color(0xFFEEECEC),
+                color: activeTab == tab
+                    ? KYCColors.primary
+                    : const Color(0xFFEEECEC),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(6),
                   topRight: Radius.circular(6),
@@ -581,17 +667,24 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
                   child: Image.network(
                     doc['url'],
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const Icon(Icons.image, size: 64),
+                    errorBuilder: (_, _, _) =>
+                        const Icon(Icons.image, size: 64),
                   ),
                 ),
-                Text(doc['type'], style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(
+                  doc['type'],
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     // Download functionality
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: KYCColors.primary,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                   ),
                   child: const Text('Download', style: TextStyle(fontSize: 12)),
                 ),
@@ -625,7 +718,9 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
                 controller: _noteController,
                 decoration: InputDecoration(
                   hintText: 'Add a note...',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                 ),
               ),
             ),
@@ -636,7 +731,9 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
                 Navigator.pop(context);
                 _showModal();
               },
-              style: ElevatedButton.styleFrom(backgroundColor: KYCColors.primary),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: KYCColors.primary,
+              ),
               child: const Text('Add Note'),
             ),
           ],

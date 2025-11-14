@@ -746,7 +746,6 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildBottomSection() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        int crossAxisCount = DashboardStyles.getChartGridColumns(context);
         if (constraints.maxWidth < 768) {
           return Column(
             children: [
@@ -878,7 +877,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       _QuickActionData(
         title: 'Approve KYC',
-        icon: FontAwesomeIcons.checkCircle,
+        icon: FontAwesomeIcons.circleCheck,
         color: DashboardColors.success,
         route: '/admin/kyc',
       ),
@@ -1070,4 +1069,3 @@ class _QuickActionData {
     required this.route,
   });
 }
-

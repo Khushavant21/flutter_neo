@@ -16,7 +16,6 @@ import 'widgets/adminMoneyTransfer/admin_money_transfer_page.dart';
 import 'widgets/adminDepositManagement/admin_deposit_management_page.dart';
 import 'widgets/adminComplaint/complaints_layout_screen.dart';
 import 'widgets/adminInvestment/admin_investment_page.dart';
-import 'widgets/adminInvestment/portfolio_reports.dart';
 import 'widgets/adminAccounts/admin_accounts_page.dart';
 import 'widgets/adminKYC/kyc_dashboard.dart';
 import 'widgets/adminUser/user_management_page.dart';

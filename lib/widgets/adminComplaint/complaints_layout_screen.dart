@@ -311,7 +311,7 @@ class _ComplaintsLayoutScreenState extends State<ComplaintsLayoutScreen> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: pagedTickets.length,
-                            separatorBuilder: (_, __) =>
+                            separatorBuilder: (_, _) =>
                                 const Divider(height: 1),
                             itemBuilder: (context, index) {
                               final ticket = pagedTickets[index];

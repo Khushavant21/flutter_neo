@@ -541,8 +541,10 @@ class _AdminSidebarState extends State<AdminSidebar> {
 
               // Navigate after 2 seconds
               Future.delayed(const Duration(seconds: 2), () {
-                Navigator.of(context).pop();
-                Navigator.pushReplacementNamed(context, '/');
+                if (mounted) {
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacementNamed(context, '/');
+                }
               });
             },
             child: const Text('Logout', style: TextStyle(color: Colors.white)),
