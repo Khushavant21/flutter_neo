@@ -146,9 +146,9 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
@@ -178,7 +178,11 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 5,
+                offset: const Offset(0, 2),
+              ),
             ],
           ),
           child: Padding(

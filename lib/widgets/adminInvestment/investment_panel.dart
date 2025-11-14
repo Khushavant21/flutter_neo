@@ -3,11 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class InvestmentPanel extends StatefulWidget {
   final Function(int)? onNavigateToTab; // Add callback
-  
-  const InvestmentPanel({
-    super.key,
-    this.onNavigateToTab,
-  });
+
+  const InvestmentPanel({super.key, this.onNavigateToTab});
 
   @override
   State<InvestmentPanel> createState() => _InvestmentPanelState();
@@ -25,7 +22,7 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
     {
       "key": "subscriptions",
       "title": "Subscriptions/Redemptions",
-      "icon": FontAwesomeIcons.exchangeAlt,
+      "icon": FontAwesomeIcons.rightLeft,
       "tabIndex": 5, // Maps to SubscriptionsScreen
       "description": "Handle subscription and redemption requests",
     },
@@ -39,7 +36,7 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
     {
       "key": "services",
       "title": "Services & Merchant",
-      "icon": FontAwesomeIcons.cog,
+      "icon": FontAwesomeIcons.gear,
       "tabIndex": 4, // Maps to ServicesMerchantScreen
       "description": "Manage merchant integrations",
     },
@@ -80,7 +77,7 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
             borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -140,7 +137,7 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
