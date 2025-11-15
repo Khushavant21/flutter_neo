@@ -1,3 +1,7 @@
+Steps - 
+stepwise cmds to run your flutter application
+1 by 1 copy and paste cmd in your vs code terminal
+
 flutter clean
 flutter pub get
 flutter pub run flutter_launcher_icons
@@ -5,4 +9,4 @@ flutter pub run flutter_native_splash:create
 flutter pub get
 
 and still you facing any issue, plz connect me 
--- Khushavant Wagh (😊)
+------ Khushavant Wagh (😊) ------
