@@ -59,12 +59,14 @@ class _PortfolioReportsState extends State<PortfolioReports> {
     final file = File("${dir.path}/portfolio_reports.csv");
     await file.writeAsString(csv);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Exported to: ${file.path}"),
-        backgroundColor: Colors.green,
-      ),
-    );
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Exported to: ${file.path}"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   @override

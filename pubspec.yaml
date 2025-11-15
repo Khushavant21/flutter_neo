@@ -36,13 +36,26 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.4.0
 
 flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/neobank01.png"
   min_sdk_android: 21
+
+flutter_native_splash:
+  color: "#FFFFFF"  # White background
+  image: assets/neobank01.png  # Your logo (already has red color)
+  android: true
+  ios: true
   
+  # For Android 12 and above
+  android_12:
+    color: "#FFFFFF"  # White background
+    image: assets/neobank01.png
+    icon_background_color: "#FFFFFF"  # White background
+
 flutter:
   uses-material-design: true
 

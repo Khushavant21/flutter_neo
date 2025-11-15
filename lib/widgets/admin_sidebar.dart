@@ -365,192 +365,187 @@ class _AdminSidebarState extends State<AdminSidebar> {
 
   // 🚪 Logout Dialog
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF900603),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text('Logout'),
+      content: const Text('Are you sure you want to logout?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF900603),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
-            onPressed: () {
-              Navigator.pop(context);
+          ),
+          onPressed: () {
+            Navigator.pop(context);
 
-              // Show beautiful logout message
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                barrierColor: Colors.black.withValues(alpha: 0.7),
-                builder: (_) => Center(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 40),
-                      padding: const EdgeInsets.all(30),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF900603), Color(0xFFB91C1C)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(
-                              0xFF900603,
-                            ).withValues(alpha: 0.4),
-                            blurRadius: 20,
-                            spreadRadius: 5,
-                          ),
-                        ],
+            // Show beautiful logout message
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              barrierColor: Colors.black.withValues(alpha: 0.7),
+              builder: (dialogContext) => Center(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF900603), Color(0xFFB91C1C)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // Animated Icon
-                          TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0.0, end: 1.0),
-                            duration: const Duration(milliseconds: 600),
-                            builder: (context, double value, child) {
-                              return Transform.scale(
-                                scale: value,
-                                child: Container(
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.25),
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.white.withValues(
-                                          alpha: 0.3,
-                                        ),
-                                        blurRadius: 15,
-                                        spreadRadius: 3,
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    Icons.favorite,
-                                    color: Colors.white,
-                                    size: 60,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 24),
-                          // Thank You with fade-in
-                          TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0.0, end: 1.0),
-                            duration: const Duration(milliseconds: 800),
-                            builder: (context, double value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: const Text(
-                                  'Thank You!',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 1.5,
-                                    shadows: [
-                                      Shadow(
-                                        color: Colors.black26,
-                                        offset: Offset(0, 2),
-                                        blurRadius: 4,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          // Hope message
-                          TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0.0, end: 1.0),
-                            duration: const Duration(milliseconds: 1000),
-                            builder: (context, double value, child) {
-                              return Opacity(
-                                opacity: value,
-                                child: const Text(
-                                  'We Hope You Enjoyed\nOur Banking Services! 🏦',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.6,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          // Decorative line with animation
-                          TweenAnimationBuilder(
-                            tween: Tween<double>(begin: 0.0, end: 60.0),
-                            duration: const Duration(milliseconds: 800),
-                            builder: (context, double width, child) {
-                              return Container(
-                                width: width,
-                                height: 4,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF900603).withValues(alpha: 0.4),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Animated Icon
+                        TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0.0, end: 1.0),
+                          duration: const Duration(milliseconds: 600),
+                          builder: (context, double value, child) {
+                            return Transform.scale(
+                              scale: value,
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                  borderRadius: BorderRadius.circular(2),
+                                  color: Colors.white.withValues(alpha: 0.25),
+                                  shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.4,
-                                      ),
-                                      blurRadius: 8,
+                                      color: Colors.white.withValues(alpha: 0.3),
+                                      blurRadius: 15,
+                                      spreadRadius: 3,
                                     ),
                                   ],
                                 ),
-                              );
-                            },
+                                child: const Icon(
+                                  Icons.favorite,
+                                  color: Colors.white,
+                                  size: 60,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        // Thank You with fade-in
+                        TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0.0, end: 1.0),
+                          duration: const Duration(milliseconds: 800),
+                          builder: (context, double value, child) {
+                            return Opacity(
+                              opacity: value,
+                              child: const Text(
+                                'Thank You!',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.5,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black26,
+                                      offset: Offset(0, 2),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        // Hope message
+                        TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0.0, end: 1.0),
+                          duration: const Duration(milliseconds: 1000),
+                          builder: (context, double value, child) {
+                            return Opacity(
+                              opacity: value,
+                              child: const Text(
+                                'We Hope You Enjoyed\nOur Banking Services! 🏦',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.6,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        // Decorative line with animation
+                        TweenAnimationBuilder(
+                          tween: Tween<double>(begin: 0.0, end: 60.0),
+                          duration: const Duration(milliseconds: 800),
+                          builder: (context, double width, child) {
+                            return Container(
+                              width: width,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.8),
+                                borderRadius: BorderRadius.circular(2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withValues(alpha: 0.4),
+                                    blurRadius: 8,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        // See you soon message
+                        const Text(
+                          'See You Soon! 👋',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.italic,
                           ),
-                          const SizedBox(height: 12),
-                          // See you soon message
-                          const Text(
-                            'See You Soon! 👋',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              );
+              ),
+            );
 
-              // Navigate after 2 seconds
-              Future.delayed(const Duration(seconds: 2), () {
-                if (mounted) {
-                  Navigator.of(context).pop();
-                  Navigator.pushReplacementNamed(context, '/');
-                }
-              });
-            },
-            child: const Text('Logout', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
+            // Navigate after 2 seconds
+            Future.delayed(const Duration(seconds: 2), () {
+              // ✅ Check if the widget is still mounted before using context
+              if (!context.mounted) return;
+              
+              Navigator.of(context).pop(); // Close the logout message dialog
+              Navigator.pushReplacementNamed(context, '/');
+            });
+          },
+          child: const Text('Logout', style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    ),
+  );
+}
 }

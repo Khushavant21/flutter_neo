@@ -20,7 +20,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
   String reportPeriod = "daily";
   DateTime fromDate = DateTime.now().subtract(const Duration(days: 30));
   DateTime toDate = DateTime.now();
-  
+
   List<ReportData> rawData = [];
   List<ReportData> aggregatedData = [];
 
@@ -32,14 +32,54 @@ class _AdminReportPageState extends State<AdminReportPage> {
 
   void _loadMockData() {
     rawData = [
-      ReportData(date: DateTime(2025, 9, 1), type: "Deposit", count: 12, total: 5000),
-      ReportData(date: DateTime(2025, 9, 2), type: "Withdrawal", count: 8, total: 3200),
-      ReportData(date: DateTime(2025, 9, 3), type: "Transfer", count: 15, total: 7800),
-      ReportData(date: DateTime(2025, 9, 4), type: "Deposit", count: 10, total: 4200),
-      ReportData(date: DateTime(2025, 9, 8), type: "Deposit", count: 5, total: 2000),
-      ReportData(date: DateTime(2025, 9, 15), type: "Withdrawal", count: 7, total: 3100),
-      ReportData(date: DateTime(2025, 9, 20), type: "Transfer", count: 9, total: 4500),
-      ReportData(date: DateTime(2025, 9, 25), type: "Deposit", count: 11, total: 5200),
+      ReportData(
+        date: DateTime(2025, 9, 1),
+        type: "Deposit",
+        count: 12,
+        total: 5000,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 2),
+        type: "Withdrawal",
+        count: 8,
+        total: 3200,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 3),
+        type: "Transfer",
+        count: 15,
+        total: 7800,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 4),
+        type: "Deposit",
+        count: 10,
+        total: 4200,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 8),
+        type: "Deposit",
+        count: 5,
+        total: 2000,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 15),
+        type: "Withdrawal",
+        count: 7,
+        total: 3100,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 20),
+        type: "Transfer",
+        count: 9,
+        total: 4500,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 25),
+        type: "Deposit",
+        count: 11,
+        total: 5200,
+      ),
     ];
     _aggregateData();
   }
@@ -53,7 +93,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
     }
 
     Map<String, ReportData> grouped = {};
-    
+
     for (var data in rawData) {
       String key;
       if (reportPeriod == "weekly") {
@@ -120,17 +160,19 @@ class _AdminReportPageState extends State<AdminReportPage> {
   void _downloadCSV() {
     List<List<String>> csvData = [
       ['Date', 'Count', 'Total Amount'],
-      ...aggregatedData.map((d) => [
-        DateFormat('yyyy-MM-dd').format(d.date),
-        d.count.toString(),
-        d.total.toString(),
-      ]),
+      ...aggregatedData.map(
+        (d) => [
+          DateFormat('yyyy-MM-dd').format(d.date),
+          d.count.toString(),
+          d.total.toString(),
+        ],
+      ),
     ];
 
     // String csvContent = csvData.map((row) => row.join(',')).join('\n');
     // In a real app, you would save csvContent to a file or trigger download
     // For now, we just show a message
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('CSV export prepared with ${csvData.length - 1} rows'),
@@ -150,16 +192,23 @@ class _AdminReportPageState extends State<AdminReportPage> {
             children: [
               pw.Text(
                 'Admin Report',
-                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                style: pw.TextStyle(
+                  fontSize: 24,
+                  fontWeight: pw.FontWeight.bold,
+                ),
               ),
               pw.SizedBox(height: 20),
-              pw.Table.fromTextArray(
+              pw.TableHelper.fromTextArray(
                 headers: ['Date', 'Count', 'Total Amount'],
-                data: aggregatedData.map((d) => [
-                  DateFormat('yyyy-MM-dd').format(d.date),
-                  d.count.toString(),
-                  '\$${d.total}',
-                ]).toList(),
+                data: aggregatedData
+                    .map(
+                      (d) => [
+                        DateFormat('yyyy-MM-dd').format(d.date),
+                        d.count.toString(),
+                        '\$${d.total}',
+                      ],
+                    )
+                    .toList(),
               ),
             ],
           );
@@ -167,10 +216,13 @@ class _AdminReportPageState extends State<AdminReportPage> {
       ),
     );
 
-    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => pdf.save());
+    await Printing.layoutPdf(
+      onLayout: (PdfPageFormat format) async => pdf.save(),
+    );
   }
 
-  int get totalTransactions => aggregatedData.fold(0, (sum, d) => sum + d.count);
+  int get totalTransactions =>
+      aggregatedData.fold(0, (sum, d) => sum + d.count);
   double get totalAmount => aggregatedData.fold(0.0, (sum, d) => sum + d.total);
   String get averageAmount {
     if (totalTransactions > 0) {
@@ -206,12 +258,16 @@ class _AdminReportPageState extends State<AdminReportPage> {
                       children: [
                         Text(
                           'Admin Reports & Analytics',
-                          style: AdminReportStyles.headerTitleStyle(isSmallMobile),
+                          style: AdminReportStyles.headerTitleStyle(
+                            isSmallMobile,
+                          ),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           'View detailed reports and analytics to monitor system performance and user activity.',
-                          style: AdminReportStyles.headerSubtitleStyle(isSmallMobile),
+                          style: AdminReportStyles.headerSubtitleStyle(
+                            isSmallMobile,
+                          ),
                         ),
                       ],
                     ),
@@ -256,7 +312,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         int crossAxisCount = isSmallMobile ? 1 : (isMobile ? 2 : 3);
-        
+
         return GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -270,16 +326,8 @@ class _AdminReportPageState extends State<AdminReportPage> {
               totalTransactions.toString(),
               isSmallMobile,
             ),
-            _buildCard(
-              'Total Amount',
-              '\$$totalAmount',
-              isSmallMobile,
-            ),
-            _buildCard(
-              'Average Amount',
-              '\$$averageAmount',
-              isSmallMobile,
-            ),
+            _buildCard('Total Amount', '\$$totalAmount', isSmallMobile),
+            _buildCard('Average Amount', '\$$averageAmount', isSmallMobile),
           ],
         );
       },
@@ -299,16 +347,17 @@ class _AdminReportPageState extends State<AdminReportPage> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          Text(
-            value,
-            style: AdminReportStyles.cardValueStyle(isSmallMobile),
-          ),
+          Text(value, style: AdminReportStyles.cardValueStyle(isSmallMobile)),
         ],
       ),
     );
   }
 
-  Widget _buildFilters(BuildContext context, bool isMobile, bool isSmallMobile) {
+  Widget _buildFilters(
+    BuildContext context,
+    bool isMobile,
+    bool isSmallMobile,
+  ) {
     return Container(
       decoration: AdminReportStyles.filterContainerDecoration,
       padding: EdgeInsets.all(isSmallMobile ? 12 : 20),
@@ -336,9 +385,21 @@ class _AdminReportPageState extends State<AdminReportPage> {
                   isSmallMobile,
                 ),
                 const SizedBox(height: 10),
-                _buildDatePicker(context, 'From Date', fromDate, true, isSmallMobile),
+                _buildDatePicker(
+                  context,
+                  'From Date',
+                  fromDate,
+                  true,
+                  isSmallMobile,
+                ),
                 const SizedBox(height: 10),
-                _buildDatePicker(context, 'To Date', toDate, false, isSmallMobile),
+                _buildDatePicker(
+                  context,
+                  'To Date',
+                  toDate,
+                  false,
+                  isSmallMobile,
+                ),
               ],
             )
           : Row(
@@ -370,11 +431,23 @@ class _AdminReportPageState extends State<AdminReportPage> {
                 ),
                 const SizedBox(width: 15),
                 Expanded(
-                  child: _buildDatePicker(context, 'From Date', fromDate, true, isSmallMobile),
+                  child: _buildDatePicker(
+                    context,
+                    'From Date',
+                    fromDate,
+                    true,
+                    isSmallMobile,
+                  ),
                 ),
                 const SizedBox(width: 15),
                 Expanded(
-                  child: _buildDatePicker(context, 'To Date', toDate, false, isSmallMobile),
+                  child: _buildDatePicker(
+                    context,
+                    'To Date',
+                    toDate,
+                    false,
+                    isSmallMobile,
+                  ),
                 ),
               ],
             ),
@@ -449,7 +522,11 @@ class _AdminReportPageState extends State<AdminReportPage> {
                   DateFormat('yyyy-MM-dd').format(date),
                   style: AdminReportStyles.dateTextStyle(isSmallMobile),
                 ),
-                const Icon(Icons.calendar_today, size: 16, color: Color(0xFF666666)),
+                const Icon(
+                  Icons.calendar_today,
+                  size: 16,
+                  color: Color(0xFF666666),
+                ),
               ],
             ),
           ),
@@ -464,12 +541,20 @@ class _AdminReportPageState extends State<AdminReportPage> {
             children: [
               SizedBox(
                 width: double.infinity,
-                child: _buildExportButton('Export CSV', _downloadCSV, isSmallMobile),
+                child: _buildExportButton(
+                  'Export CSV',
+                  _downloadCSV,
+                  isSmallMobile,
+                ),
               ),
               const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
-                child: _buildExportButton('Export PDF', _downloadPDF, isSmallMobile),
+                child: _buildExportButton(
+                  'Export PDF',
+                  _downloadPDF,
+                  isSmallMobile,
+                ),
               ),
             ],
           )
@@ -477,17 +562,29 @@ class _AdminReportPageState extends State<AdminReportPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
-                child: _buildExportButton('Export CSV', _downloadCSV, isSmallMobile),
+                child: _buildExportButton(
+                  'Export CSV',
+                  _downloadCSV,
+                  isSmallMobile,
+                ),
               ),
               const SizedBox(width: 12),
               Flexible(
-                child: _buildExportButton('Export PDF', _downloadPDF, isSmallMobile),
+                child: _buildExportButton(
+                  'Export PDF',
+                  _downloadPDF,
+                  isSmallMobile,
+                ),
               ),
             ],
           );
   }
 
-  Widget _buildExportButton(String text, VoidCallback onPressed, bool isSmallMobile) {
+  Widget _buildExportButton(
+    String text,
+    VoidCallback onPressed,
+    bool isSmallMobile,
+  ) {
     return ElevatedButton(
       onPressed: onPressed,
       style: AdminReportStyles.exportButtonStyle(isSmallMobile),
@@ -530,9 +627,12 @@ class _AdminReportPageState extends State<AdminReportPage> {
                       showTitles: true,
                       reservedSize: 30,
                       getTitlesWidget: (value, meta) {
-                        if (value.toInt() >= 0 && value.toInt() < aggregatedData.length) {
+                        if (value.toInt() >= 0 &&
+                            value.toInt() < aggregatedData.length) {
                           return Text(
-                            DateFormat('MM/dd').format(aggregatedData[value.toInt()].date),
+                            DateFormat(
+                              'MM/dd',
+                            ).format(aggregatedData[value.toInt()].date),
                             style: const TextStyle(fontSize: 10),
                           );
                         }
@@ -540,14 +640,21 @@ class _AdminReportPageState extends State<AdminReportPage> {
                       },
                     ),
                   ),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
                 borderData: FlBorderData(show: true),
                 lineBarsData: [
                   LineChartBarData(
                     spots: aggregatedData.asMap().entries.map((entry) {
-                      return FlSpot(entry.key.toDouble(), entry.value.count.toDouble());
+                      return FlSpot(
+                        entry.key.toDouble(),
+                        entry.value.count.toDouble(),
+                      );
                     }).toList(),
                     isCurved: true,
                     color: AdminReportStyles.primaryColor,
@@ -588,9 +695,12 @@ class _AdminReportPageState extends State<AdminReportPage> {
                       showTitles: true,
                       reservedSize: 30,
                       getTitlesWidget: (value, meta) {
-                        if (value.toInt() >= 0 && value.toInt() < aggregatedData.length) {
+                        if (value.toInt() >= 0 &&
+                            value.toInt() < aggregatedData.length) {
                           return Text(
-                            DateFormat('MM/dd').format(aggregatedData[value.toInt()].date),
+                            DateFormat(
+                              'MM/dd',
+                            ).format(aggregatedData[value.toInt()].date),
                             style: const TextStyle(fontSize: 10),
                           );
                         }
@@ -598,8 +708,12 @@ class _AdminReportPageState extends State<AdminReportPage> {
                       },
                     ),
                   ),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                 ),
                 borderData: FlBorderData(show: true),
                 barGroups: aggregatedData.asMap().entries.map((entry) {
@@ -648,30 +762,45 @@ class _AdminReportPageState extends State<AdminReportPage> {
               headingRowColor: WidgetStateProperty.all(const Color(0xFFF8F9FA)),
               columns: [
                 DataColumn(
-                  label: Text('Date', style: AdminReportStyles.tableColumnStyle(isSmallMobile)),
+                  label: Text(
+                    'Date',
+                    style: AdminReportStyles.tableColumnStyle(isSmallMobile),
+                  ),
                 ),
                 DataColumn(
-                  label: Text('Count', style: AdminReportStyles.tableColumnStyle(isSmallMobile)),
+                  label: Text(
+                    'Count',
+                    style: AdminReportStyles.tableColumnStyle(isSmallMobile),
+                  ),
                 ),
                 DataColumn(
-                  label: Text('Total Amount', style: AdminReportStyles.tableColumnStyle(isSmallMobile)),
+                  label: Text(
+                    'Total Amount',
+                    style: AdminReportStyles.tableColumnStyle(isSmallMobile),
+                  ),
                 ),
               ],
               rows: aggregatedData.map((data) {
                 return DataRow(
                   cells: [
-                    DataCell(Text(
-                      DateFormat('yyyy-MM-dd').format(data.date),
-                      style: AdminReportStyles.tableCellStyle(isSmallMobile),
-                    )),
-                    DataCell(Text(
-                      data.count.toString(),
-                      style: AdminReportStyles.tableCellStyle(isSmallMobile),
-                    )),
-                    DataCell(Text(
-                      '\$${data.total}',
-                      style: AdminReportStyles.tableCellStyle(isSmallMobile),
-                    )),
+                    DataCell(
+                      Text(
+                        DateFormat('yyyy-MM-dd').format(data.date),
+                        style: AdminReportStyles.tableCellStyle(isSmallMobile),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        data.count.toString(),
+                        style: AdminReportStyles.tableCellStyle(isSmallMobile),
+                      ),
+                    ),
+                    DataCell(
+                      Text(
+                        '\$${data.total}',
+                        style: AdminReportStyles.tableCellStyle(isSmallMobile),
+                      ),
+                    ),
                   ],
                 );
               }).toList(),
