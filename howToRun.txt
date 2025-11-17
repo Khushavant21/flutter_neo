@@ -8,5 +8,5 @@ flutter pub run flutter_launcher_icons
 flutter pub run flutter_native_splash:create 
 flutter pub get
 
-and still you facing any issue, plz connect me 
+and still you facing any issue, plz connect to me 
 ------ Khushavant Wagh (😊) ------
