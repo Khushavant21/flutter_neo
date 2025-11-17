@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../styles/kyc_styles.dart';
-// import 'kyc_routes.dart';
+import 'review_kyc.dart';
+import 'review_transactions.dart';
+import 'view_alerts.dart' hide KYCColors;
+import 'transactions.dart' hide KYCColors;
 
 class KYCDashboard extends StatefulWidget {
   const KYCDashboard({super.key});
@@ -10,11 +13,6 @@ class KYCDashboard extends StatefulWidget {
 }
 
 class _KYCDashboardState extends State<KYCDashboard> {
-  DateTime lastUpdated = DateTime.now();
-  Map<String, dynamic>? viewingAlert;
-  Map<String, dynamic>? monitorTxn;
-  Map<String, dynamic>? reviewTxn;
-
   final List<Map<String, dynamic>> transactions = [
     {
       'id': 'TXN001',
@@ -54,19 +52,28 @@ class _KYCDashboardState extends State<KYCDashboard> {
     },
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    // Update time every second
-    Future.delayed(Duration.zero, () {
-      Stream.periodic(const Duration(seconds: 1)).listen((_) {
-        if (mounted) {
-          setState(() {
-            lastUpdated = DateTime.now();
-          });
-        }
-      });
-    });
+  // Navigation handler
+  void _navigateToPage(String route) {
+    Widget? page;
+
+    switch (route) {
+      case '/review-kyc':
+        page = const ReviewKYC();
+        break;
+      case '/review-transactions':
+        page = const ReviewTransactions();
+        break;
+      case '/view-alerts':
+        page = const ViewAlerts();
+        break;
+      case '/transactions':
+        page = const Transactions();
+        break;
+    }
+
+    if (page != null) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => page!));
+    }
   }
 
   @override
@@ -193,7 +200,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: InkWell(
-        onTap: () => Navigator.pushNamed(context, route),
+        onTap: () => _navigateToPage(route),
         borderRadius: BorderRadius.circular(10),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -237,7 +244,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
               ),
               const SizedBox(height: 12),
               ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, route),
+                onPressed: () => _navigateToPage(route),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: KYCColors.primary,
                   foregroundColor: Colors.white,
@@ -299,8 +306,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 OutlinedButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, '/transactions'),
+                  onPressed: () => _navigateToPage('/transactions'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: KYCColors.primary,
                     side: const BorderSide(color: KYCColors.primary),
@@ -363,13 +369,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
               ),
               const SizedBox(width: 8),
               ElevatedButton(
-                onPressed: () {
-                  if (txn['status'] == 'pending') {
-                    setState(() => monitorTxn = txn);
-                  } else {
-                    setState(() => reviewTxn = txn);
-                  }
-                },
+                onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   backgroundColor: txn['status'] == 'pending'
                       ? Colors.grey[800]
@@ -407,7 +407,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 OutlinedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/view-alerts'),
+                  onPressed: () => _navigateToPage('/view-alerts'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: KYCColors.primary,
                     side: const BorderSide(color: KYCColors.primary),
@@ -461,12 +461,13 @@ class _KYCDashboardState extends State<KYCDashboard> {
           ),
           const SizedBox(width: 8),
           ElevatedButton(
-            onPressed: () => setState(() => viewingAlert = alert),
+            onPressed: () => _navigateToPage('/view-alerts'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: KYCColors.primary,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
-            child: const Text('View Report'),
+            child: const Text('View Reports'),
           ),
         ],
       ),

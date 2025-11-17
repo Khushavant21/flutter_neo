@@ -317,7 +317,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
           // Header
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
             decoration: const BoxDecoration(
               color: UserManagementStyles.primaryColor,
             ),
@@ -328,7 +328,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
                   'User Dashboard',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -640,24 +640,6 @@ class _UserManagementPageState extends State<UserManagementPage> {
                 ),
               ),
             ),
-            const DataColumn(
-              label: Text(
-                'Email & Phone',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const DataColumn(
-              label: Text(
-                'Account & Type',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             DataColumn(
               label: InkWell(
                 onTap: () => _handleSort('status'),
@@ -736,38 +718,6 @@ class _UserManagementPageState extends State<UserManagementPage> {
                       ),
                       const SizedBox(width: 10),
                       Text(user.name),
-                    ],
-                  ),
-                ),
-                DataCell(
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(user.email, style: const TextStyle(fontSize: 12)),
-                      Text(
-                        user.phone,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                DataCell(
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(user.account, style: const TextStyle(fontSize: 12)),
-                      Text(
-                        user.type,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Colors.grey,
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -887,23 +837,6 @@ class _UserManagementPageState extends State<UserManagementPage> {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Email: ${user.email}',
-                style: const TextStyle(fontSize: 13.5, color: Colors.black87),
-              ),
-              Text(
-                'Phone: ${user.phone}',
-                style: const TextStyle(fontSize: 13.5, color: Colors.black87),
-              ),
-              Text(
-                'Account: ${user.account}',
-                style: const TextStyle(fontSize: 13.5, color: Colors.black87),
-              ),
-              Text(
-                'Type: ${user.type}',
-                style: const TextStyle(fontSize: 13.5, color: Colors.black87),
               ),
               const SizedBox(height: 8),
               Row(
@@ -1147,4 +1080,3 @@ class UserData {
     required this.documents,
   });
 }
-

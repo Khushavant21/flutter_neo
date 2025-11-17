@@ -206,27 +206,31 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
 
     return Scaffold(
       backgroundColor: AccountsStyles.backgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(isSmallMobile),
-            Padding(
-              padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
-              child: Column(
-                children: [
-                  _buildSummaryCards(isMobile, isSmallMobile),
-                  const SizedBox(height: 24),
-                  _buildFiltersSection(isMobile, isSmallMobile),
-                  const SizedBox(height: 24),
-                  _buildAccountsTable(isMobile),
-                ],
-              ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildHeader(isSmallMobile),
+                Padding(
+                  padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
+                  child: Column(
+                    children: [
+                      _buildSummaryCards(isMobile, isSmallMobile),
+                      const SizedBox(height: 24),
+                      _buildFiltersSection(isMobile, isSmallMobile),
+                      const SizedBox(height: 24),
+                      _buildAccountsTable(isMobile),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            if (selectedAccount != null && editingAccount == null)
-              _buildDetailModal(isMobile),
-            if (editingAccount != null) _buildEditModal(isMobile),
-          ],
-        ),
+          ),
+          if (selectedAccount != null && editingAccount == null)
+            _buildDetailModal(isMobile),
+          if (editingAccount != null) _buildEditModal(isMobile),
+        ],
       ),
     );
   }
@@ -234,7 +238,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
   Widget _buildHeader(bool isSmallMobile) {
     return Container(
       decoration: AccountsStyles.headerDecoration,
-      padding: EdgeInsets.all(isSmallMobile ? 20.0 : 24.0),
+      padding: EdgeInsets.all(isSmallMobile ? 17.0 : 20.0),
       child: SafeArea(
         bottom: false,
         child: Column(
@@ -244,7 +248,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
               'Accounts & Wallets',
               style: AccountsStyles.getHeaderTitleStyle(isSmallMobile),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 7),
             Text(
               'Manage customer accounts, wallets, and financial operations',
               style: AccountsStyles.getHeaderSubtitleStyle(isSmallMobile),
@@ -772,9 +776,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
             scrollDirection: Axis.horizontal,
             child: DataTable(
               columnSpacing: isMobile ? 20 : 40,
-              headingRowColor: WidgetStateProperty.all(
-                const Color(0xFFF8F9FA),
-              ),
+              headingRowColor: WidgetStateProperty.all(const Color(0xFFF8F9FA)),
               columns: const [
                 DataColumn(
                   label: Text(
@@ -1758,4 +1760,3 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
     );
   }
 }
-
