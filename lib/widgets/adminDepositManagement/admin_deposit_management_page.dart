@@ -323,15 +323,27 @@ Generated Date\t${data['generatedDate']}''';
                           horizontal: isMobile ? 16 : 32,
                           vertical: isMobile ? 16 : 20,
                         ),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Deposits Management',
-                          style: TextStyle(
-                            fontSize: isMobile ? 18 : 32,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            letterSpacing: 0.5,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Deposits Management',
+                              style: TextStyle(
+                                fontSize: isMobile ? 18 : 32,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Deposit Management with Neo',
+                              style: TextStyle(
+                                fontSize: isMobile ? 12 : 15,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
 

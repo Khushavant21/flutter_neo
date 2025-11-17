@@ -122,7 +122,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                       Text(
                         'Transaction Management',
                         style: TransactionStyles.headerTitleStyle.copyWith(
-                          fontSize: 18,
+                          fontSize: 22,
                         ),
                       ),
                       const SizedBox(height: 4),

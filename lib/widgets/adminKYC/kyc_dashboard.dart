@@ -97,7 +97,8 @@ class _KYCDashboardState extends State<KYCDashboard> {
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
       decoration: const BoxDecoration(color: KYCColors.primary),
       child: SafeArea(
         bottom: false,
@@ -536,4 +537,3 @@ class _KYCDashboardState extends State<KYCDashboard> {
     );
   }
 }
-

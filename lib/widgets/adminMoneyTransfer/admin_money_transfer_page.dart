@@ -234,7 +234,7 @@ class _MoneyTransferRequestsState extends State<MoneyTransferRequests> {
                     Text(
                       "Money Transfer Request",
                       style: TextStyle(
-                        fontSize: isMobile ? 18 : 22,
+                        fontSize: isMobile ? 20 : 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),

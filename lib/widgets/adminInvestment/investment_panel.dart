@@ -59,11 +59,23 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
 
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
-          "Investment Management",
-          style: TextStyle(color: Colors.white),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Investment Management",
+              style: TextStyle(color: Colors.white),
+            ),
+            Text(
+              "Investment Management with Neo",
+              style: TextStyle(
+                fontSize: isMobile ? 11 : 13,
+                color: Colors.white70,
+              ),
+            ),
+          ],
         ),
-        centerTitle: true,
+        centerTitle: false,
         backgroundColor: const Color(0xFF900603),
         elevation: 4,
       ),
