@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../styles/kyc_styles.dart';
-// import 'kyc_routes.dart';
 
 class ReviewTransactions extends StatefulWidget {
   const ReviewTransactions({super.key});
@@ -281,6 +280,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
           onPressed: () => _bulkAction('Approved'),
           style: ElevatedButton.styleFrom(
             backgroundColor: KYCColors.success,
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
           child: const Text('Bulk Approve'),
@@ -290,6 +290,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
           onPressed: () => _bulkAction('Rejected'),
           style: ElevatedButton.styleFrom(
             backgroundColor: KYCColors.danger,
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
           child: const Text('Bulk Reject'),
@@ -404,9 +405,11 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
                         viewingCase = c;
                         activeTab = 'Documents';
                       });
+                      _showModal();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: KYCColors.primary,
+                      foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 6,
@@ -667,7 +670,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
                   child: Image.network(
                     doc['url'],
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) =>
+                    errorBuilder: (_, _, __) =>
                         const Icon(Icons.image, size: 64),
                   ),
                 ),
@@ -681,6 +684,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: KYCColors.primary,
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 4,
@@ -733,6 +737,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: KYCColors.primary,
+                foregroundColor: Colors.white,
               ),
               child: const Text('Add Note'),
             ),
@@ -775,7 +780,10 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
             _escalateCase(viewingCase!['caseId'], _escalateController.text);
             Navigator.pop(context);
           },
-          style: ElevatedButton.styleFrom(backgroundColor: KYCColors.primary),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: KYCColors.primary,
+            foregroundColor: Colors.white,
+          ),
           child: const Text('Escalate Case'),
         ),
       ],

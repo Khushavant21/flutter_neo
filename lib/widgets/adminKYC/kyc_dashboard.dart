@@ -161,8 +161,8 @@ class _KYCDashboardState extends State<KYCDashboard> {
         int crossAxisCount = constraints.maxWidth > 900
             ? 3
             : constraints.maxWidth > 600
-            ? 2
-            : 1;
+                ? 2
+                : 1;
 
         return GridView.builder(
           shrinkWrap: true,
@@ -226,9 +226,9 @@ class _KYCDashboardState extends State<KYCDashboard> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 '0',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -460,12 +460,18 @@ class _KYCDashboardState extends State<KYCDashboard> {
             ),
           ),
           const SizedBox(width: 8),
+
+          // ✅ UPDATED BUTTON (RED BACKGROUND + WHITE TEXT)
           ElevatedButton(
             onPressed: () => _navigateToPage('/view-alerts'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              backgroundColor: KYCColors.primary,   // 🔴 Red background
+              foregroundColor: Colors.white,        // ⚪ White text
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
             ),
             child: const Text('View Reports'),
           ),
@@ -487,8 +493,8 @@ class _KYCDashboardState extends State<KYCDashboard> {
         int crossAxisCount = constraints.maxWidth > 900
             ? 4
             : constraints.maxWidth > 600
-            ? 2
-            : 1;
+                ? 2
+                : 1;
 
         return GridView.builder(
           shrinkWrap: true,

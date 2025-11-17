@@ -274,6 +274,7 @@ class _ViewAlertsState extends State<ViewAlerts> {
     );
   }
 
+  // 🔥 CHANGED TEXT COLOR TO WHITE (requested)
   Widget _buildBulkButtons() {
     return Row(
       children: [
@@ -281,6 +282,7 @@ class _ViewAlertsState extends State<ViewAlerts> {
           onPressed: () => _bulkAction('Resolved'),
           style: ElevatedButton.styleFrom(
             backgroundColor: KYCColors.success,
+            foregroundColor: Colors.white,   // <-- CHANGED HERE
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
           child: const Text('Bulk Resolve'),
@@ -290,6 +292,7 @@ class _ViewAlertsState extends State<ViewAlerts> {
           onPressed: () => _bulkAction('Escalated'),
           style: ElevatedButton.styleFrom(
             backgroundColor: KYCColors.danger,
+            foregroundColor: Colors.white,   // <-- CHANGED HERE
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
           child: const Text('Bulk Escalate'),
@@ -344,11 +347,14 @@ class _ViewAlertsState extends State<ViewAlerts> {
               )),
               DataCell(Text(a['date'])),
               DataCell(Text(a['note'])),
+              
+              // 🔥 CHANGED TEXT COLOR TO WHITE (requested)
               DataCell(
                 ElevatedButton(
                   onPressed: () => _openModal(a),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: KYCColors.primary,
+                    foregroundColor: Colors.white, // <-- CHANGED HERE
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   ),
                   child: const Text('View'),
@@ -597,9 +603,14 @@ class _ViewAlertsState extends State<ViewAlerts> {
                 ),
               ),
               const SizedBox(width: 8),
+
+              // 🔥 CHANGED TEXT COLOR TO WHITE (requested)
               ElevatedButton(
                 onPressed: () => _addNote(viewingAlert!['alertId'], _noteController.text),
-                style: ElevatedButton.styleFrom(backgroundColor: KYCColors.primary),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: KYCColors.primary,
+                  foregroundColor: Colors.white,  // <-- CHANGED HERE
+                ),
                 child: const Text('Add Note'),
               ),
             ],
@@ -617,9 +628,14 @@ class _ViewAlertsState extends State<ViewAlerts> {
                 ),
               ),
               const SizedBox(width: 8),
+
+              // 🔥 CHANGED TEXT COLOR TO WHITE (requested)
               ElevatedButton(
                 onPressed: () => _escalateAlert(viewingAlert!['alertId'], _escalateController.text),
-                style: ElevatedButton.styleFrom(backgroundColor: KYCColors.danger),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: KYCColors.danger,
+                  foregroundColor: Colors.white,  // <-- CHANGED HERE
+                ),
                 child: const Text('Escalate'),
               ),
             ],

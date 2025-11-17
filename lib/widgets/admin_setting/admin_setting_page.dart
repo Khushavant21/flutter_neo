@@ -36,9 +36,11 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
   };
 
   // Password form controllers
-  final TextEditingController currentPasswordController = TextEditingController();
+  final TextEditingController currentPasswordController =
+      TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   // Success/error messages
   Map<String, String> securityMessage = {'type': '', 'text': ''};
@@ -75,7 +77,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       securityFeatures['twoFactorAuth'] = true;
       securityMessage = {
         'type': 'success',
-        'text': 'Two-Factor Authentication has been enabled successfully!'
+        'text': 'Two-Factor Authentication has been enabled successfully!',
       };
     });
     _clearMessageAfterDelay();
@@ -86,7 +88,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       securityFeatures['twoFactorAuth'] = false;
       securityMessage = {
         'type': 'success',
-        'text': 'Two-Factor Authentication has been disabled.'
+        'text': 'Two-Factor Authentication has been disabled.',
       };
     });
     _clearMessageAfterDelay();
@@ -97,7 +99,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       securityFeatures['biometricLogin'] = true;
       securityMessage = {
         'type': 'success',
-        'text': 'Biometric Login has been enabled successfully!'
+        'text': 'Biometric Login has been enabled successfully!',
       };
     });
     _clearMessageAfterDelay();
@@ -108,7 +110,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       securityFeatures['biometricLogin'] = false;
       securityMessage = {
         'type': 'success',
-        'text': 'Biometric Login has been disabled.'
+        'text': 'Biometric Login has been disabled.',
       };
     });
     _clearMessageAfterDelay();
@@ -119,7 +121,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       setState(() {
         securityMessage = {
           'type': 'error',
-          'text': 'New passwords do not match!'
+          'text': 'New passwords do not match!',
         };
       });
       _clearMessageAfterDelay();
@@ -130,7 +132,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       setState(() {
         securityMessage = {
           'type': 'error',
-          'text': 'Password must be at least 8 characters long!'
+          'text': 'Password must be at least 8 characters long!',
         };
       });
       _clearMessageAfterDelay();
@@ -138,13 +140,14 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
     }
 
     setState(() {
-      securityFeatures['passwordLastUpdated'] = DateTime.now().toIso8601String();
+      securityFeatures['passwordLastUpdated'] = DateTime.now()
+          .toIso8601String();
       currentPasswordController.clear();
       newPasswordController.clear();
       confirmPasswordController.clear();
       securityMessage = {
         'type': 'success',
-        'text': 'Password updated successfully!'
+        'text': 'Password updated successfully!',
       };
     });
     _clearMessageAfterDelay();
@@ -177,6 +180,10 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       body: Column(
         children: [
           // const TopNavbar(),
+
+          /// FULL-WIDTH ADMIN HEADER (NO PADDING)
+          _buildAdminHeader(),
+
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -184,7 +191,6 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildAdminHeader(),
                     const SizedBox(height: 24),
                     _buildSettingsGrid(),
                     const SizedBox(height: 30),
@@ -204,9 +210,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       decoration: AdminSettingStyles.adminHeaderDecoration,
       child: Stack(
         children: [
-          Container(
-            decoration: AdminSettingStyles.adminHeaderOverlay,
-          ),
+          Container(decoration: AdminSettingStyles.adminHeaderOverlay),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Column(
@@ -234,7 +238,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isMobile = constraints.maxWidth <= 768;
-        
+
         if (isMobile) {
           return Column(
             children: [
@@ -250,11 +254,13 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
               const SizedBox(height: 16),
               _buildSettingsCard(
                 title: 'Personal Details',
-                description: 'Update your profile information and contact details',
+                description:
+                    'Update your profile information and contact details',
                 icon: '👤',
                 iconColor: AdminSettingStyles.userIconColor,
                 isExpanded: showPersonalForm,
-                onTap: () => setState(() => showPersonalForm = !showPersonalForm),
+                onTap: () =>
+                    setState(() => showPersonalForm = !showPersonalForm),
                 formWidget: _buildPersonalForm(),
               ),
               const SizedBox(height: 16),
@@ -264,13 +270,14 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                 icon: '🛡️',
                 iconColor: AdminSettingStyles.shieldIconColor,
                 isExpanded: showSecurityForm,
-                onTap: () => setState(() => showSecurityForm = !showSecurityForm),
+                onTap: () =>
+                    setState(() => showSecurityForm = !showSecurityForm),
                 formWidget: _buildSecurityForm(),
               ),
             ],
           );
         }
-        
+
         return GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -290,7 +297,8 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
             ),
             _buildSettingsCard(
               title: 'Personal Details',
-              description: 'Update your profile information and contact details',
+              description:
+                  'Update your profile information and contact details',
               icon: '👤',
               iconColor: AdminSettingStyles.userIconColor,
               isExpanded: showPersonalForm,
@@ -338,7 +346,9 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                     Container(
                       width: 32,
                       height: 32,
-                      decoration: AdminSettingStyles.cardIconDecoration(iconColor),
+                      decoration: AdminSettingStyles.cardIconDecoration(
+                        iconColor,
+                      ),
                       child: Center(
                         child: Text(icon, style: const TextStyle(fontSize: 18)),
                       ),
@@ -355,7 +365,10 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                 ElevatedButton(
                   onPressed: onTap,
                   style: AdminSettingStyles.primaryButtonStyle,
-                  child: Text('Configure', style: AdminSettingStyles.buttonText),
+                  child: Text(
+                    'Configure',
+                    style: AdminSettingStyles.buttonText,
+                  ),
                 ),
               ],
             ),
@@ -375,10 +388,26 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
           Text('Edit General Settings', style: AdminSettingStyles.cardTitle),
           const SizedBox(height: 16),
           _buildFormField('Username / Display Name', 'Enter username'),
-          _buildDropdownField('Language Preferences', ['English', 'Hindi', 'Spanish']),
-          _buildDropdownField('Timezone / Region', ['India Standard Time (UTC+5:30)', 'Pacific Standard Time (UTC-8:00)', 'Greenwich Mean Time (UTC+0:00)']),
-          _buildDropdownField('Notifications Preferences', ['All Notifications', 'Important Only', 'None']),
-          _buildDropdownField('App/Theme Preferences', ['Light Mode', 'Dark Mode', 'System Default']),
+          _buildDropdownField('Language Preferences', [
+            'English',
+            'Hindi',
+            'Spanish',
+          ]),
+          _buildDropdownField('Timezone / Region', [
+            'India Standard Time (UTC+5:30)',
+            'Pacific Standard Time (UTC-8:00)',
+            'Greenwich Mean Time (UTC+0:00)',
+          ]),
+          _buildDropdownField('Notifications Preferences', [
+            'All Notifications',
+            'Important Only',
+            'None',
+          ]),
+          _buildDropdownField('App/Theme Preferences', [
+            'Light Mode',
+            'Dark Mode',
+            'System Default',
+          ]),
           _buildFormActions(),
         ],
       ),
@@ -395,8 +424,16 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
           const SizedBox(height: 16),
           _buildPhotoUpload(),
           _buildFormField('Full Name', 'Enter full name'),
-          _buildFormField('Email ID', 'Enter email', keyboardType: TextInputType.emailAddress),
-          _buildFormField('Phone Number', 'Enter phone number', keyboardType: TextInputType.phone),
+          _buildFormField(
+            'Email ID',
+            'Enter email',
+            keyboardType: TextInputType.emailAddress,
+          ),
+          _buildFormField(
+            'Phone Number',
+            'Enter phone number',
+            keyboardType: TextInputType.phone,
+          ),
           _buildFormField('Date of Birth', 'Select date'),
           _buildFormField('Address (Optional)', 'Enter address', maxLines: 3),
           _buildFormActions(),
@@ -413,23 +450,50 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
         children: [
           Text('Edit Security Settings', style: AdminSettingStyles.cardTitle),
           const SizedBox(height: 16),
-          _buildFormField('Password Reset / Change Password', 'Enter new password', isPassword: true),
-          _buildFormField('Confirm New Password', 'Confirm new password', isPassword: true),
-          _buildDropdownField('Two-Factor Authentication (2FA)', ['Enabled', 'Disabled']),
-          _buildDropdownField('Security Questions', ['What is your pet\'s name?', 'What is your favorite book?', 'What is your mother\'s maiden name?']),
+          _buildFormField(
+            'Password Reset / Change Password',
+            'Enter new password',
+            isPassword: true,
+          ),
+          _buildFormField(
+            'Confirm New Password',
+            'Confirm new password',
+            isPassword: true,
+          ),
+          _buildDropdownField('Two-Factor Authentication (2FA)', [
+            'Enabled',
+            'Disabled',
+          ]),
+          _buildDropdownField('Security Questions', [
+            'What is your pet\'s name?',
+            'What is your favorite book?',
+            'What is your mother\'s maiden name?',
+          ]),
           _buildFormField('Answer', 'Enter answer'),
           const SizedBox(height: 16),
-          Text('Login Activity / Sessions', style: AdminSettingStyles.formLabel),
+          Text(
+            'Login Activity / Sessions',
+            style: AdminSettingStyles.formLabel,
+          ),
           const SizedBox(height: 8),
           ElevatedButton(
-            onPressed: () => _showSnackBar('Session management feature coming soon'),
+            onPressed: () =>
+                _showSnackBar('Session management feature coming soon'),
             style: AdminSettingStyles.primaryButtonStyle,
             child: Text('View Sessions', style: AdminSettingStyles.buttonText),
           ),
           const SizedBox(height: 16),
           Text('Account Recovery Options', style: AdminSettingStyles.formLabel),
-          _buildFormField('Recovery Email', 'Recovery email', keyboardType: TextInputType.emailAddress),
-          _buildFormField('Recovery Phone Number', 'Recovery phone number', keyboardType: TextInputType.phone),
+          _buildFormField(
+            'Recovery Email',
+            'Recovery email',
+            keyboardType: TextInputType.emailAddress,
+          ),
+          _buildFormField(
+            'Recovery Phone Number',
+            'Recovery phone number',
+            keyboardType: TextInputType.phone,
+          ),
           _buildFormActions(),
         ],
       ),
@@ -437,71 +501,99 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
   }
 
   Widget _buildPhotoUpload() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Profile Photo', style: AdminSettingStyles.formLabel),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            InkWell(
-              onTap: _handlePhotoUpload,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: AdminSettingStyles.photoUploadButtonDecoration,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text('📷', style: TextStyle(fontSize: 18)),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Upload Photo',
-                      style: AdminSettingStyles.formLabel.copyWith(color: AdminSettingStyles.primaryRed),
-                    ),
-                  ],
+    return Container(
+      width: double.infinity, // FULL WIDTH
+      padding: const EdgeInsets.only(
+        top: 0,
+        bottom: 16,
+      ), // no left-right padding
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Profile Photo', style: AdminSettingStyles.formLabel),
+          const SizedBox(height: 8),
+
+          Row(
+            children: [
+              InkWell(
+                onTap: _handlePhotoUpload,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: AdminSettingStyles.photoUploadButtonDecoration,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('📷', style: TextStyle(fontSize: 18)),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Upload Photo',
+                        style: AdminSettingStyles.formLabel.copyWith(
+                          color: AdminSettingStyles.primaryRed,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            if (photoPreview != null) ...[
-              const SizedBox(width: 16),
-              Stack(
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: AdminSettingStyles.photoPreviewDecoration.copyWith(
-                      image: DecorationImage(
-                        image: AssetImage(photoPreview!),
-                        fit: BoxFit.cover,
-                      ),
+
+              if (photoPreview != null) ...[
+                const SizedBox(width: 16),
+                Stack(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: AdminSettingStyles.photoPreviewDecoration
+                          .copyWith(
+                            image: DecorationImage(
+                              image: AssetImage(photoPreview!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                     ),
-                  ),
-                  Positioned(
-                    top: 4,
-                    right: 4,
-                    child: InkWell(
-                      onTap: _removePhoto,
-                      child: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: AdminSettingStyles.removePhotoButtonDecoration,
-                        child: const Center(
-                          child: Text('✕', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: InkWell(
+                        onTap: _removePhoto,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration:
+                              AdminSettingStyles.removePhotoButtonDecoration,
+                          child: const Center(
+                            child: Text(
+                              '✕',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ],
-          ],
-        ),
-        const SizedBox(height: 16),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildFormField(String label, String hint, {bool isPassword = false, int maxLines = 1, TextInputType? keyboardType}) {
+  Widget _buildFormField(
+    String label,
+    String hint, {
+    bool isPassword = false,
+    int maxLines = 1,
+    TextInputType? keyboardType,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -527,10 +619,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
         DropdownButtonFormField<String>(
           decoration: AdminSettingStyles.inputDecoration('', label: null),
           items: options.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
+            return DropdownMenuItem<String>(value: value, child: Text(value));
           }).toList(),
           onChanged: (String? value) {},
         ),
@@ -572,7 +661,10 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
         children: [
           Text('Quick Settings', style: AdminSettingStyles.sectionTitle),
           const SizedBox(height: 8),
-          Text('Frequently used settings for quick access', style: AdminSettingStyles.sectionDescription),
+          Text(
+            'Frequently used settings for quick access',
+            style: AdminSettingStyles.sectionDescription,
+          ),
           const SizedBox(height: 24),
           _buildToggleItem('👆', 'Biometric Login', 'biometricLogin'),
           _buildToggleItem('🔔', 'Transaction Alerts', 'transactionAlerts'),
@@ -600,15 +692,15 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
           Container(
             width: 24,
             height: 24,
-            decoration: AdminSettingStyles.toggleIconDecoration(AdminSettingStyles.primaryRed),
+            decoration: AdminSettingStyles.toggleIconDecoration(
+              AdminSettingStyles.primaryRed,
+            ),
             child: Center(
               child: Text(icon, style: const TextStyle(fontSize: 14)),
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: Text(label, style: AdminSettingStyles.toggleLabel),
-          ),
+          Expanded(child: Text(label, style: AdminSettingStyles.toggleLabel)),
           Switch(
             value: quickSettings[key] ?? false,
             onChanged: (value) => _handleToggle(key, value),
@@ -623,9 +715,15 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Account Information and Status', style: AdminSettingStyles.sectionTitle),
+        Text(
+          'Account Information and Status',
+          style: AdminSettingStyles.sectionTitle,
+        ),
         const SizedBox(height: 8),
-        Text('Overview of your account settings and status', style: AdminSettingStyles.sectionDescription),
+        Text(
+          'Overview of your account settings and status',
+          style: AdminSettingStyles.sectionDescription,
+        ),
         const SizedBox(height: 16),
         LayoutBuilder(
           builder: (context, constraints) {
@@ -637,12 +735,32 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
               crossAxisSpacing: 12,
               childAspectRatio: constraints.maxWidth > 600 ? 4 : 6,
               children: [
-                _buildStatusRow('Account Status', 'Active', AdminSettingStyles.enabledBlue),
+                _buildStatusRow(
+                  'Account Status',
+                  'Active',
+                  AdminSettingStyles.enabledBlue,
+                ),
                 _buildStatusRow('Last Login', 'Today 10:30 AM', null),
-                _buildStatusRow('KYC Status', 'Verified', AdminSettingStyles.verifiedGreen),
-                _buildStatusRow('Mobile Verified', 'Yes', AdminSettingStyles.verifiedGreen),
-                _buildStatusRow('Two-Factor Auth', 'Enabled', AdminSettingStyles.enabledBlue),
-                _buildStatusRow('Email Verified', 'Yes', AdminSettingStyles.verifiedGreen),
+                _buildStatusRow(
+                  'KYC Status',
+                  'Verified',
+                  AdminSettingStyles.verifiedGreen,
+                ),
+                _buildStatusRow(
+                  'Mobile Verified',
+                  'Yes',
+                  AdminSettingStyles.verifiedGreen,
+                ),
+                _buildStatusRow(
+                  'Two-Factor Auth',
+                  'Enabled',
+                  AdminSettingStyles.enabledBlue,
+                ),
+                _buildStatusRow(
+                  'Email Verified',
+                  'Yes',
+                  AdminSettingStyles.verifiedGreen,
+                ),
               ],
             );
           },
@@ -658,9 +776,7 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Text(label, style: AdminSettingStyles.statusLabel),
-          ),
+          Expanded(child: Text(label, style: AdminSettingStyles.statusLabel)),
           Text(
             value,
             style: AdminSettingStyles.statusValue.copyWith(
@@ -676,9 +792,15 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Security Recommendations', style: AdminSettingStyles.sectionTitle),
+        Text(
+          'Security Recommendations',
+          style: AdminSettingStyles.sectionTitle,
+        ),
         const SizedBox(height: 8),
-        Text('Improve your account security with these suggestions', style: AdminSettingStyles.sectionDescription),
+        Text(
+          'Improve your account security with these suggestions',
+          style: AdminSettingStyles.sectionDescription,
+        ),
         const SizedBox(height: 16),
         _buildSecurityRecItem(
           '2fa',
@@ -705,12 +827,19 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
     );
   }
 
-  Widget _buildSecurityRecItem(String key, String icon, String title, String description, Widget panel) {
+  Widget _buildSecurityRecItem(
+    String key,
+    String icon,
+    String title,
+    String description,
+    Widget panel,
+  ) {
     final isActive = activeSecurityRec == key;
     return Column(
       children: [
         InkWell(
-          onTap: () => setState(() => activeSecurityRec = isActive ? null : key),
+          onTap: () =>
+              setState(() => activeSecurityRec = isActive ? null : key),
           child: Container(
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(16),
@@ -732,7 +861,10 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                     children: [
                       Text(title, style: AdminSettingStyles.recTitle),
                       const SizedBox(height: 4),
-                      Text(description, style: AdminSettingStyles.recDescription),
+                      Text(
+                        description,
+                        style: AdminSettingStyles.recDescription,
+                      ),
                     ],
                   ),
                 ),
@@ -767,11 +899,17 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
             Text('Status: ', style: AdminSettingStyles.formLabel),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: AdminSettingStyles.statusBadgeDecoration(securityFeatures['twoFactorAuth'] == true),
+              decoration: AdminSettingStyles.statusBadgeDecoration(
+                securityFeatures['twoFactorAuth'] == true,
+              ),
               child: Text(
-                securityFeatures['twoFactorAuth'] == true ? 'ENABLED' : 'DISABLED',
+                securityFeatures['twoFactorAuth'] == true
+                    ? 'ENABLED'
+                    : 'DISABLED',
                 style: AdminSettingStyles.statusBadgeText.copyWith(
-                  color: AdminSettingStyles.getStatusBadgeTextColor(securityFeatures['twoFactorAuth'] == true),
+                  color: AdminSettingStyles.getStatusBadgeTextColor(
+                    securityFeatures['twoFactorAuth'] == true,
+                  ),
                 ),
               ),
             ),
@@ -779,12 +917,16 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: securityFeatures['twoFactorAuth'] == true ? _handleDisable2FA : _handleEnable2FA,
+          onPressed: securityFeatures['twoFactorAuth'] == true
+              ? _handleDisable2FA
+              : _handleEnable2FA,
           style: securityFeatures['twoFactorAuth'] == true
               ? AdminSettingStyles.dangerButtonStyle
               : AdminSettingStyles.primaryButtonStyle,
           child: Text(
-            securityFeatures['twoFactorAuth'] == true ? 'Disable 2FA' : 'Enable 2FA',
+            securityFeatures['twoFactorAuth'] == true
+                ? 'Disable 2FA'
+                : 'Enable 2FA',
             style: AdminSettingStyles.buttonText,
           ),
         ),
@@ -811,7 +953,9 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: AdminSettingStyles.statusBadgeDecoration(true),
                 child: Text(
-                  DateTime.parse(securityFeatures['passwordLastUpdated']).toLocal().toString().split(' ')[0],
+                  DateTime.parse(
+                    securityFeatures['passwordLastUpdated'],
+                  ).toLocal().toString().split(' ')[0],
                   style: AdminSettingStyles.statusBadgeText.copyWith(
                     color: AdminSettingStyles.getStatusBadgeTextColor(true),
                   ),
@@ -824,19 +968,28 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
         TextField(
           controller: currentPasswordController,
           obscureText: true,
-          decoration: AdminSettingStyles.inputDecoration('Enter current password', label: 'Current Password'),
+          decoration: AdminSettingStyles.inputDecoration(
+            'Enter current password',
+            label: 'Current Password',
+          ),
         ),
         const SizedBox(height: 16),
         TextField(
           controller: newPasswordController,
           obscureText: true,
-          decoration: AdminSettingStyles.inputDecoration('Enter new password', label: 'New Password'),
+          decoration: AdminSettingStyles.inputDecoration(
+            'Enter new password',
+            label: 'New Password',
+          ),
         ),
         const SizedBox(height: 16),
         TextField(
           controller: confirmPasswordController,
           obscureText: true,
-          decoration: AdminSettingStyles.inputDecoration('Confirm new password', label: 'Confirm New Password'),
+          decoration: AdminSettingStyles.inputDecoration(
+            'Confirm new password',
+            label: 'Confirm New Password',
+          ),
         ),
         const SizedBox(height: 16),
         ElevatedButton(
@@ -864,11 +1017,17 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
             Text('Status: ', style: AdminSettingStyles.formLabel),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: AdminSettingStyles.statusBadgeDecoration(securityFeatures['biometricLogin'] == true),
+              decoration: AdminSettingStyles.statusBadgeDecoration(
+                securityFeatures['biometricLogin'] == true,
+              ),
               child: Text(
-                securityFeatures['biometricLogin'] == true ? 'ENABLED' : 'DISABLED',
+                securityFeatures['biometricLogin'] == true
+                    ? 'ENABLED'
+                    : 'DISABLED',
                 style: AdminSettingStyles.statusBadgeText.copyWith(
-                  color: AdminSettingStyles.getStatusBadgeTextColor(securityFeatures['biometricLogin'] == true),
+                  color: AdminSettingStyles.getStatusBadgeTextColor(
+                    securityFeatures['biometricLogin'] == true,
+                  ),
                 ),
               ),
             ),
@@ -876,12 +1035,16 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
         ),
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: securityFeatures['biometricLogin'] == true ? _handleDisableBiometric : _handleEnableBiometric,
+          onPressed: securityFeatures['biometricLogin'] == true
+              ? _handleDisableBiometric
+              : _handleEnableBiometric,
           style: securityFeatures['biometricLogin'] == true
               ? AdminSettingStyles.dangerButtonStyle
               : AdminSettingStyles.primaryButtonStyle,
           child: Text(
-            securityFeatures['biometricLogin'] == true ? 'Disable Biometric' : 'Enable Biometric',
+            securityFeatures['biometricLogin'] == true
+                ? 'Disable Biometric'
+                : 'Enable Biometric',
             style: AdminSettingStyles.buttonText,
           ),
         ),
@@ -892,13 +1055,17 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
   Widget _buildSecurityMessage() {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: AdminSettingStyles.securityMessageDecoration(securityMessage['type']!),
+      decoration: AdminSettingStyles.securityMessageDecoration(
+        securityMessage['type']!,
+      ),
       child: Text(
         securityMessage['text']!,
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: AdminSettingStyles.getSecurityMessageTextColor(securityMessage['type']!),
+          color: AdminSettingStyles.getSecurityMessageTextColor(
+            securityMessage['type']!,
+          ),
         ),
       ),
     );
