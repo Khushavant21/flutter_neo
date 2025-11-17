@@ -108,7 +108,7 @@ class _KYCDashboardState extends State<KYCDashboard> {
             const Text(
               'KYC Dashboard',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
