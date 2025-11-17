@@ -670,7 +670,7 @@ class _ReviewTransactionsState extends State<ReviewTransactions> {
                   child: Image.network(
                     doc['url'],
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, __) =>
+                    errorBuilder: (_, _, _) =>
                         const Icon(Icons.image, size: 64),
                   ),
                 ),
