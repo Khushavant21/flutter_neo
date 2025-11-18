@@ -26,7 +26,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
     "Sanction",
     "Disburse",
     "Reschedule",
-    "NPA"
+    "NPA",
   ];
 
   final List<String> actionOptions = [
@@ -35,7 +35,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
     "Sanction",
     "Disburse",
     "Reschedule",
-    "NPA"
+    "NPA",
   ];
 
   @override
@@ -82,7 +82,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
           "DocumentsVerified": true,
           "EligibilityCheck": "Fail",
           "documents": [
-            {"name": "SalarySlip.pdf", "url": "/docs/charlie_salary.pdf"}
+            {"name": "SalarySlip.pdf", "url": "/docs/charlie_salary.pdf"},
           ],
         },
       ];
@@ -105,7 +105,7 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
       final q = search.toLowerCase();
       final matchesSearch =
           loan["CustomerName"].toString().toLowerCase().contains(q) ||
-              loan["LoanID"].toString().toLowerCase().contains(q);
+          loan["LoanID"].toString().toLowerCase().contains(q);
       final matchesStatus =
           statusFilter == "All" || loan["Status"] == statusFilter;
       return matchesSearch && matchesStatus;
@@ -118,7 +118,9 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
     final start = (currentPage - 1) * rowsPerPage;
     final end = start + rowsPerPage;
     return filteredLoans.sublist(
-        start, end > filteredLoans.length ? filteredLoans.length : end);
+      start,
+      end > filteredLoans.length ? filteredLoans.length : end,
+    );
   }
 
   @override
@@ -155,10 +157,10 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
     );
   }
 
-  Widget _buildHeader() {
+ Widget _buildHeader() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(30),
+      padding: const EdgeInsets.all(22),
       color: LoanStyles.primaryColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +210,10 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
           child: TextField(
             decoration: InputDecoration(
               hintText: 'Search by Loan ID or Customer...',
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6),
                 borderSide: const BorderSide(color: Colors.grey),
@@ -231,7 +236,10 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
           child: DropdownButtonFormField<String>(
             initialValue: statusFilter,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6),
                 borderSide: const BorderSide(color: Colors.grey),
@@ -277,7 +285,9 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
         scrollDirection: Axis.horizontal,
         child: DataTable(
           headingRowColor: WidgetStateProperty.all(const Color(0xFFF7F7F7)),
-          dataRowColor: WidgetStateProperty.resolveWith((states) => Colors.transparent),
+          dataRowColor: WidgetStateProperty.resolveWith(
+            (states) => Colors.transparent,
+          ),
           columnSpacing: 16,
           dataRowMinHeight: 40,
           dataRowMaxHeight: 60,
@@ -293,29 +303,102 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
   List<DataColumn> _buildColumns() {
     if (activeTab == "applications") {
       return const [
-        DataColumn(label: Text('Loan ID', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Customer', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Loan Type', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Principal', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Credit Score', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Documents', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Eligibility', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Status', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.w600))),
+        DataColumn(
+          label: Text('Loan ID', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+        DataColumn(
+          label: Text(
+            'Customer',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Loan Type',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Principal',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Credit Score',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Documents',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Eligibility',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text('Status', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+        DataColumn(
+          label: Text('Actions', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
       ];
     } else {
       return const [
-        DataColumn(label: Text('Loan ID', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Customer', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Loan Type', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Principal', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Remaining', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('EMI', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Tenure', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Repayment', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Default', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Status', style: TextStyle(fontWeight: FontWeight.w600))),
-        DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.w600))),
+        DataColumn(
+          label: Text('Loan ID', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+        DataColumn(
+          label: Text(
+            'Customer',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Loan Type',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Principal',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text(
+            'Remaining',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text('EMI', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+        DataColumn(
+          label: Text('Tenure', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+        DataColumn(
+          label: Text(
+            'Repayment',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+        DataColumn(
+          label: Text('Default', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+        DataColumn(
+          label: Text('Status', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+        DataColumn(
+          label: Text('Actions', style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
       ];
     }
   }
@@ -331,7 +414,10 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
                 Center(
                   child: Text(
                     'No loans found',
-                    style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                 ),
               )
@@ -379,7 +465,8 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
   Widget _buildViewDocs(Map<String, dynamic> loan) {
     if (loan["DocumentsVerified"] && (loan["documents"] as List).isNotEmpty) {
       return ElevatedButton(
-        onPressed: () => _showDocs((loan["documents"] as List).cast<Map<String, String>>()),
+        onPressed: () =>
+            _showDocs((loan["documents"] as List).cast<Map<String, String>>()),
         style: ElevatedButton.styleFrom(
           backgroundColor: LoanStyles.primaryColor,
           foregroundColor: Colors.white,
@@ -417,7 +504,10 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: DropdownButtonFormField<String>(
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
             borderSide: BorderSide(color: LoanStyles.primaryColor),
@@ -450,7 +540,10 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: DropdownButtonFormField<String>(
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
             borderSide: BorderSide(color: LoanStyles.primaryColor),
@@ -463,8 +556,14 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
         hint: const Text('Select Action', style: TextStyle(fontSize: 12)),
         isExpanded: true,
         items: const [
-          DropdownMenuItem(value: "Reschedule", child: Text("Reschedule", style: TextStyle(fontSize: 12))),
-          DropdownMenuItem(value: "NPA", child: Text("Mark NPA", style: TextStyle(fontSize: 12))),
+          DropdownMenuItem(
+            value: "Reschedule",
+            child: Text("Reschedule", style: TextStyle(fontSize: 12)),
+          ),
+          DropdownMenuItem(
+            value: "NPA",
+            child: Text("Mark NPA", style: TextStyle(fontSize: 12)),
+          ),
         ],
         onChanged: (value) {
           if (value != null) {
@@ -477,18 +576,22 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
 
   Widget _buildPagination() {
     if (totalPages == 0) return const SizedBox.shrink();
-    
+
     return Wrap(
       spacing: 8,
       alignment: WrapAlignment.end,
       children: [
         ElevatedButton(
-          onPressed: currentPage == 1 ? null : () => setState(() => currentPage--),
+          onPressed: currentPage == 1
+              ? null
+              : () => setState(() => currentPage--),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: LoanStyles.primaryColor,
             side: BorderSide(color: LoanStyles.primaryColor),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
             elevation: 0,
           ),
           child: const Text('Prev'),
@@ -498,22 +601,32 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
           return ElevatedButton(
             onPressed: () => setState(() => currentPage = page),
             style: ElevatedButton.styleFrom(
-              backgroundColor: currentPage == page ? LoanStyles.primaryColor : Colors.white,
-              foregroundColor: currentPage == page ? Colors.white : LoanStyles.primaryColor,
+              backgroundColor: currentPage == page
+                  ? LoanStyles.primaryColor
+                  : Colors.white,
+              foregroundColor: currentPage == page
+                  ? Colors.white
+                  : LoanStyles.primaryColor,
               side: BorderSide(color: LoanStyles.primaryColor),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
               elevation: 0,
             ),
             child: Text('$page'),
           );
         }),
         ElevatedButton(
-          onPressed: currentPage == totalPages ? null : () => setState(() => currentPage++),
+          onPressed: currentPage == totalPages
+              ? null
+              : () => setState(() => currentPage++),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: LoanStyles.primaryColor,
             side: BorderSide(color: LoanStyles.primaryColor),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
             elevation: 0,
           ),
           child: const Text('Next'),
@@ -533,25 +646,35 @@ class _AdminLoanPageState extends State<AdminLoanPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('User Documents', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const Text(
+                'User Documents',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 15),
-              ...docs.map((doc) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Text(
-                        doc["name"]!,
-                        style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+              ...docs.map(
+                (doc) => Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Text(
+                      doc["name"]!,
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
-                  )),
+                  ),
+                ),
+              ),
               const SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: LoanStyles.primaryColor,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                 ),
                 child: const Text('Close'),
               ),

@@ -64,8 +64,13 @@ class _InvestmentPanelState extends State<InvestmentPanel> {
           children: [
             const Text(
               "Investment Management",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
             ),
+
             Text(
               "Investment Management with Neo",
               style: TextStyle(

@@ -329,7 +329,7 @@ Generated Date\t${data['generatedDate']}''';
                             Text(
                               'Deposits Management',
                               style: TextStyle(
-                                fontSize: isMobile ? 18 : 32,
+                                fontSize: isMobile ? 25 : 35,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 letterSpacing: 0.5,

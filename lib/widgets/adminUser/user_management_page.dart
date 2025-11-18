@@ -317,7 +317,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
           // Header
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 28),
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
             decoration: const BoxDecoration(
               color: UserManagementStyles.primaryColor,
             ),
