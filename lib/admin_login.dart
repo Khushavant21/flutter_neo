@@ -42,20 +42,15 @@ class _AdminLoginState extends State<AdminLogin> {
 
   void _handleForgotPassword() {
     final TextEditingController emailController = TextEditingController();
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1a1a1a),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           'Reset Password',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
         content: TextField(
           controller: emailController,
@@ -75,10 +70,7 @@ class _AdminLoginState extends State<AdminLogin> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(
-              'Cancel',
-              style: TextStyle(color: Colors.grey[400]),
-            ),
+            child: Text('Cancel', style: TextStyle(color: Colors.grey[400])),
           ),
           ElevatedButton(
             onPressed: () {
@@ -114,7 +106,10 @@ class _AdminLoginState extends State<AdminLogin> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Send Link'),
+            child: const Text(
+              'Send Link',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -126,7 +121,7 @@ class _AdminLoginState extends State<AdminLogin> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
-    
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -135,11 +130,7 @@ class _AdminLoginState extends State<AdminLogin> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF900603),
-              Color(0xFF0f172a),
-              Color(0xFF900603),
-            ],
+            colors: [Color(0xFF900603), Color(0xFF0f172a), Color(0xFF900603)],
             stops: [0.0, 0.5, 1.0],
           ),
         ),
@@ -147,7 +138,10 @@ class _AdminLoginState extends State<AdminLogin> {
           child: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: screenHeight - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom,
+                minHeight:
+                    screenHeight -
+                    MediaQuery.of(context).padding.top -
+                    MediaQuery.of(context).padding.bottom,
               ),
               child: IntrinsicHeight(
                 child: Padding(
@@ -159,7 +153,7 @@ class _AdminLoginState extends State<AdminLogin> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Spacer(flex: 1),
-                      
+
                       // Logo with glow effect
                       Container(
                         width: isMobile ? 80 : 90,
@@ -187,9 +181,9 @@ class _AdminLoginState extends State<AdminLogin> {
                           ),
                         ),
                       ),
-                      
+
                       SizedBox(height: isMobile ? 32 : 40),
-                      
+
                       // Title
                       Text(
                         'Admin Portal',
@@ -200,9 +194,9 @@ class _AdminLoginState extends State<AdminLogin> {
                           letterSpacing: 0.5,
                         ),
                       ),
-                      
+
                       const SizedBox(height: 8),
-                      
+
                       Text(
                         'Sign in to continue',
                         style: TextStyle(
@@ -210,9 +204,9 @@ class _AdminLoginState extends State<AdminLogin> {
                           color: Colors.white70,
                         ),
                       ),
-                      
+
                       SizedBox(height: isMobile ? 40 : 48),
-                      
+
                       // Form
                       Form(
                         key: _formKey,
@@ -293,9 +287,9 @@ class _AdminLoginState extends State<AdminLogin> {
                                 ),
                               ),
                             ),
-                            
+
                             const SizedBox(height: 20),
-                            
+
                             // Password field
                             const Text(
                               'Password',
@@ -381,9 +375,9 @@ class _AdminLoginState extends State<AdminLogin> {
                                 ),
                               ),
                             ),
-                            
+
                             const SizedBox(height: 12),
-                            
+
                             // Forgot password
                             Align(
                               alignment: Alignment.centerRight,
@@ -405,28 +399,31 @@ class _AdminLoginState extends State<AdminLogin> {
                                 ),
                               ),
                             ),
-                            
+
                             const SizedBox(height: 24),
-                            
+
                             // Login button
                             SizedBox(
                               width: double.infinity,
                               height: 52,
                               child: ElevatedButton(
                                 onPressed: _handleLogin,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF900603),
-                                  foregroundColor: Colors.white,
-                                  elevation: 8,
-                                  shadowColor: const Color(0xFF900603).withValues(alpha: 0.5),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ).copyWith(
-                                  overlayColor: WidgetStateProperty.all(
-                                    Colors.white.withValues(alpha: 0.1),
-                                  ),
-                                ),
+                                style:
+                                    ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF900603),
+                                      foregroundColor: Colors.white,
+                                      elevation: 8,
+                                      shadowColor: const Color(
+                                        0xFF900603,
+                                      ).withValues(alpha: 0.5),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ).copyWith(
+                                      overlayColor: WidgetStateProperty.all(
+                                        Colors.white.withValues(alpha: 0.1),
+                                      ),
+                                    ),
                                 child: const Text(
                                   'Sign In',
                                   style: TextStyle(
@@ -440,9 +437,9 @@ class _AdminLoginState extends State<AdminLogin> {
                           ],
                         ),
                       ),
-                      
+
                       const Spacer(flex: 1),
-                      
+
                       // Demo credentials info
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -474,7 +471,7 @@ class _AdminLoginState extends State<AdminLogin> {
                           ],
                         ),
                       ),
-                      
+
                       const SizedBox(height: 20),
                     ],
                   ),

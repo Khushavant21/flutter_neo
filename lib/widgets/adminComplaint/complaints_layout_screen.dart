@@ -549,23 +549,27 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: const Color(0xFF950606),
+        foregroundColor: Colors.white,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(currentTicket.subject, style: const TextStyle(fontSize: 18)),
+            Text(
+              currentTicket.subject,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
             Text(
               "ID: ${currentTicket.ticketId} | ${currentTicket.user}",
-              style: const TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12, color: Colors.white),
             ),
           ],
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: widget.onBack,
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings),
+            icon: const Icon(Icons.settings, color: Colors.white),
             onPressed: () => setState(() => showActions = true),
           ),
         ],

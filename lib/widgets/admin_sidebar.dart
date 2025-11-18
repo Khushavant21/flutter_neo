@@ -171,7 +171,7 @@ class _AdminSidebarState extends State<AdminSidebar> {
                         Navigator.pushNamed(context, '/admin/adminprofile');
                         break;
                       case 'settings':
-                        Navigator.pushNamed(context, '/admin/adminsettings');
+                        Navigator.pushNamed(context, '/admin/settings');
                         break;
                       case 'logout':
                         _showLogoutDialog(context);
@@ -406,7 +406,9 @@ class _AdminSidebarState extends State<AdminSidebar> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF900603).withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFF900603,
+                            ).withValues(alpha: 0.4),
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
@@ -429,7 +431,9 @@ class _AdminSidebarState extends State<AdminSidebar> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.white.withValues(alpha: 0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                         blurRadius: 15,
                                         spreadRadius: 3,
                                       ),
@@ -507,7 +511,9 @@ class _AdminSidebarState extends State<AdminSidebar> {
                                   borderRadius: BorderRadius.circular(2),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.white.withValues(alpha: 0.4),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.4,
+                                      ),
                                       blurRadius: 8,
                                     ),
                                   ],
@@ -537,14 +543,13 @@ class _AdminSidebarState extends State<AdminSidebar> {
               Future.delayed(const Duration(seconds: 2), () {
                 // ✅ Check if the widget is still mounted before using context
                 if (!context.mounted) return;
-                
+
                 Navigator.of(context).pop(); // Close the logout message dialog
-                
+
                 // Clear all routes and go to admin login
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/login',
-                  (route) => false,
-                );
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil('/login', (route) => false);
               });
             },
             child: const Text('Logout', style: TextStyle(color: Colors.white)),
