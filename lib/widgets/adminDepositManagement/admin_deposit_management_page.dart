@@ -1221,8 +1221,11 @@ Generated Date\t${data['generatedDate']}''';
                       Expanded(
                         child: Text(
                           'Confirm $action',
-                          style: DepositStyles.modalTitleStyle.copyWith(
+                          style: TextStyle(
                             fontSize: isMobile ? 16 : 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white, // ✅ CHANGED TO WHITE
+                            letterSpacing: 0.5,
                           ),
                         ),
                       ),
