@@ -125,7 +125,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                           fontSize: 22,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Text(
                         'Monitor and manage transactions',
                         style: TransactionStyles.headerSubtitleStyle.copyWith(
@@ -665,7 +665,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                   color: TransactionStyles.textPrimaryColor,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 txn["account"],
                 style: TransactionStyles.accountNoStyle.copyWith(fontSize: 11),
@@ -710,7 +710,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                           ).copyWith(fontSize: 11),
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Text(
                         txn["date"],
                         style: TransactionStyles.tableCellStyle.copyWith(
@@ -856,11 +856,14 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                   // Detail Grid
                   GridView.count(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     crossAxisCount: isMobile ? 1 : 2,
-                    childAspectRatio: isMobile ? 5 : 3,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                    childAspectRatio: isMobile
+                        ? 7
+                        : 4, // safe value (no overflow)
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+
                     children: [
                       _buildDetailItem('Transaction ID', selectedTxn!["id"]),
                       _buildDetailItem(
@@ -905,25 +908,73 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
                   const SizedBox(height: 24),
 
                   // Modal Actions
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _buildActionButton('Reverse', Colors.red[700]!),
-                      _buildActionButton('Refund', Colors.purple[700]!),
-                      _buildActionButton('Resolved', Colors.green[700]!),
-                      _buildActionButton('Add Note', Colors.orange[700]!),
-                      _buildActionButton(
-                        'Close',
-                        Colors.grey[700]!,
-                        onPressed: () {
-                          setState(() {
-                            selectedTxn = null;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                  isMobile
+                      ? Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            _buildActionButton(
+                              'Reverse',
+                              TransactionStyles.primaryColor,
+                            ),
+                            _buildActionButton(
+                              'Refund',
+                              TransactionStyles.primaryColor,
+                            ),
+                            _buildActionButton(
+                              'Resolved',
+                              TransactionStyles.primaryColor,
+                            ),
+                            _buildActionButton(
+                              'Add Note',
+                              TransactionStyles.primaryColor,
+                            ),
+                            _buildActionButton(
+                              'Close',
+                              TransactionStyles.primaryColor,
+                              onPressed: () {
+                                setState(() {
+                                  selectedTxn = null;
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildActionButton(
+                              'Reverse',
+                              TransactionStyles.primaryColor,
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionButton(
+                              'Refund',
+                              TransactionStyles.primaryColor,
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionButton(
+                              'Resolved',
+                              TransactionStyles.primaryColor,
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionButton(
+                              'Add Note',
+                              TransactionStyles.primaryColor,
+                            ),
+                            const SizedBox(width: 12),
+                            _buildActionButton(
+                              'Close',
+                              TransactionStyles.primaryColor,
+                              onPressed: () {
+                                setState(() {
+                                  selectedTxn = null;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                 ],
               ),
             ),
@@ -948,7 +999,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
           label,
           style: TransactionStyles.detailLabelStyle.copyWith(fontSize: 11),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 2),
         if (isType)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -997,7 +1048,7 @@ class _AdminTransactionPageState extends State<AdminTransactionPage> {
           label,
           style: TransactionStyles.detailLabelStyle.copyWith(fontSize: 11),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 2),
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(10),

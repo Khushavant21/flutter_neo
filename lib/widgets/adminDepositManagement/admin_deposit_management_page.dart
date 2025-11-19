@@ -354,41 +354,25 @@ Generated Date\t${data['generatedDate']}''';
                         child: Column(
                           children: [
                             // Tabs
-                            if (isMobile)
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: _buildTab(
-                                          'Applications',
-                                          'applications',
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: _buildTab(
-                                          'Maturities',
-                                          'maturities',
-                                        ),
-                                      ),
-                                    ],
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildTab(
+                                    'Applications',
+                                    'applications',
                                   ),
-                                  const SizedBox(height: 8),
-                                  _buildTab('Withdrawals', 'withdrawals'),
-                                ],
-                              )
-                            else
-                              Wrap(
-                                spacing: 16,
-                                runSpacing: 16,
-                                alignment: WrapAlignment.center,
-                                children: [
-                                  _buildTab('Applications', 'applications'),
-                                  _buildTab('Maturities', 'maturities'),
-                                  _buildTab('Withdrawals', 'withdrawals'),
-                                ],
-                              ),
+                                ),
+                                Expanded(
+                                  child: _buildTab('Maturities', 'maturities'),
+                                ),
+                                Expanded(
+                                  child: _buildTab(
+                                    'Withdrawals',
+                                    'withdrawals',
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 24),
 
                             // Content
