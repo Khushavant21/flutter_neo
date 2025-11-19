@@ -250,7 +250,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
                     width: double.infinity,
                     decoration: AdminReportStyles.headerDecoration,
                     padding: EdgeInsets.symmetric(
-                      horizontal: isSmallMobile ? 12 : 16,
+                      horizontal: isSmallMobile ? 15 : 19,
                       vertical: isSmallMobile ? 15 : 25,
                     ),
                     child: Column(
@@ -258,16 +258,32 @@ class _AdminReportPageState extends State<AdminReportPage> {
                       children: [
                         Text(
                           'Admin Reports & Analytics',
-                          style: AdminReportStyles.headerTitleStyle(
-                            isSmallMobile,
-                          ),
+                          style:
+                              AdminReportStyles.headerTitleStyle(
+                                isSmallMobile,
+                              ).copyWith(
+                                fontSize:
+                                    (AdminReportStyles.headerTitleStyle(
+                                          isSmallMobile,
+                                        ).fontSize ??
+                                        24) +
+                                    2,
+                              ),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           'View detailed reports and analytics to monitor system performance and user activity.',
-                          style: AdminReportStyles.headerSubtitleStyle(
-                            isSmallMobile,
-                          ),
+                          style:
+                              AdminReportStyles.headerSubtitleStyle(
+                                isSmallMobile,
+                              ).copyWith(
+                                fontSize:
+                                    (AdminReportStyles.headerSubtitleStyle(
+                                          isSmallMobile,
+                                        ).fontSize ??
+                                        14) -
+                                    2,
+                              ),
                         ),
                       ],
                     ),

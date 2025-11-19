@@ -254,231 +254,213 @@ class _ProfilePageState extends State<ProfilePage> {
     
     return Container(
       decoration: ProfileStyles.cardDecoration,
-      child: Column(
-        children: [
-          // Profile Header (Red Gradient)
-          Container(
-            height: 80,
-            decoration: ProfileStyles.profileHeaderDecoration,
-          ),
-          
-          // Profile Body
-          Padding(
-            padding: EdgeInsets.all(isMobile ? 16 : 24),
-            child: Column(
+      child: Padding(
+        padding: EdgeInsets.all(isMobile ? 16 : 24),
+        child: Column(
+          children: [
+            // Top Section with Profile Pic and Actions
+            isMobile ? _buildMobileProfileTop() : _buildDesktopProfileTop(),
+            
+            const SizedBox(height: 24),
+            
+            // Info Grid
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: isMobile ? 1 : 2,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: isMobile ? 4.5 : 3.5,
               children: [
-                // Top Section with Profile Pic and Actions
-                isMobile ? _buildMobileProfileTop() : _buildDesktopProfileTop(),
-                
-                const SizedBox(height: 24),
-                
-                // Info Grid
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: isMobile ? 1 : 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: isMobile ? 4.5 : 3.5,
-                  children: [
-                    _buildInfoCard(Icons.person_outline, 'Employee ID', adminData['employeeId']!, Colors.blue),
-                    _buildInfoCard(Icons.email_outlined, 'Email Address', adminData['email']!, const Color(0xFF6F42C1)),
-                    _buildInfoCard(Icons.phone_outlined, 'Phone Number', adminData['phone']!, Colors.green),
-                    _buildInfoCard(Icons.work_outline, 'Department', adminData['department']!, Colors.orange),
-                    _buildInfoCard(Icons.location_city_outlined, 'Branch Location', adminData['branch']!, const Color(0xFF20C997)),
-                    _buildTwoFactorCard(),
-                  ],
-                ),
+                _buildInfoCard(Icons.person_outline, 'Employee ID', adminData['employeeId']!, Colors.blue),
+                _buildInfoCard(Icons.email_outlined, 'Email Address', adminData['email']!, const Color(0xFF6F42C1)),
+                _buildInfoCard(Icons.phone_outlined, 'Phone Number', adminData['phone']!, Colors.green),
+                _buildInfoCard(Icons.work_outline, 'Department', adminData['department']!, Colors.orange),
+                _buildInfoCard(Icons.location_city_outlined, 'Branch Location', adminData['branch']!, const Color(0xFF20C997)),
+                _buildTwoFactorCard(),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildDesktopProfileTop() {
-    return Transform.translate(
-      offset: const Offset(0, -60),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Profile Picture
-          Column(
-            children: [
-              Container(
-                width: 140,
-                height: 140,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 4),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                  color: ProfileStyles.primaryColor,
-                ),
-                child: ClipOval(
-                  child: Image.network(
-                    adminData['profileImage']!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback widget when image fails to load
-                      return Container(
-                        color: ProfileStyles.primaryColor,
-                        child: const Center(
-                          child: Icon(
-                            Icons.person,
-                            size: 60,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                    },
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                              : null,
-                          color: Colors.white,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.camera_alt, size: 16),
-                label: const Text('Change Photo'),
-                style: ProfileStyles.changePhotoButtonStyle,
-              ),
-            ],
-          ),
-          
-          // Action Buttons
-          Column(
-            children: [
-              const SizedBox(height: 72),
-              Row(
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.edit, size: 16),
-                    label: const Text('Edit Profile'),
-                    style: ProfileStyles.editButtonStyle,
-                  ),
-                  const SizedBox(width: 10),
-                  OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.lock_outline, size: 16),
-                    label: const Text('Change Password'),
-                    style: ProfileStyles.outlineButtonStyle,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Profile Picture
+        Column(
+          children: [
+            Container(
+              width: 140,
+              height: 140,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 4),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
                   ),
                 ],
+                color: ProfileStyles.primaryColor,
               ),
-            ],
-          ),
-        ],
-      ),
+              child: ClipOval(
+                child: Image.network(
+                  adminData['profileImage']!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    // Fallback widget when image fails to load
+                    return Container(
+                      color: ProfileStyles.primaryColor,
+                      child: const Center(
+                        child: Icon(
+                          Icons.person,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.camera_alt, size: 16),
+              label: const Text('Change Photo'),
+              style: ProfileStyles.changePhotoButtonStyle,
+            ),
+          ],
+        ),
+        
+        // Action Buttons
+        Column(
+          children: [
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.edit, size: 16),
+                  label: const Text('Edit Profile'),
+                  style: ProfileStyles.editButtonStyle,
+                ),
+                const SizedBox(width: 10),
+                OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.lock_outline, size: 16),
+                  label: const Text('Change Password'),
+                  style: ProfileStyles.outlineButtonStyle,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   Widget _buildMobileProfileTop() {
-    return Transform.translate(
-      offset: const Offset(0, -55),
-      child: Column(
-        children: [
-          // Profile Picture
-          Container(
-            width: 110,
-            height: 110,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 4),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-              color: ProfileStyles.primaryColor,
-            ),
-            child: ClipOval(
-              child: Image.network(
-                adminData['profileImage']!,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  // Fallback widget when image fails to load
-                  return Container(
-                    color: ProfileStyles.primaryColor,
-                    child: const Center(
-                      child: Icon(
-                        Icons.person,
-                        size: 50,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          ElevatedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.camera_alt, size: 14),
-            label: const Text('Change Photo'),
-            style: ProfileStyles.changePhotoButtonStyle,
-          ),
-          const SizedBox(height: 16),
-          // Action Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit, size: 14),
-                  label: const Text('Edit'),
-                  style: ProfileStyles.editButtonStyle,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.lock_outline, size: 14),
-                  label: const Text('Password'),
-                  style: ProfileStyles.outlineButtonStyle,
-                ),
+    return Column(
+      children: [
+        // Profile Picture
+        Container(
+          width: 110,
+          height: 110,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 4),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.2),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
               ),
             ],
+            color: ProfileStyles.primaryColor,
           ),
-        ],
-      ),
+          child: ClipOval(
+            child: Image.network(
+              adminData['profileImage']!,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback widget when image fails to load
+                return Container(
+                  color: ProfileStyles.primaryColor,
+                  child: const Center(
+                    child: Icon(
+                      Icons.person,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              },
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        ElevatedButton.icon(
+          onPressed: () {},
+          icon: const Icon(Icons.camera_alt, size: 14),
+          label: const Text('Change Photo'),
+          style: ProfileStyles.changePhotoButtonStyle,
+        ),
+        const SizedBox(height: 16),
+        // Action Buttons
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.edit, size: 14),
+                label: const Text('Edit'),
+                style: ProfileStyles.editButtonStyle,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.lock_outline, size: 14),
+                label: const Text('Password'),
+                style: ProfileStyles.outlineButtonStyle,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

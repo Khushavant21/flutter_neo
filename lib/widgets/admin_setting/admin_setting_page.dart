@@ -205,31 +205,32 @@ class _AdminSettingPageState extends State<AdminSettingPage> {
     );
   }
 
+  // Modified _buildAdminHeader() method
   Widget _buildAdminHeader() {
     return Container(
-      decoration: AdminSettingStyles.adminHeaderDecoration,
-      child: Stack(
-        children: [
-          Container(decoration: AdminSettingStyles.adminHeaderOverlay),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: Column(
-              children: [
-                Text(
-                  'Admin Settings',
-                  style: AdminSettingStyles.adminTitle,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Manage your preferences and security',
-                  style: AdminSettingStyles.adminSubtitle,
-                  textAlign: TextAlign.center,
-                ),
-              ],
+      width: double.infinity, // Full width
+      decoration: BoxDecoration(
+        color: AdminSettingStyles.primaryRed,
+        borderRadius:
+            BorderRadius.zero, // Remove border radius for rectangular shape
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+        child: Column(
+          children: [
+            Text(
+              'Admin Settings',
+              style: AdminSettingStyles.adminTitle,
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            const SizedBox(height: 6),
+            Text(
+              'Manage your preferences and security',
+              style: AdminSettingStyles.adminSubtitle,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
