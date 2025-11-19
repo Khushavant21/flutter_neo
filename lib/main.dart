@@ -96,6 +96,123 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// ===== Search Result Model =====
+class SearchResult {
+  final String title;
+  final String subtitle;
+  final String route;
+  final IconData icon;
+
+  SearchResult({
+    required this.title,
+    required this.subtitle,
+    required this.route,
+    required this.icon,
+  });
+}
+
+// ===== Get all searchable items =====
+List<SearchResult> getAllSearchItems() {
+  return [
+    SearchResult(
+      title: 'Dashboard',
+      subtitle: 'View main dashboard',
+      route: '/admin/',
+      icon: Icons.dashboard,
+    ),
+    SearchResult(
+      title: 'Users',
+      subtitle: 'Manage user accounts',
+      route: '/admin/users',
+      icon: Icons.people,
+    ),
+    SearchResult(
+      title: 'KYC',
+      subtitle: 'Know Your Customer verification',
+      route: '/admin/kyc',
+      icon: Icons.verified_user,
+    ),
+    SearchResult(
+      title: 'Accounts',
+      subtitle: 'Manage accounts',
+      route: '/admin/accountsdashboard',
+      icon: Icons.account_balance,
+    ),
+    SearchResult(
+      title: 'Transactions',
+      subtitle: 'View all transactions',
+      route: '/admin/transactions',
+      icon: Icons.swap_horiz,
+    ),
+    SearchResult(
+      title: 'Money Requests',
+      subtitle: 'Manage money transfer requests',
+      route: '/admin/moneyrequest',
+      icon: Icons.money,
+    ),
+    SearchResult(
+      title: 'Deposit Management',
+      subtitle: 'Handle deposits',
+      route: '/admin/depositmanagement',
+      icon: Icons.account_balance_wallet,
+    ),
+    SearchResult(
+      title: 'Investment Products',
+      subtitle: 'Manage investment products',
+      route: '/admin/investment_products',
+      icon: Icons.trending_up,
+    ),
+    SearchResult(
+      title: 'Complaints',
+      subtitle: 'View complaints and support tickets',
+      route: '/admin/complaints&support',
+      icon: Icons.report_problem,
+    ),
+    SearchResult(
+      title: 'Reports',
+      subtitle: 'Generate and view reports',
+      route: '/admin/reports',
+      icon: Icons.assessment,
+    ),
+    SearchResult(
+      title: 'Loans',
+      subtitle: 'Manage loan applications',
+      route: '/admin/loans',
+      icon: Icons.card_giftcard,
+    ),
+    SearchResult(
+      title: 'Cards',
+      subtitle: 'Manage user cards',
+      route: '/admin/cards',
+      icon: Icons.credit_card,
+    ),
+    SearchResult(
+      title: 'Settings',
+      subtitle: 'Configure app settings',
+      route: '/admin/settings',
+      icon: Icons.settings,
+    ),
+    SearchResult(
+      title: 'Admin Profile',
+      subtitle: 'View admin profile',
+      route: '/admin/adminprofile',
+      icon: Icons.person,
+    ),
+  ];
+}
+
+// ===== Search Function =====
+List<SearchResult> searchItems(String query) {
+  if (query.isEmpty) return [];
+
+  final items = getAllSearchItems();
+  return items
+      .where((item) =>
+          item.title.toLowerCase().contains(query.toLowerCase()) ||
+          item.subtitle.toLowerCase().contains(query.toLowerCase()))
+      .toList();
+}
+
 // ===== Notification Model =====
 class NotificationItem {
   final String title;
@@ -182,6 +299,7 @@ class ResponsiveAdminLayout extends StatefulWidget {
 
 class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
   bool showSearch = false;
+  List<SearchResult> searchResults = [];
 
   // ===== SHOW NOTIFICATION BOTTOM SHEET (Mobile) =====
   void _showNotifications() {
@@ -205,6 +323,23 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
         ),
       ),
     );
+  }
+
+  // ===== SHOW SEARCH RESULTS =====
+  void _showSearchResults(String query) {
+    setState(() {
+      searchResults = searchItems(query);
+    });
+  }
+
+  // ===== NAVIGATE TO SEARCH RESULT =====
+  void _navigateToResult(String route) {
+    Navigator.pushNamed(context, route);
+    setState(() {
+      showSearch = false;
+      homeSearchController.clear();
+      searchResults = [];
+    });
   }
 
   @override
@@ -238,18 +373,19 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
               actions: [
                 if (!showSearch)
                   IconButton(
-                    icon: const Icon(Icons.search, color: Colors.black87),
+                    icon: const Icon(Icons.search, color: Color.fromARGB(255, 148, 18, 8)),
                     onPressed: () {
                       setState(() => showSearch = true);
                     },
                   )
                 else
                   IconButton(
-                    icon: const Icon(Icons.close, color: Colors.black87),
+                    icon: const Icon(Icons.close, color: Color.fromARGB(255, 148, 18, 8)),
                     onPressed: () {
                       setState(() {
                         showSearch = false;
                         homeSearchController.clear();
+                        searchResults = [];
                       });
                     },
                   ),
@@ -262,7 +398,7 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                         Icons.notifications_outlined,
                         color: Colors.black87,
                       ),
-                      onPressed: _showNotifications, // <--- ADDED
+                      onPressed: _showNotifications,
                     ),
                     Positioned(
                       right: 8,
@@ -287,10 +423,12 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
               ],
             ),
             drawer: const Drawer(child: AdminSidebar()),
-            body: widget.content,
+            body: showSearch && searchResults.isNotEmpty
+                ? _buildSearchResultsList()
+                : widget.content,
           );
         }
-        // DESKTOP VIEW (UNCHANGED)
+        // DESKTOP VIEW
         else {
           return Scaffold(
             body: Row(
@@ -315,20 +453,18 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.search),
-                              onPressed: () {},
+                            SizedBox(
+                              width: 250,
+                              child: _desktopSearchBar(),
                             ),
                             const SizedBox(width: 12),
-
-                            // Desktop notifications NOT modified
                             Stack(
                               children: [
                                 IconButton(
                                   icon: const Icon(
                                     Icons.notifications_outlined,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: _showNotifications,
                                 ),
                                 Positioned(
                                   right: 8,
@@ -353,7 +489,11 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                           ],
                         ),
                       ),
-                      Expanded(child: widget.content),
+                      Expanded(
+                        child: showSearch && searchResults.isNotEmpty
+                            ? _buildSearchResultsList()
+                            : widget.content,
+                      ),
                     ],
                   ),
                 ),
@@ -361,6 +501,22 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
             ),
           );
         }
+      },
+    );
+  }
+
+  // ===== BUILD SEARCH RESULTS LIST =====
+  Widget _buildSearchResultsList() {
+    return ListView.builder(
+      itemCount: searchResults.length,
+      itemBuilder: (context, index) {
+        final result = searchResults[index];
+        return ListTile(
+          leading: Icon(result.icon, color: Color.fromARGB(255, 148, 18, 8)),
+          title: Text(result.title),
+          subtitle: Text(result.subtitle),
+          onTap: () => _navigateToResult(result.route),
+        );
       },
     );
   }
@@ -387,10 +543,41 @@ class _ResponsiveAdminLayoutState extends State<ResponsiveAdminLayout> {
                 hintText: "Search...",
                 border: InputBorder.none,
               ),
+              onChanged: _showSearchResults,
               onSubmitted: (value) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text("Searching: $value")));
+                _showSearchResults(value);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // DESKTOP SEARCH BAR
+  Widget _desktopSearchBar() {
+    return Container(
+      height: 42,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          const Icon(Icons.search, color: Colors.black54, size: 20),
+          const SizedBox(width: 6),
+          Expanded(
+            child: TextField(
+              controller: homeSearchController,
+              decoration: const InputDecoration(
+                hintText: "Search pages...",
+                border: InputBorder.none,
+              ),
+              onChanged: _showSearchResults,
+              onSubmitted: (value) {
+                _showSearchResults(value);
               },
             ),
           ),
