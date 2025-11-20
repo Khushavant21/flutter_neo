@@ -112,13 +112,11 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
-    return WillPopScope(
-      onWillPop: () async {
-        if (widget.onBack != null) {
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop && widget.onBack != null) {
           widget.onBack!(); // ✅ Use tab back instead of Navigator.pop
-          return false;
         }
-        return true;
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
@@ -157,7 +155,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha: 0.08),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -189,7 +187,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 5,
                 offset: const Offset(0, 2),
               ),
@@ -286,7 +284,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
-        headingRowColor: MaterialStateProperty.all(const Color(0xFF900603)),
+        headingRowColor: WidgetStateProperty.all(const Color(0xFF900603)),
         columns: const [
           DataColumn(label: Text("Key Name")),
           DataColumn(label: Text("Status")),

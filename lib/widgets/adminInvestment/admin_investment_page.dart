@@ -26,8 +26,12 @@ class _AdminInvestmentPageState extends State<AdminInvestmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _handleBackPress,
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          _handleBackPress();
+        }
+      },
       child: Navigator(
         pages: [
           MaterialPage(child: InvestmentPanel(onNavigateToTab: _navigateToTab)),
@@ -48,15 +52,11 @@ class _AdminInvestmentPageState extends State<AdminInvestmentPage> {
           if (_selectedIndex == 5)
             const MaterialPage(child: SubscriptionsScreen()),
         ],
-        onPopPage: (route, result) {
-          if (!route.didPop(result)) return false;
-
+        onDidRemovePage: (page) {
           // When user presses back → go to previous tab
           setState(() {
             _selectedIndex = 0;
           });
-
-          return true;
         },
       ),
     );
