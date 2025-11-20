@@ -796,12 +796,13 @@ class _UserManagementPageState extends State<UserManagementPage> {
     );
   }
 
-  Widget _buildMobileCards() {
+ Widget _buildMobileCards() {
     return Column(
       children: pagedUsers.map((user) {
         return Container(
           margin: const EdgeInsets.only(bottom: 10),
           padding: const EdgeInsets.all(12),
+          width: double.infinity, // Make cards full width
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
@@ -943,79 +944,99 @@ class _UserManagementPageState extends State<UserManagementPage> {
     );
   }
 
-  Widget _buildPagination() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          onPressed: currentPage == 1
-              ? null
-              : () => setState(() => currentPage--),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: UserManagementStyles.primaryColor,
-            side: const BorderSide(color: UserManagementStyles.primaryColor),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
-            ),
+ Widget _buildPagination() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
           ),
-          child: const Text('Prev'),
-        ),
-        const SizedBox(width: 5),
-        ...List.generate(totalPages, (i) => i + 1)
-            .where((page) {
-              return page == 1 ||
-                  page == totalPages ||
-                  (page >= currentPage - 2 && page <= currentPage + 2);
-            })
-            .map((page) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: ElevatedButton(
-                  onPressed: () => setState(() => currentPage = page),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: currentPage == page
-                        ? UserManagementStyles.primaryColor
-                        : Colors.white,
-                    foregroundColor: currentPage == page
-                        ? Colors.white
-                        : UserManagementStyles.primaryColor,
-                    side: const BorderSide(
-                      color: UserManagementStyles.primaryColor,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                  ),
-                  child: Text('$page'),
-                ),
-              );
-            }),
-        const SizedBox(width: 5),
-        ElevatedButton(
-          onPressed: currentPage == totalPages
-              ? null
-              : () => setState(() => currentPage++),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            foregroundColor: UserManagementStyles.primaryColor,
-            side: const BorderSide(color: UserManagementStyles.primaryColor),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: currentPage == 1
+                ? null
+                : () => setState(() => currentPage--),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: UserManagementStyles.primaryColor,
+              side: const BorderSide(color: UserManagementStyles.primaryColor),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
             ),
+            child: const Text('Prev'),
           ),
-          child: const Text('Next'),
-        ),
-      ],
+          const SizedBox(width: 5),
+          ElevatedButton(
+            onPressed: () => setState(() => currentPage = 1),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: currentPage == 1
+                  ? UserManagementStyles.primaryColor
+                  : Colors.white,
+              foregroundColor: currentPage == 1
+                  ? Colors.white
+                  : UserManagementStyles.primaryColor,
+              side: const BorderSide(color: UserManagementStyles.primaryColor),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            child: const Text('1'),
+          ),
+          const SizedBox(width: 5),
+          ElevatedButton(
+            onPressed: totalPages > 1
+                ? () => setState(() => currentPage = 2)
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: currentPage == 2
+                  ? UserManagementStyles.primaryColor
+                  : Colors.white,
+              foregroundColor: currentPage == 2
+                  ? Colors.white
+                  : UserManagementStyles.primaryColor,
+              side: const BorderSide(color: UserManagementStyles.primaryColor),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            child: const Text('2'),
+          ),
+          const SizedBox(width: 5),
+          ElevatedButton(
+            onPressed: currentPage == totalPages
+                ? null
+                : () => setState(() => currentPage++),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: UserManagementStyles.primaryColor,
+              side: const BorderSide(color: UserManagementStyles.primaryColor),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            child: const Text('Next'),
+          ),
+        ],
+      ),
     );
   }
-
+  
   void _showUserProfileModal(UserData user) {
     showDialog(
       context: context,

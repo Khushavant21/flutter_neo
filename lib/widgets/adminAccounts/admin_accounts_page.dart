@@ -81,6 +81,17 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
   Map<String, dynamic>? selectedAccount;
   Map<String, dynamic>? editingAccount;
   Map<String, dynamic> editFormData = {};
+  bool showNewAccountForm = false;
+  Map<String, dynamic> newAccountData = {
+    'customerName': '',
+    'accountNumber': '',
+    'accountType': 'Savings',
+    'balance': 0.0,
+    'walletBalance': 0.0,
+    'status': 'Pending',
+    'lastTransaction': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+    'kycStatus': 'Pending',
+  };
 
   @override
   void initState() {
@@ -190,6 +201,85 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
     });
   }
 
+  void _handleOpenNewAccountForm() {
+    setState(() {
+      showNewAccountForm = true;
+      newAccountData = {
+        'customerName': '',
+        'accountNumber': '', // ✅ EMPTY - ADMIN WILL ENTER
+        'accountType': 'Savings',
+        'balance': 0.0,
+        'walletBalance': 0.0,
+        'status': 'Pending',
+        'lastTransaction': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+        'kycStatus': 'Pending',
+      };
+    });
+  }
+
+  void _handleSaveNewAccount() {
+    // Validate customer name
+    if (newAccountData['customerName'].toString().trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter customer name'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Validate account number
+    if (newAccountData['accountNumber'].toString().trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter account number'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check for duplicate account number
+    final isDuplicate = accounts.any(
+      (account) =>
+          account['accountNumber'] ==
+          newAccountData['accountNumber'].toString().trim(),
+    );
+
+    if (isDuplicate) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Account number already exists!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      final newAccount = Map<String, dynamic>.from(newAccountData);
+      newAccount['id'] = accounts.length + 1;
+      accounts.add(newAccount);
+      showNewAccountForm = false;
+      _applyFilters();
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Account created successfully!'),
+        backgroundColor: Colors.green,
+      ),
+    );
+  }
+
+  void _handleCancelNewAccount() {
+    setState(() {
+      showNewAccountForm = false;
+      newAccountData = {};
+    });
+  }
+
   int get totalAccounts => accounts.length;
   int get activeAccounts =>
       accounts.where((acc) => acc['status'] == 'Active').length;
@@ -227,9 +317,12 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
               ],
             ),
           ),
-          if (selectedAccount != null && editingAccount == null)
+          if (selectedAccount != null &&
+              editingAccount == null &&
+              !showNewAccountForm)
             _buildDetailModal(isMobile),
           if (editingAccount != null) _buildEditModal(isMobile),
+          if (showNewAccountForm) _buildNewAccountModal(isMobile),
         ],
       ),
     );
@@ -511,7 +604,7 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: _handleOpenNewAccountForm,
               icon: const Icon(Icons.add, size: 18),
               label: const Text('New Account'),
               style: AccountsStyles.primaryButtonStyle,
@@ -615,38 +708,53 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
           ),
         ),
         const SizedBox(height: 6),
-        DropdownButtonFormField<String>(
+        FormField<String>(
           initialValue: value,
-          decoration: const InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(
-                color: AccountsStyles.borderColor,
-                width: 2,
+          builder: (FormFieldState<String> state) {
+            return InputDecorator(
+              decoration: const InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  borderSide: BorderSide(
+                    color: AccountsStyles.borderColor,
+                    width: 2,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  borderSide: BorderSide(
+                    color: AccountsStyles.borderColor,
+                    width: 2,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  borderSide: BorderSide(
+                    color: AccountsStyles.primaryColor,
+                    width: 2,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
               ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(
-                color: AccountsStyles.borderColor,
-                width: 2,
+              child: DropdownButton<String>(
+                value: state.value,
+                items: items.map((item) {
+                  return DropdownMenuItem(value: item, child: Text(item));
+                }).toList(),
+                onChanged: (newValue) {
+                  state.didChange(newValue);
+                  onChanged(newValue);
+                },
+                isExpanded: true,
+                underline: const SizedBox(),
               ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              borderSide: BorderSide(
-                color: AccountsStyles.primaryColor,
-                width: 2,
-              ),
-            ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          ),
-          items: items.map((item) {
-            return DropdownMenuItem(value: item, child: Text(item));
-          }).toList(),
-          onChanged: onChanged,
+            );
+          },
         ),
       ],
     );
@@ -1153,7 +1261,6 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
                                 ),
                                 _buildInfoRow(
                                   'Wallet Balance:',
-                                  // '\${NumberFormat('#,##0.00').format(selectedAccount!['walletBalance'])}',
                                   '\$${NumberFormat('#,##0.00').format(selectedAccount!['walletBalance'])}',
                                 ),
                                 _buildInfoRow(
@@ -1224,7 +1331,6 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
                                       ),
                                       _buildInfoRow(
                                         'Wallet Balance:',
-                                        // '\${NumberFormat('#,##0.00').format(selectedAccount!['walletBalance'])}',
                                         '\$${NumberFormat('#,##0.00').format(selectedAccount!['walletBalance'])}',
                                       ),
                                       _buildInfoRow(
@@ -1602,6 +1708,325 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
     );
   }
 
+  Widget _buildNewAccountModal(bool isMobile) {
+    return Material(
+      color: Colors.black54,
+      child: Center(
+        child: Container(
+          width: isMobile ? MediaQuery.of(context).size.width * 0.95 : 800,
+          margin: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 60,
+                offset: const Offset(0, 20),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF900603), Color(0xFFB30805)],
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons.add_circle_outline,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Create New Account',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: _handleCancelNewAccount,
+                    ),
+                  ],
+                ),
+              ),
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      isMobile
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Customer Information',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                    color: AccountsStyles.primaryColor,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildNewAccountField(
+                                  'Customer Name:',
+                                  newAccountData['customerName'],
+                                  (value) {
+                                    setState(() {
+                                      newAccountData['customerName'] = value;
+                                    });
+                                  },
+                                  required: true,
+                                ),
+                                _buildNewAccountField(
+                                  'Account Number:',
+                                  newAccountData['accountNumber'],
+                                  (value) {
+                                    setState(() {
+                                      newAccountData['accountNumber'] = value;
+                                    });
+                                  },
+                                  required: true, // ✅ REQUIRED FIELD
+                                ),
+                                _buildNewAccountDropdown(
+                                  'Account Type:',
+                                  newAccountData['accountType'],
+                                  ['Savings', 'Current', 'Business'],
+                                  (value) {
+                                    setState(() {
+                                      newAccountData['accountType'] = value;
+                                    });
+                                  },
+                                ),
+                                _buildNewAccountDropdown(
+                                  'KYC Status:',
+                                  newAccountData['kycStatus'],
+                                  ['Verified', 'Pending', 'Rejected'],
+                                  (value) {
+                                    setState(() {
+                                      newAccountData['kycStatus'] = value;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 24),
+                                const Text(
+                                  'Balance Information',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                    color: AccountsStyles.primaryColor,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                _buildNewAccountField(
+                                  'Initial Account Balance:',
+                                  newAccountData['balance'].toString(),
+                                  (value) {
+                                    setState(() {
+                                      newAccountData['balance'] =
+                                          double.tryParse(value) ?? 0.0;
+                                    });
+                                  },
+                                  isNumber: true,
+                                ),
+                                _buildNewAccountField(
+                                  'Initial Wallet Balance:',
+                                  newAccountData['walletBalance'].toString(),
+                                  (value) {
+                                    setState(() {
+                                      newAccountData['walletBalance'] =
+                                          double.tryParse(value) ?? 0.0;
+                                    });
+                                  },
+                                  isNumber: true,
+                                ),
+                                _buildNewAccountDropdown(
+                                  'Status:',
+                                  newAccountData['status'],
+                                  ['Active', 'Pending', 'Frozen'],
+                                  (value) {
+                                    setState(() {
+                                      newAccountData['status'] = value;
+                                    });
+                                  },
+                                ),
+                              ],
+                            )
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Customer Information',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
+                                          color: AccountsStyles.primaryColor,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      _buildNewAccountField(
+                                        'Customer Name:',
+                                        newAccountData['customerName'],
+                                        (value) {
+                                          setState(() {
+                                            newAccountData['customerName'] =
+                                                value;
+                                          });
+                                        },
+                                        required: true,
+                                      ),
+                                      _buildNewAccountField(
+                                        'Account Number:',
+                                        newAccountData['accountNumber'],
+                                        (value) {
+                                          setState(() {
+                                            newAccountData['accountNumber'] =
+                                                value;
+                                          });
+                                        },
+                                        required: true, // ✅ REQUIRED FIELD
+                                      ),
+                                      _buildNewAccountDropdown(
+                                        'Account Type:',
+                                        newAccountData['accountType'],
+                                        ['Savings', 'Current', 'Business'],
+                                        (value) {
+                                          setState(() {
+                                            newAccountData['accountType'] =
+                                                value;
+                                          });
+                                        },
+                                      ),
+                                      _buildNewAccountDropdown(
+                                        'KYC Status:',
+                                        newAccountData['kycStatus'],
+                                        ['Verified', 'Pending', 'Rejected'],
+                                        (value) {
+                                          setState(() {
+                                            newAccountData['kycStatus'] = value;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 32),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Balance Information',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
+                                          color: AccountsStyles.primaryColor,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      _buildNewAccountField(
+                                        'Initial Account Balance:',
+                                        newAccountData['balance'].toString(),
+                                        (value) {
+                                          setState(() {
+                                            newAccountData['balance'] =
+                                                double.tryParse(value) ?? 0.0;
+                                          });
+                                        },
+                                        isNumber: true,
+                                      ),
+                                      _buildNewAccountField(
+                                        'Initial Wallet Balance:',
+                                        newAccountData['walletBalance']
+                                            .toString(),
+                                        (value) {
+                                          setState(() {
+                                            newAccountData['walletBalance'] =
+                                                double.tryParse(value) ?? 0.0;
+                                          });
+                                        },
+                                        isNumber: true,
+                                      ),
+                                      _buildNewAccountDropdown(
+                                        'Status:',
+                                        newAccountData['status'],
+                                        ['Active', 'Pending', 'Frozen'],
+                                        (value) {
+                                          setState(() {
+                                            newAccountData['status'] = value;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF8F9FA),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _handleCancelNewAccount,
+                      style: AccountsStyles.secondaryButtonStyle,
+                      child: const Text('Cancel'),
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton.icon(
+                      onPressed: _handleSaveNewAccount,
+                      icon: const Icon(Icons.check, size: 18),
+                      label: const Text('Create Account'),
+                      style: AccountsStyles.primaryButtonStyle,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildInfoRow(String label, String value, {bool badge = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -1719,41 +2144,208 @@ class _AdminAccountsPageState extends State<AdminAccountsPage> {
             ),
           ),
           const SizedBox(height: 6),
-          DropdownButtonFormField<String>(
+          FormField<String>(
             initialValue: value,
-            decoration: const InputDecoration(
+            builder: (FormFieldState<String> state) {
+              return InputDecorator(
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: AccountsStyles.borderColor,
+                      width: 2,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: AccountsStyles.borderColor,
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: AccountsStyles.primaryColor,
+                      width: 2,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                ),
+                child: DropdownButton<String>(
+                  value: state.value,
+                  items: items.map((item) {
+                    return DropdownMenuItem(value: item, child: Text(item));
+                  }).toList(),
+                  onChanged: (newValue) {
+                    state.didChange(newValue);
+                    onChanged(newValue);
+                  },
+                  isExpanded: true,
+                  underline: const SizedBox(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNewAccountField(
+    String label,
+    String value,
+    ValueChanged<String>? onChanged, {
+    bool enabled = true,
+    bool isNumber = false,
+    bool required = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: AccountsStyles.textSecondary,
+                  fontSize: 14,
+                ),
+              ),
+              if (required)
+                const Text(
+                  ' *',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          TextFormField(
+            initialValue: value,
+            decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
+              fillColor: enabled ? Colors.white : const Color(0xFFF8F9FA),
+              border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
                   color: AccountsStyles.borderColor,
                   width: 2,
                 ),
               ),
-              enabledBorder: OutlineInputBorder(
+              enabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
                   color: AccountsStyles.borderColor,
                   width: 2,
                 ),
               ),
-              focusedBorder: OutlineInputBorder(
+              focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 borderSide: BorderSide(
                   color: AccountsStyles.primaryColor,
                   width: 2,
                 ),
               ),
-              contentPadding: EdgeInsets.symmetric(
+              disabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderSide: BorderSide(
+                  color: AccountsStyles.borderColor,
+                  width: 2,
+                ),
+              ),
+              contentPadding: const EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 12,
               ),
             ),
-            items: items.map((item) {
-              return DropdownMenuItem(value: item, child: Text(item));
-            }).toList(),
+            enabled: enabled,
+            keyboardType: isNumber ? TextInputType.number : TextInputType.text,
             onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNewAccountDropdown(
+    String label,
+    String value,
+    List<String> items,
+    ValueChanged<String?> onChanged,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              color: AccountsStyles.textSecondary,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 6),
+          FormField<String>(
+            initialValue: value,
+            builder: (FormFieldState<String> state) {
+              return InputDecorator(
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: AccountsStyles.borderColor,
+                      width: 2,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: AccountsStyles.borderColor,
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(
+                      color: AccountsStyles.primaryColor,
+                      width: 2,
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                ),
+                child: DropdownButton<String>(
+                  value: state.value,
+                  items: items.map((item) {
+                    return DropdownMenuItem(value: item, child: Text(item));
+                  }).toList(),
+                  onChanged: (newValue) {
+                    state.didChange(newValue);
+                    onChanged(newValue);
+                  },
+                  isExpanded: true,
+                  underline: const SizedBox(),
+                ),
+              );
+            },
           ),
         ],
       ),
