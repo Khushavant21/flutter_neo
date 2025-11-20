@@ -72,9 +72,14 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-
       appBar: AppBar(
-        automaticallyImplyLeading: false, // 🔥 REMOVE BACK BUTTON
+        automaticallyImplyLeading: isMobile ? true : false,
+        leading: isMobile
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
         title: const Text(
           "Subscriptions / Redemptions",
           style: TextStyle(color: Colors.white, fontSize: 18),
@@ -83,7 +88,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
         centerTitle: true,
         elevation: 4,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Container(
@@ -141,7 +145,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -156,7 +159,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                   ],
                 ),
                 const SizedBox(height: 10),
-
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -178,7 +180,6 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-
                 if (sub["status"] == "Pending")
                   Row(
                     children: [

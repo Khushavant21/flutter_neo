@@ -68,7 +68,13 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        automaticallyImplyLeading: false, // 🚀 Back button removed
+        automaticallyImplyLeading: isMobile ? true : false,
+        leading: isMobile
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
         title: const Text(
           "Services & Merchant Integrations",
           style: TextStyle(color: Colors.white, fontSize: 18),
@@ -97,7 +103,7 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
     );
   }
 
-  // 📱 Mobile Card Layout
+  /// 📱 Mobile Card Layout
   Widget _buildMobileView() {
     return ListView.builder(
       itemCount: merchants.length,
@@ -132,7 +138,6 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -147,13 +152,11 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
                 ],
               ),
               const SizedBox(height: 6),
-
               Text(
                 "Service: ${m["service"]}",
                 style: const TextStyle(fontSize: 14),
               ),
               const SizedBox(height: 10),
-
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -172,7 +175,6 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-
               Row(
                 children: [
                   Expanded(
@@ -196,7 +198,7 @@ class _ServicesMerchantScreenState extends State<ServicesMerchantScreen> {
     );
   }
 
-  // 💻 Desktop / Tablet DataTable Layout
+  /// 💻 Desktop / Tablet DataTable Layout
   Widget _buildDesktopView() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

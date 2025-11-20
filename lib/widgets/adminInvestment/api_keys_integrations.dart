@@ -1,10 +1,11 @@
-// Example: api_keys_integrations.dart with back button
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
 
 class APIKeysIntegrationsScreen extends StatefulWidget {
-  const APIKeysIntegrationsScreen({super.key});
+  final VoidCallback? onBack; // ✅ Added back callback for tab navigation
+
+  const APIKeysIntegrationsScreen({super.key, this.onBack});
 
   @override
   State<APIKeysIntegrationsScreen> createState() =>
@@ -67,7 +68,9 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
             child: const Text("Cancel"),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Color(0xFF900603)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF900603),
+            ),
             onPressed: () {
               setState(() {
                 keys.removeWhere((e) => e["id"] == id);
@@ -106,63 +109,70 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
-
-      appBar: AppBar(
-        automaticallyImplyLeading: true, // ✅ SHOW BACK BUTTON
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context), // Go back
-        ),
-        title: const Text(
-          "API Keys & Integrations",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: const Color(0xFF900603),
-        centerTitle: true,
-        elevation: 3,
-      ),
-
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xFF900603),
-        onPressed: () => setState(() => showModal = true),
-        label: const Text(
-          "Generate API Key",
-          style: TextStyle(color: Colors.white),
-        ),
-        icon: const Icon(Icons.add, color: Colors.white),
-      ),
-
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.08),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: isMobile ? _buildMobileView() : _buildDesktopView(),
-            ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.onBack != null) {
+          widget.onBack!(); // ✅ Use tab back instead of Navigator.pop
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF5F5F5),
+        appBar: AppBar(
+          automaticallyImplyLeading: widget.onBack != null,
+          leading: widget.onBack != null
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: widget.onBack, // ✅ Back works now
+                )
+              : null,
+          title: const Text(
+            "API Keys & Integrations",
+            style: TextStyle(color: Colors.white, fontSize: 18),
           ),
-
-          if (showModal) _buildNewKeyModal(),
-        ],
+          backgroundColor: const Color(0xFF900603),
+          centerTitle: true,
+          elevation: 4,
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: const Color(0xFF900603),
+          onPressed: () => setState(() => showModal = true),
+          label: const Text(
+            "Generate API Key",
+            style: TextStyle(color: Colors.white),
+          ),
+          icon: const Icon(Icons.add, color: Colors.white),
+        ),
+        body: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: isMobile ? _buildMobileView() : _buildDesktopView(),
+              ),
+            ),
+            if (showModal) _buildNewKeyModal(),
+          ],
+        ),
       ),
     );
   }
 
-  // ... rest of the code remains the same ...
   Widget _buildMobileView() {
     return ListView.builder(
       padding: const EdgeInsets.all(10),
@@ -179,7 +189,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
             border: Border.all(color: Colors.grey.shade300),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withOpacity(0.05),
                 blurRadius: 5,
                 offset: const Offset(0, 2),
               ),
@@ -200,7 +210,6 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                 const SizedBox(height: 6),
                 Text("Created: ${k["created"]}"),
                 const SizedBox(height: 8),
-
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -218,16 +227,14 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 12),
-
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () => handleCopyKey(k["value"]),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF900603),
+                          backgroundColor: const Color(0xFF900603),
                         ),
                         child: const Text(
                           "Copy",
@@ -240,7 +247,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                       child: ElevatedButton(
                         onPressed: () => toggleStatus(k["id"]),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF900603),
+                          backgroundColor: const Color(0xFF900603),
                         ),
                         child: Text(
                           k["status"] == "Active" ? "Disable" : "Enable",
@@ -253,7 +260,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                       child: ElevatedButton(
                         onPressed: () => handleRevokeKey(k["id"]),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF900603),
+                          backgroundColor: const Color(0xFF900603),
                         ),
                         child: const Text(
                           "Revoke",
@@ -279,7 +286,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
-        headingRowColor: WidgetStateProperty.all(const Color(0xFF900603)),
+        headingRowColor: MaterialStateProperty.all(const Color(0xFF900603)),
         columns: const [
           DataColumn(label: Text("Key Name")),
           DataColumn(label: Text("Status")),
@@ -316,7 +323,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                     ElevatedButton(
                       onPressed: () => handleCopyKey(k["value"]),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF900603),
+                        backgroundColor: const Color(0xFF900603),
                       ),
                       child: const Text(
                         "Copy",
@@ -327,7 +334,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                     ElevatedButton(
                       onPressed: () => toggleStatus(k["id"]),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF900603),
+                        backgroundColor: const Color(0xFF900603),
                       ),
                       child: Text(
                         k["status"] == "Active" ? "Disable" : "Enable",
@@ -338,7 +345,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                     ElevatedButton(
                       onPressed: () => handleRevokeKey(k["id"]),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF900603),
+                        backgroundColor: const Color(0xFF900603),
                       ),
                       child: const Text(
                         "Revoke",
@@ -374,7 +381,6 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 14),
-
               TextField(
                 decoration: InputDecoration(
                   labelText: "Key Name",
@@ -384,9 +390,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                 ),
                 onChanged: (v) => setState(() => newKeyName = v),
               ),
-
               const SizedBox(height: 20),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -397,7 +401,7 @@ class _APIKeysIntegrationsScreenState extends State<APIKeysIntegrationsScreen> {
                   ElevatedButton(
                     onPressed: handleGenerateKey,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF900603),
+                      backgroundColor: const Color(0xFF900603),
                     ),
                     child: const Text(
                       "Generate",

@@ -17,24 +17,20 @@ class AdminReportStyles {
   static BoxDecoration get headerDecoration => const BoxDecoration(
     color: primaryColor,
     boxShadow: [
-      BoxShadow(
-        color: Color(0x1A000000),
-        blurRadius: 8,
-        offset: Offset(0, 3),
-      ),
+      BoxShadow(color: Color(0x1A000000), blurRadius: 8, offset: Offset(0, 3)),
     ],
   );
 
   // Header Text Styles
   static TextStyle headerTitleStyle(bool isSmallMobile) => TextStyle(
-    fontSize: isSmallMobile ? 20 : 24,
+    fontSize: isSmallMobile ? 24 : 24,
     fontWeight: FontWeight.bold,
     color: Colors.white,
     height: 1.3,
   );
 
   static TextStyle headerSubtitleStyle(bool isSmallMobile) => TextStyle(
-    fontSize: isSmallMobile ? 13 : 14,
+    fontSize: isSmallMobile ? 14 : 16,
     color: const Color(0xFFF0F0F0),
     height: 1.4,
   );
@@ -45,17 +41,13 @@ class AdminReportStyles {
     borderRadius: BorderRadius.circular(10),
     border: Border.all(color: borderColor),
     boxShadow: const [
-      BoxShadow(
-        color: Color(0x14000000),
-        blurRadius: 8,
-        offset: Offset(0, 2),
-      ),
+      BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2)),
     ],
   );
 
   // Card Text Styles
   static TextStyle cardTitleStyle(bool isSmallMobile) => TextStyle(
-    fontSize: isSmallMobile ? 12 : 14,
+    fontSize: isSmallMobile ? 12 : 16,
     fontWeight: FontWeight.w600,
     color: textSecondary,
     height: 1.3,
@@ -74,11 +66,7 @@ class AdminReportStyles {
     borderRadius: BorderRadius.circular(10),
     border: Border.all(color: borderColor),
     boxShadow: const [
-      BoxShadow(
-        color: Color(0x14000000),
-        blurRadius: 10,
-        offset: Offset(0, 2),
-      ),
+      BoxShadow(color: Color(0x14000000), blurRadius: 10, offset: Offset(0, 2)),
     ],
   );
 
@@ -112,24 +100,25 @@ class AdminReportStyles {
   );
 
   // Export Button Style
-  static ButtonStyle exportButtonStyle(bool isSmallMobile) => ElevatedButton.styleFrom(
-    backgroundColor: primaryColor,
-    foregroundColor: Colors.white,
-    padding: EdgeInsets.symmetric(
-      horizontal: isSmallMobile ? 15 : 20,
-      vertical: isSmallMobile ? 10 : 12,
-    ),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
-      side: const BorderSide(color: primaryColor),
-    ),
-    textStyle: TextStyle(
-      fontSize: isSmallMobile ? 13 : 14,
-      fontWeight: FontWeight.w600,
-    ),
-    minimumSize: const Size(140, 44),
-    elevation: 0,
-  );
+  static ButtonStyle exportButtonStyle(bool isSmallMobile) =>
+      ElevatedButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+        padding: EdgeInsets.symmetric(
+          horizontal: isSmallMobile ? 15 : 20,
+          vertical: isSmallMobile ? 10 : 12,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(color: primaryColor),
+        ),
+        textStyle: TextStyle(
+          fontSize: isSmallMobile ? 13 : 14,
+          fontWeight: FontWeight.w600,
+        ),
+        minimumSize: const Size(140, 44),
+        elevation: 0,
+      );
 
   // Chart Container Decoration
   static BoxDecoration get chartDecoration => BoxDecoration(
@@ -137,11 +126,7 @@ class AdminReportStyles {
     borderRadius: BorderRadius.circular(10),
     border: Border.all(color: borderColor),
     boxShadow: const [
-      BoxShadow(
-        color: Color(0x14000000),
-        blurRadius: 10,
-        offset: Offset(0, 2),
-      ),
+      BoxShadow(color: Color(0x14000000), blurRadius: 10, offset: Offset(0, 2)),
     ],
   );
 
@@ -159,11 +144,7 @@ class AdminReportStyles {
     borderRadius: BorderRadius.circular(10),
     border: Border.all(color: borderColor),
     boxShadow: const [
-      BoxShadow(
-        color: Color(0x14000000),
-        blurRadius: 16,
-        offset: Offset(0, 2),
-      ),
+      BoxShadow(color: Color(0x14000000), blurRadius: 16, offset: Offset(0, 2)),
     ],
   );
 
@@ -191,22 +172,19 @@ class AdminReportStyles {
   );
 
   // Padding Values
-  static EdgeInsets containerPadding(bool isSmallMobile) => EdgeInsets.all(
-    isSmallMobile ? 8 : 16,
-  );
+  static EdgeInsets containerPadding(bool isSmallMobile) =>
+      EdgeInsets.all(isSmallMobile ? 8 : 16);
 
   static EdgeInsets cardPadding(bool isSmallMobile) => EdgeInsets.symmetric(
     horizontal: isSmallMobile ? 10 : 15,
     vertical: isSmallMobile ? 12 : 20,
   );
 
-  static EdgeInsets filterPadding(bool isSmallMobile) => EdgeInsets.all(
-    isSmallMobile ? 12 : 20,
-  );
+  static EdgeInsets filterPadding(bool isSmallMobile) =>
+      EdgeInsets.all(isSmallMobile ? 12 : 20);
 
-  static EdgeInsets chartPadding(bool isSmallMobile) => EdgeInsets.all(
-    isSmallMobile ? 12 : 20,
-  );
+  static EdgeInsets chartPadding(bool isSmallMobile) =>
+      EdgeInsets.all(isSmallMobile ? 12 : 20);
 
   // Spacing Values
   static double cardSpacing(bool isSmallMobile) => isSmallMobile ? 10 : 15;
@@ -219,18 +197,10 @@ class AdminReportStyles {
 
   // Shadow
   static List<BoxShadow> get defaultShadow => const [
-    BoxShadow(
-      color: Color(0x14000000),
-      blurRadius: 8,
-      offset: Offset(0, 2),
-    ),
+    BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2)),
   ];
 
   static List<BoxShadow> get hoverShadow => const [
-    BoxShadow(
-      color: Color(0x1F000000),
-      blurRadius: 12,
-      offset: Offset(0, 4),
-    ),
+    BoxShadow(color: Color(0x1F000000), blurRadius: 12, offset: Offset(0, 4)),
   ];
 }

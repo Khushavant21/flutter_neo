@@ -81,7 +81,13 @@ class _PortfolioReportsState extends State<PortfolioReports> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        automaticallyImplyLeading: false, // 🔥 BACK BUTTON REMOVED
+        automaticallyImplyLeading: isMobile ? true : false,
+        leading: isMobile
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
         title: const Text(
           "Portfolio Reports",
           style: TextStyle(color: Colors.white, fontSize: 18),
@@ -97,7 +103,6 @@ class _PortfolioReportsState extends State<PortfolioReports> {
           ),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Container(
@@ -113,10 +118,8 @@ class _PortfolioReportsState extends State<PortfolioReports> {
               ),
             ],
           ),
-
           child: Column(
             children: [
-              // FILTER TEXTFIELD
               TextField(
                 decoration: InputDecoration(
                   hintText: "Filter by User",
@@ -127,9 +130,7 @@ class _PortfolioReportsState extends State<PortfolioReports> {
                 ),
                 onChanged: (val) => setState(() => filterUser = val),
               ),
-
               const SizedBox(height: 20),
-
               Expanded(
                 child: isMobile
                     ? _buildMobileView(filteredReports)
@@ -142,7 +143,7 @@ class _PortfolioReportsState extends State<PortfolioReports> {
     );
   }
 
-  // 📱 Mobile: Card Style
+  /// 📱 Mobile: Card Style
   Widget _buildMobileView(List<Map<String, String>> reportList) {
     if (reportList.isEmpty) {
       return const Center(
@@ -174,11 +175,9 @@ class _PortfolioReportsState extends State<PortfolioReports> {
             ],
             color: Colors.white,
           ),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // USER
               Text(
                 r["user"]!,
                 style: const TextStyle(
@@ -186,10 +185,7 @@ class _PortfolioReportsState extends State<PortfolioReports> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-
               const SizedBox(height: 8),
-
-              // DETAILS ROW 1
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -198,8 +194,6 @@ class _PortfolioReportsState extends State<PortfolioReports> {
                 ],
               ),
               const SizedBox(height: 8),
-
-              // DETAILS ROW 2
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -214,7 +208,7 @@ class _PortfolioReportsState extends State<PortfolioReports> {
     );
   }
 
-  // 💻 Desktop Table
+  /// 💻 Desktop Table
   Widget _buildDesktopView(List<Map<String, String>> reportList) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -224,7 +218,6 @@ class _PortfolioReportsState extends State<PortfolioReports> {
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
-
         columns: const [
           DataColumn(label: Text("User")),
           DataColumn(label: Text("Product")),
@@ -232,7 +225,6 @@ class _PortfolioReportsState extends State<PortfolioReports> {
           DataColumn(label: Text("Returns")),
           DataColumn(label: Text("Date")),
         ],
-
         rows: reportList.map((r) {
           return DataRow(
             cells: [

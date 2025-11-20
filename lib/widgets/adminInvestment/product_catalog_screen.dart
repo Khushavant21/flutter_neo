@@ -68,10 +68,14 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-
-      /// 🚫 REMOVE BACK BUTTON
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: isMobile ? true : false,
+        leading: isMobile
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
         title: const Text(
           "Product Catalog",
           style: TextStyle(color: Colors.white, fontSize: 18),
@@ -80,7 +84,6 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
         centerTitle: true,
         elevation: 4,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: Container(
@@ -126,7 +129,6 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
               ),
             ],
           ),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -138,7 +140,6 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
                 ),
               ),
               const SizedBox(height: 6),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -152,9 +153,7 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 10),
-
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -175,9 +174,7 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 10),
-
               if (p["status"] == "Pending")
                 Row(
                   children: [
@@ -233,7 +230,6 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
-
         columns: const [
           DataColumn(label: Text("Product Name")),
           DataColumn(label: Text("Category")),
@@ -241,7 +237,6 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
           DataColumn(label: Text("Status")),
           DataColumn(label: Text("Actions")),
         ],
-
         rows: products.map((p) {
           final statusColor = getStatusColor(p["status"]);
 
@@ -250,7 +245,6 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
               DataCell(Text(p["name"])),
               DataCell(Text(p["category"])),
               DataCell(Text(p["amount"])),
-
               DataCell(
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -272,7 +266,6 @@ class _ProductCatalogScreenState extends State<ProductCatalogScreen> {
                   ),
                 ),
               ),
-
               DataCell(
                 p["status"] == "Pending"
                     ? Row(

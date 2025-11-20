@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../styles/kyc_styles.dart';
 
 class InvestmentPanel extends StatefulWidget {
-  final Function(int)? onNavigateToTab; // Add callback
+  final Function(int)? onNavigateToTab;
 
   const InvestmentPanel({super.key, this.onNavigateToTab});
 
@@ -13,198 +14,164 @@ class InvestmentPanel extends StatefulWidget {
 class _InvestmentPanelState extends State<InvestmentPanel> {
   final List<Map<String, dynamic>> pages = [
     {
-      "key": "catalog",
       "title": "Product Catalog",
-      "icon": FontAwesomeIcons.boxOpen,
-      "tabIndex": 3, // Maps to ProductCatalogScreen
       "description": "Manage investment products and offerings",
+      "icon": FontAwesomeIcons.boxOpen,
+      "tabIndex": 3,
     },
     {
-      "key": "subscriptions",
-      "title": "Subscriptions/Redemptions",
-      "icon": FontAwesomeIcons.rightLeft,
-      "tabIndex": 5, // Maps to SubscriptionsScreen
+      "title": "Subscriptions / Redemptions",
       "description": "Handle subscription and redemption requests",
+      "icon": FontAwesomeIcons.rightLeft,
+      "tabIndex": 5,
     },
     {
-      "key": "reports",
       "title": "Portfolio Reports",
-      "icon": FontAwesomeIcons.chartBar,
-      "tabIndex": 2, // Maps to PortfolioReports
       "description": "View and export portfolio analytics",
+      "icon": FontAwesomeIcons.chartBar,
+      "tabIndex": 2,
     },
     {
-      "key": "services",
       "title": "Services & Merchant",
-      "icon": FontAwesomeIcons.gear,
-      "tabIndex": 4, // Maps to ServicesMerchantScreen
       "description": "Manage merchant integrations",
+      "icon": FontAwesomeIcons.gear,
+      "tabIndex": 4,
     },
     {
-      "key": "apikeys",
       "title": "API Keys & Integrations",
-      "icon": FontAwesomeIcons.key,
-      "tabIndex": 1, // Maps to APIKeysIntegrationsScreen
       "description": "Configure API access and integrations",
+      "icon": FontAwesomeIcons.key,
+      "tabIndex": 1,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 600;
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: KYCColors.background,
+      body: Column(
+        children: [
+          _buildHeader(),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: _buildCardsGrid(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Column(
+  // HEADER
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 22, 16, 20),
+      decoration: const BoxDecoration(color: KYCColors.primary),
+      child: SafeArea(
+        bottom: false,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
+          children: const [
+            Text(
               "Investment Management",
               style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
                 fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
-
+            SizedBox(height: 6),
             Text(
-              "Investment Management with Neo",
-              style: TextStyle(
-                fontSize: isMobile ? 11 : 13,
-                color: Colors.white70,
-              ),
+              "Investment management with Neo",
+              style: TextStyle(fontSize: 15, color: Color(0xFFF0F0F0)),
             ),
           ],
-        ),
-        centerTitle: false,
-        backgroundColor: const Color(0xFF900603),
-        elevation: 4,
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-
-          child: SingleChildScrollView(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                int crossAxisCount = 2;
-
-                if (constraints.maxWidth > 1200) {
-                  crossAxisCount = 4;
-                } else if (constraints.maxWidth > 800) {
-                  crossAxisCount = 3;
-                } else if (constraints.maxWidth < 600) {
-                  crossAxisCount = 1;
-                }
-
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: pages.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: isMobile ? 1.1 : 1.2,
-                  ),
-                  itemBuilder: (context, index) {
-                    return _buildCard(pages[index], isMobile);
-                  },
-                );
-              },
-            ),
-          ),
         ),
       ),
     );
   }
 
-  Widget _buildCard(Map<String, dynamic> page, bool isMobile) {
-    return InkWell(
-      onTap: () {
-        // Use callback to navigate to the correct tab
-        if (widget.onNavigateToTab != null) {
-          widget.onNavigateToTab!(page["tabIndex"]);
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: const Border(
-            top: BorderSide(color: Color(0xFF900603), width: 3),
+  // GRID
+  Widget _buildCardsGrid() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int count = constraints.maxWidth > 900
+            ? 3
+            : constraints.maxWidth > 600
+            ? 2
+            : 1;
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: pages.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: count,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 1.25,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: isMobile ? 50 : 60,
-              height: isMobile ? 50 : 60,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: [Color(0xFF900603), Color(0xFFB00804)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+          itemBuilder: (context, index) {
+            return _buildFeatureCard(pages[index]);
+          },
+        );
+      },
+    );
+  }
+
+  // CARD
+  Widget _buildFeatureCard(Map<String, dynamic> data) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () {
+          if (widget.onNavigateToTab != null) {
+            widget.onNavigateToTab!(data["tabIndex"]);
+          }
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // ICON
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  color: KYCColors.primary,
+                  shape: BoxShape.circle,
                 ),
+                child: Icon(data["icon"], color: Colors.white, size: 22),
               ),
-              child: Icon(
-                page["icon"],
-                color: Colors.white,
-                size: isMobile ? 22 : 26,
+
+              const SizedBox(height: 12),
+
+              Text(
+                data["title"],
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
 
-            const SizedBox(height: 12),
+              const SizedBox(height: 8),
 
-            Text(
-              page["title"],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: isMobile ? 15 : 16,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF333333),
+              Text(
+                data["description"],
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: KYCColors.textSecondary,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-
-            const SizedBox(height: 6),
-
-            Text(
-              page["description"],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: isMobile ? 12 : 13,
-                color: Colors.grey[700],
-                height: 1.3,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
