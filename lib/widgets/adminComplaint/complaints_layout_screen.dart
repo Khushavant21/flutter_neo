@@ -630,6 +630,8 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
               },
             ),
           ),
+
+          // In complaints_layout_screen.dart, find the Send button code and replace it with this:
           Container(
             padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(
@@ -654,9 +656,14 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF950606),
+                    foregroundColor: Colors.white,
+                    textStyle: const TextStyle(color: Colors.white),
                   ),
                   onPressed: _sendMessage,
-                  child: const Text("Send"),
+                  child: const Text(
+                    "Send",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),

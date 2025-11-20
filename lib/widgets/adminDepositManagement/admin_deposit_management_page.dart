@@ -1316,12 +1316,16 @@ Generated Date\t${data['generatedDate']}''';
                           'Generate Instrument',
                           style: DepositStyles.modalTitleStyle.copyWith(
                             fontSize: isMobile ? 16 : 18,
+                            color: Colors.white, // ✅ ADD THIS LINE
                           ),
                         ),
                       ),
                       IconButton(
                         onPressed: () => setState(() => formatModalData = null),
-                        icon: const Icon(Icons.close, color: Color(0xFF900603)),
+                        icon: const Icon(
+                          Icons.close,
+                          color: Color.fromARGB(255, 248, 247, 247),
+                        ),
                       ),
                     ],
                   ),

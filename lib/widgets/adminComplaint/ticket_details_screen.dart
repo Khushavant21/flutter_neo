@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TicketDetailsScreen extends StatefulWidget {
-  final String ticketId;
+  final Ticket ticket;
   final VoidCallback onBack;
-  final Function(Map<String, dynamic>) onUpdate;
+  final Function(Ticket) onUpdate;
 
   const TicketDetailsScreen({
     super.key,
-    required this.ticketId,
+    required this.ticket,
     required this.onBack,
     required this.onUpdate,
   });
@@ -17,82 +17,66 @@ class TicketDetailsScreen extends StatefulWidget {
 }
 
 class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
-  bool loading = true;
   bool showActions = false;
-  Map<String, dynamic>? ticket;
   final TextEditingController _messageController = TextEditingController();
+  late Ticket currentTicket;
 
   @override
   void initState() {
     super.initState();
-    _loadTicket();
+    currentTicket = widget.ticket;
   }
 
-  Future<void> _loadTicket() async {
-    await Future.delayed(const Duration(seconds: 1)); // simulate backend
+  void _sendMessage() {
+    if (_messageController.text.trim().isEmpty) return;
     setState(() {
-      ticket = {
-        "ticketId": widget.ticketId,
-        "subject": "Account not credited",
-        "user": "Amit Rajput",
-        "messages": [
-          {"sender": "User", "text": "My transaction failed."},
-          {"sender": "Admin", "text": "We are checking this issue."},
-        ],
-      };
-      loading = false;
+      currentTicket.messages.add(
+        Message(
+          sender: "Agent",
+          text: _messageController.text.trim(),
+          time: TimeOfDay.now().format(context),
+        ),
+      );
+      currentTicket.lastUpdate = DateTime.now();
     });
-  }
-
-  void _handleTicketUpdate(String type, Map<String, dynamic> payload) {
-    if (type == "reply") {
-      setState(() {
-        ticket!["messages"].add({"sender": "Admin", "text": payload["text"]});
-      });
-    }
-    widget.onUpdate(ticket!);
+    widget.onUpdate(currentTicket);
+    _messageController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: const Color(0xFF950606),
+        foregroundColor: Colors.white,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(ticket!["subject"], style: const TextStyle(fontSize: 18)),
             Text(
-              "Ticket ID: ${ticket!["ticketId"]} | User: ${ticket!["user"]}",
-              style: const TextStyle(fontSize: 12),
+              currentTicket.subject,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
+            Text(
+              "ID: ${currentTicket.ticketId} | ${currentTicket.user}",
+              style: const TextStyle(fontSize: 12, color: Colors.white),
             ),
           ],
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: widget.onBack,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => setState(() => showActions = true),
-          ),
-        ],
       ),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(12),
-              itemCount: ticket!["messages"].length,
+              itemCount: currentTicket.messages.length,
               itemBuilder: (context, index) {
-                final msg = ticket!["messages"][index];
-                final isUser = msg["sender"] == "User";
+                final msg = currentTicket.messages[index];
+                final isUser = msg.sender == "User";
                 return Align(
                   alignment: isUser
                       ? Alignment.centerLeft
@@ -103,18 +87,37 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                       horizontal: 12,
                       vertical: 8,
                     ),
+                    constraints: const BoxConstraints(maxWidth: 300),
                     decoration: BoxDecoration(
                       color: isUser
                           ? Colors.grey[300]
                           : const Color(0xFF950606).withValues(alpha: 0.9),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(
-                      msg["text"],
-                      style: TextStyle(
-                        color: isUser ? Colors.black : Colors.white,
-                        fontSize: 14,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          msg.text,
+                          style: TextStyle(
+                            color: isUser ? Colors.black : Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            "${msg.sender} | ${msg.time}",
+                            style: TextStyle(
+                              color: isUser
+                                  ? Colors.grey[600]
+                                  : Colors.grey[200],
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -132,9 +135,11 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: "Type a reply...",
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       isDense: true,
                     ),
                   ),
@@ -144,30 +149,50 @@ class _TicketDetailsScreenState extends State<TicketDetailsScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF950606),
                   ),
-                  onPressed: () {
-                    if (_messageController.text.isNotEmpty) {
-                      _handleTicketUpdate("reply", {
-                        "text": _messageController.text.trim(),
-                      });
-                      _messageController.clear();
-                    }
-                  },
-                  child: const Text("Send"),
+                  onPressed: _sendMessage,
+                  child: const Text(
+                    "Send",
+                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
           ),
         ],
       ),
-      // Actions modal
-      floatingActionButton: showActions
-          ? FloatingActionButton(
-              backgroundColor: Colors.black.withValues(alpha: 0.7),
-              onPressed: () => setState(() => showActions = false),
-              child: const Icon(Icons.close),
-            )
-          : null,
     );
   }
 }
 
+// Models
+class Ticket {
+  final int id;
+  final String ticketId;
+  final String user;
+  final String subject;
+  String priority;
+  String status;
+  DateTime lastUpdate;
+  List<Message> messages;
+  String? assigned;
+
+  Ticket({
+    required this.id,
+    required this.ticketId,
+    required this.user,
+    required this.subject,
+    required this.priority,
+    required this.status,
+    required this.lastUpdate,
+    required this.messages,
+    this.assigned,
+  });
+}
+
+class Message {
+  final String sender;
+  final String text;
+  final String time;
+
+  Message({required this.sender, required this.text, required this.time});
+}
