@@ -977,7 +977,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
     bool isSmallMobile,
     bool isActive,
   ) {
-    final isNumeric = label == '1' || label == '2';
+    final _ = label == '1' || label == '2';
 
     return SizedBox(
       width: isSmallMobile ? 38 : 44,
