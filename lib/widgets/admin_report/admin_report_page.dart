@@ -21,6 +21,10 @@ class _AdminReportPageState extends State<AdminReportPage> {
   DateTime fromDate = DateTime.now().subtract(const Duration(days: 30));
   DateTime toDate = DateTime.now();
 
+  int currentPage = 1;
+  int totalPages = 5;
+  int itemsPerPage = 10;
+
   List<ReportData> rawData = [];
   List<ReportData> aggregatedData = [];
 
@@ -80,6 +84,78 @@ class _AdminReportPageState extends State<AdminReportPage> {
         count: 11,
         total: 5200,
       ),
+      ReportData(
+        date: DateTime(2025, 9, 26),
+        type: "Withdrawal",
+        count: 6,
+        total: 2800,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 27),
+        type: "Transfer",
+        count: 13,
+        total: 6500,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 28),
+        type: "Deposit",
+        count: 9,
+        total: 4100,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 29),
+        type: "Withdrawal",
+        count: 11,
+        total: 4900,
+      ),
+      ReportData(
+        date: DateTime(2025, 9, 30),
+        type: "Transfer",
+        count: 8,
+        total: 3700,
+      ),
+      ReportData(
+        date: DateTime(2025, 10, 1),
+        type: "Deposit",
+        count: 14,
+        total: 6200,
+      ),
+      ReportData(
+        date: DateTime(2025, 10, 2),
+        type: "Withdrawal",
+        count: 10,
+        total: 4400,
+      ),
+      ReportData(
+        date: DateTime(2025, 10, 3),
+        type: "Transfer",
+        count: 12,
+        total: 5800,
+      ),
+      ReportData(
+        date: DateTime(2025, 10, 4),
+        type: "Deposit",
+        count: 7,
+        total: 3300,
+      ),
+      ReportData(
+        date: DateTime(2025, 10, 5),
+        type: "Withdrawal",
+        count: 9,
+        total: 3900,
+      ),
+      ReportData(
+        date: DateTime(2025, 10, 6),
+        type: "Transfer",
+        count: 11,
+        total: 5400,
+      ),
+      ReportData(
+        date: DateTime(2025, 10, 7),
+        type: "Deposit",
+        count: 13,
+        total: 5900,
+      ),
     ];
     _aggregateData();
   }
@@ -88,6 +164,8 @@ class _AdminReportPageState extends State<AdminReportPage> {
     if (reportPeriod == "daily") {
       setState(() {
         aggregatedData = rawData;
+        totalPages = (aggregatedData.length / itemsPerPage).ceil();
+        if (totalPages == 0) totalPages = 1;
       });
       return;
     }
@@ -117,6 +195,9 @@ class _AdminReportPageState extends State<AdminReportPage> {
 
     setState(() {
       aggregatedData = grouped.values.toList();
+      totalPages = (aggregatedData.length / itemsPerPage).ceil();
+      if (totalPages == 0) totalPages = 1;
+      currentPage = 1;
     });
   }
 
@@ -168,10 +249,6 @@ class _AdminReportPageState extends State<AdminReportPage> {
         ],
       ),
     ];
-
-    // String csvContent = csvData.map((row) => row.join(',')).join('\n');
-    // In a real app, you would save csvContent to a file or trigger download
-    // For now, we just show a message
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -229,6 +306,23 @@ class _AdminReportPageState extends State<AdminReportPage> {
       return (totalAmount / totalTransactions).toStringAsFixed(2);
     }
     return "0.00";
+  }
+
+  List<ReportData> get paginatedData {
+    if (aggregatedData.isEmpty) return [];
+
+    int startIndex = (currentPage - 1) * itemsPerPage;
+    int endIndex = startIndex + itemsPerPage;
+
+    // Ensure startIndex is within bounds
+    if (startIndex >= aggregatedData.length) {
+      return [];
+    }
+
+    return aggregatedData.sublist(
+      startIndex,
+      endIndex > aggregatedData.length ? aggregatedData.length : endIndex,
+    );
   }
 
   @override
@@ -296,6 +390,10 @@ class _AdminReportPageState extends State<AdminReportPage> {
 
                         // Table
                         _buildTable(isSmallMobile),
+                        SizedBox(height: isSmallMobile ? 15 : 25),
+
+                        // Pagination
+                        _buildPagination(isSmallMobile),
                       ],
                     ),
                   ),
@@ -780,7 +878,7 @@ class _AdminReportPageState extends State<AdminReportPage> {
                   ),
                 ),
               ],
-              rows: aggregatedData.map((data) {
+              rows: paginatedData.map((data) {
                 return DataRow(
                   cells: [
                     DataCell(
@@ -807,6 +905,104 @@ class _AdminReportPageState extends State<AdminReportPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPagination(bool isSmallMobile) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: isSmallMobile ? 8 : 16,
+        vertical: isSmallMobile ? 12 : 16,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _paginationButton(
+            'Prev',
+            () {
+              if (currentPage > 1) {
+                setState(() => currentPage--);
+              }
+            },
+            currentPage == 1,
+            isSmallMobile,
+            false,
+          ),
+          SizedBox(width: isSmallMobile ? 6 : 12),
+          _paginationButton(
+            '1',
+            () {
+              setState(() => currentPage = 1);
+            },
+            false,
+            isSmallMobile,
+            currentPage == 1,
+          ),
+          SizedBox(width: isSmallMobile ? 6 : 12),
+          if (totalPages > 1)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: isSmallMobile ? 3 : 6),
+              child: _paginationButton(
+                '2',
+                () {
+                  setState(() => currentPage = 2);
+                },
+                false,
+                isSmallMobile,
+                currentPage == 2,
+              ),
+            ),
+          SizedBox(width: isSmallMobile ? 6 : 12),
+          _paginationButton(
+            'Next',
+            () {
+              if (currentPage < totalPages) {
+                setState(() => currentPage++);
+              }
+            },
+            currentPage >= totalPages,
+            isSmallMobile,
+            false,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _paginationButton(
+    String label,
+    VoidCallback onPressed,
+    bool isDisabled,
+    bool isSmallMobile,
+    bool isActive,
+  ) {
+    final isNumeric = label == '1' || label == '2';
+
+    return SizedBox(
+      width: isSmallMobile ? 38 : 44,
+      height: isSmallMobile ? 34 : 38,
+      child: ElevatedButton(
+        onPressed: isDisabled ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isActive ? const Color(0xFF8B0000) : Colors.white,
+          foregroundColor: isActive ? Colors.white : const Color(0xFF333333),
+          disabledBackgroundColor: Colors.white,
+          disabledForegroundColor: const Color(0xFFCCCCCC),
+          side: BorderSide(
+            color: isActive ? const Color(0xFF8B0000) : const Color(0xFFCCCCCC),
+            width: 1.5,
+          ),
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: isSmallMobile ? 12 : 13,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+          ),
+        ),
       ),
     );
   }
