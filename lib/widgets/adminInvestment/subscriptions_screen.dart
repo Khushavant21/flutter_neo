@@ -28,7 +28,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
       "user": "Amit Singh",
       "type": "Subscription",
       "amount": "\$2000",
-      "status": "Approved",
+      "status": "Added",
     },
   ];
 
@@ -36,7 +36,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
     setState(() {
       subscriptions = subscriptions.map((sub) {
         if (sub["id"] == id) {
-          return {...sub, "status": "Approved"};
+          return {...sub, "status": "Added"};
         }
         return sub;
       }).toList();
@@ -47,7 +47,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
     setState(() {
       subscriptions = subscriptions.map((sub) {
         if (sub["id"] == id) {
-          return {...sub, "status": "Rejected"};
+          return {...sub, "status": "Removed"};
         }
         return sub;
       }).toList();
@@ -56,9 +56,9 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
 
   Color getStatusColor(String status) {
     switch (status) {
-      case "Approved":
+      case "Added":
         return Colors.green;
-      case "Rejected":
+      case "Removed":
         return Colors.red;
       default:
         return Colors.amber;
@@ -190,7 +190,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                             backgroundColor: const Color(0xFF900603),
                           ),
                           child: const Text(
-                            "Approve",
+                            "Add",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -203,7 +203,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                             backgroundColor: const Color(0xFF900603),
                           ),
                           child: const Text(
-                            "Reject",
+                            "Remove",
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -284,7 +284,7 @@ class _SubscriptionsScreenState extends State<SubscriptionsScreen> {
                               backgroundColor: const Color(0xFF900603),
                             ),
                             child: const Text(
-                              "Reject",
+                              "Remove",
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
