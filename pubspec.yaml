@@ -31,12 +31,6 @@ dependencies:
   pdf: ^3.11.1
   printing: ^5.13.2
 
-  # Date Picker (recommended for better date selection UI)
-  flutter_datetime_picker_plus: ^2.2.0  # Optional: for better date pickers
-  
-  # Dropdown with search (optional: for better dropdowns)
-  dropdown_search: ^5.0.6  # Optional: for searchable dropdowns
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -51,15 +45,16 @@ flutter_launcher_icons:
   min_sdk_android: 21
 
 flutter_native_splash:
-  color: "#FFFFFF"
-  image: assets/neobank01.png
+  color: "#FFFFFF"  # White background
+  image: assets/neobank01.png  # Your logo (already has red color)
   android: true
   ios: true
   
+  # For Android 12 and above
   android_12:
-    color: "#FFFFFF"
+    color: "#FFFFFF"  # White background
     image: assets/neobank01.png
-    icon_background_color: "#FFFFFF"
+    icon_background_color: "#FFFFFF"  # White background
 
 flutter:
   uses-material-design: true
@@ -68,16 +63,3 @@ flutter:
     - assets/logo.png
     - assets/neobank01.png
     - assets/neobank02.png
-    - assets/  # This will include all files in assets folder
-
-  # Add custom fonts if you want to match the web version exactly
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Poppins-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
